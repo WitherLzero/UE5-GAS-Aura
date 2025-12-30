@@ -1,0 +1,59 @@
+﻿# Unreal Engine 5 .gitignore
+
+# Visual Studio 2019/2022
+.vs/
+*.sln
+*.suo
+*.opensdf
+*.sdf
+*.user
+*.vc.db
+*.vc.opendb
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Rider
+.idea/
+*.sln.DotSettings.user
+
+# Unreal Engine
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+Build/
+Releases/
+Collections/
+Developers/
+__ExternalActors__/
+__ExternalObjects__/
+
+# AI
+.agent/
+
+# Local builds
+Builds/
+
+# Plugins (if you want to ignore all plugins, uncomment the next line)
+# Plugins/
+
+# Mac
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Python
+__pycache__/
+*.py[cod]
+
+# C++
+*.obj
+*.pdb
+*.pch
+*.lib
+*.dll
+*.exe

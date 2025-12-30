@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Framework/BaseCharacter.h"
+#include "Framework/CoreCharacterBase.h"
 #include "Enemy.generated.h"
 
 UCLASS()
-class AURA_API AEnemy : public ABaseCharacter
+class AURA_API AEnemy : public ACoreCharacterBase
 {
 	GENERATED_BODY()
 

@@ -1,9 +1,9 @@
 // Copyright rynnli
 
 
-#include "Framework/BaseCharacter.h"
+#include "Framework/CoreCharacterBase.h"
 
-ABaseCharacter::ABaseCharacter()
+ACoreCharacterBase::ACoreCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
 	
@@ -14,7 +14,7 @@ ABaseCharacter::ABaseCharacter()
 	
 }
 
-void ABaseCharacter::BeginPlay()
+void ACoreCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	

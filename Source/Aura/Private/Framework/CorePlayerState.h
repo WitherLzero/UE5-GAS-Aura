@@ -13,4 +13,6 @@ UCLASS()
 class AURA_API ACorePlayerState : public APlayerState
 {
 	GENERATED_BODY()
+public:
+	ACorePlayerState();
 };

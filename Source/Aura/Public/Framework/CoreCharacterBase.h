@@ -14,9 +14,11 @@ class AURA_API ACoreCharacterBase : public ACharacter
 public:
 	ACoreCharacterBase();
 
+	virtual void Move(const FVector2D& InputAxis);
+	
 protected:
 	virtual void BeginPlay() override;
-
+	
 	UPROPERTY(VisibleAnywhere, Category= "Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 

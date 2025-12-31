@@ -20,5 +20,7 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	// Input handlers
+	virtual void Move(const FVector2D& InputAxis) override;
+	
 };

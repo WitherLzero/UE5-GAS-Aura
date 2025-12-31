@@ -14,6 +14,10 @@ ACoreCharacterBase::ACoreCharacterBase()
 	
 }
 
+void ACoreCharacterBase::Move(const FVector2D& InputAxis)
+{
+}
+
 void ACoreCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();

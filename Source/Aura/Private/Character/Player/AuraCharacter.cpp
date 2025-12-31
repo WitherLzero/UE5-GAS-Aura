@@ -20,8 +20,15 @@ void AAuraCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AAuraCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AAuraCharacter::Move(const FVector2D& InputAxis)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	const FRotator Rotation = GetControlRotation();
+	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
+
+	const FVector Forward = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	const FVector Right = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	AddMovementInput(Forward,InputAxis.Y);
+	AddMovementInput(Right,InputAxis.X);
 }
+
 

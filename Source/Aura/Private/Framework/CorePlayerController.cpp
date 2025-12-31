@@ -2,15 +2,23 @@
 
 
 #include "Framework/CorePlayerController.h"
+#include "Framework/CoreCharacterBase.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
-#include "Framework/CoreCharacterBase.h"
+#include "Interaction/EnemyInterface.h"
+
 
 ACorePlayerController::ACorePlayerController()
 {
 	bReplicates = true;
 }
 
+void ACorePlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+	
+	CursorTrace();
+}
 
 
 void ACorePlayerController::BeginPlay()
@@ -44,6 +52,49 @@ void ACorePlayerController::Move(const FInputActionValue& InputActionValue)
 		ControlledPawn->Move(InputAxis);
 	}
 
+}
+
+void ACorePlayerController::CursorTrace()
+{
+	FHitResult CursorHit;
+	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
+	if (!CursorHit.bBlockingHit) return;
+	
+	LastActor = ThisActor;
+	ThisActor = CursorHit.GetActor();
+
+	if (LastActor == nullptr)
+	{
+		if (ThisActor != nullptr) 
+		{
+			/* Last->null, This->valid 
+			 * First trace, highlight the new enemy */
+			ThisActor->HighlightActor();
+		}
+		/* Last/This->null 
+		 * Do nothing */
+	}
+	else
+	{
+		if (ThisActor == nullptr) 
+		{
+			/* Last->valid, This->null 
+			 * UnHighlight Last */
+			LastActor->UnHighlightActor();
+		}
+		else
+		{
+			if (ThisActor != LastActor)
+			{
+				/* Last/This->valid, Last != This 
+				* UnHighlight Last, Highlight This */
+				LastActor->UnHighlightActor();
+				ThisActor->HighlightActor();
+			}
+			/* Last == This
+			 * Do nothing */
+		}
+	}
 }
 
 

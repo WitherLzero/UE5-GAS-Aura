@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "CorePlayerController.generated.h"
 
+class IEnemyInterface;
 struct FInputActionValue;
 class UInputAction;
 class UInputMappingContext;
@@ -19,6 +20,7 @@ class AURA_API ACorePlayerController : public APlayerController
 	
 public:
 	ACorePlayerController();
+	virtual void PlayerTick(float DeltaTime) override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -26,12 +28,10 @@ protected:
 	virtual void SetupInputComponent() override;
 	
 private:
-
-	
-	
 	// Input Callbacks
 	// TODO: Extend to Tag-distribution pattern 
 	void Move(const FInputActionValue& InputActionValue);
+	void CursorTrace();
 	
 	// helpers
 	void UpdateMouse();
@@ -42,4 +42,7 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category= "Input")
 	TObjectPtr<UInputAction> MoveAction;
+	
+	TScriptInterface<IEnemyInterface> LastActor;
+	TScriptInterface<IEnemyInterface> ThisActor;
 };

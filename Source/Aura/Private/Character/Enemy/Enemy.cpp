@@ -3,6 +3,8 @@
 
 #include "Character/Enemy/Enemy.h"
 
+#include "AbilitySystem/CoreAbilitySystemComponent.h"
+#include "AbilitySystem/CoreAttributeSet.h"
 #include "Aura/Aura.h"
 
 
@@ -10,6 +12,12 @@ AEnemy::AEnemy()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility,ECR_Block);
+	
+	AbilitySystemComponent = CreateDefaultSubobject<UCoreAbilitySystemComponent>("AbilitySystemComponent");
+	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+	
+	AttributeSet = CreateDefaultSubobject<UCoreAttributeSet>("AttributeSet");
 }
 
 void AEnemy::BeginPlay()

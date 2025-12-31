@@ -1,31 +1,25 @@
-// Copyright rynnli
+﻿// Copyright rynnli
 
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
-#include "CoreCharacterBase.generated.h"
+#include "GameFramework/PlayerState.h"
+#include "CorePlayerState.generated.h"
 
 class UAbilitySystemComponent;
 class UAttributeSet;
-
+/**
+ * 
+ */
 UCLASS()
-class AURA_API ACoreCharacterBase : public ACharacter, public IAbilitySystemInterface
+class AURA_API ACorePlayerState : public APlayerState, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
-
 public:
-	ACoreCharacterBase();
-
-	virtual void Move(const FVector2D& InputAxis);
+	ACorePlayerState();
 	
 protected:
-	virtual void BeginPlay() override;
-	
-	UPROPERTY(VisibleAnywhere, Category= "Combat")
-	TObjectPtr<USkeletalMeshComponent> Weapon;
-	
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 	

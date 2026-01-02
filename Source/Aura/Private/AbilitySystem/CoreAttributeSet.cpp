@@ -2,11 +2,12 @@
 
 
 #include "AbilitySystem/CoreAttributeSet.h"
-#include "AbilitySystemComponent.h"
 #include "Net/UnrealNetwork.h"
 
 UCoreAttributeSet::UCoreAttributeSet()
 {
+	InitHealth(100.f);
+	InitMaxMana(200.f);
 }
 
 void UCoreAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const

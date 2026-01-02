@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Blueprint/UserWidget.h"
 #include "UObject/Object.h"
 #include "UserWidgetBase.generated.h"
 
@@ -10,7 +11,7 @@
  * 
  */
 UCLASS()
-class AURA_API UUserWidgetBase : public UObject
+class AURA_API UUserWidgetBase : public UUserWidget
 {
 	GENERATED_BODY()
 

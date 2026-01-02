@@ -13,14 +13,17 @@ class AURA_API AAuraCharacter : public ACoreCharacterBase
 
 public:
 	AAuraCharacter();
-
+	virtual void Tick(float DeltaTime) override;
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_PlayerState() override;
 protected:
 	virtual void BeginPlay() override;
-
-public:
-	virtual void Tick(float DeltaTime) override;
-
+	
+	
 	// Input handlers
 	virtual void Move(const FVector2D& InputAxis) override;
+	
+private:
+	void InitAbilityActorInfo();
 	
 };

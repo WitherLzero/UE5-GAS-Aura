@@ -6,7 +6,8 @@
 
 UCoreAttributeSet::UCoreAttributeSet()
 {
-	InitHealth(100.f);
+	InitHealth(75.f);
+	InitMaxHealth(100.f);
 	InitMaxMana(200.f);
 }
 

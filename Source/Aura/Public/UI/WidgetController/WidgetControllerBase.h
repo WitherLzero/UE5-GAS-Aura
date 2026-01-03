@@ -18,6 +18,8 @@ class AURA_API UWidgetControllerBase : public UObject
 	
 protected:
 	
+	virtual void BroadcastInitialValues();
+	
 	UPROPERTY( BlueprintReadOnly, Category = "WidgetController")
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 

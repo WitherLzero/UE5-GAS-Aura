@@ -29,6 +29,8 @@ void AAuraHUD::InitOverlay(UAbilitySystemComponent* ASC, UAttributeSet* AS, APla
 	const FWidgetControllerParams WidgetControllerParams(ASC,AS,PC,PS);
 	OverlayWidget->SetWidgetController(GetOverlayWidgetController(WidgetControllerParams));
 	
+	OverlayWidgetController->BroadcastInitialValues();
+	
 	OverlayWidget->AddToViewport();
 
 }

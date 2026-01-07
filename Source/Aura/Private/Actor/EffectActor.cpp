@@ -4,41 +4,38 @@
 #include "Actor/EffectActor.h"
 
 #include "AbilitySystemInterface.h"
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/CoreAttributeSet.h"
-#include "Components/SphereComponent.h"
 
 
 AEffectActor::AEffectActor()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	SetRootComponent(CreateDefaultSubobject<USceneComponent>("RootComponent"));
 	
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
-	SetRootComponent(Mesh);
-	
-	Sphere = CreateDefaultSubobject<USphereComponent>("Sphere");
-	Sphere->SetupAttachment(GetRootComponent());
 }
 
 void AEffectActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	Sphere->OnComponentBeginOverlap.AddDynamic(this,&AEffectActor::OnOverlap);
-	
 }
 
-void AEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
 {
-	// TODO: Need to change this to apply Gameplay Effect. 
-	if (IAbilitySystemInterface* ASCInterface = Cast<IAbilitySystemInterface>(OtherActor))
-	{
-		const UCoreAttributeSet* CoreAttributeSet = Cast<UCoreAttributeSet>(ASCInterface->GetAbilitySystemComponent()->GetAttributeSet(UCoreAttributeSet::StaticClass()));
-		UCoreAttributeSet* MutableCAS = const_cast<UCoreAttributeSet*>(CoreAttributeSet);
-		MutableCAS->SetHealth(CoreAttributeSet->GetHealth() + 20.f);
-		
-		Destroy();
+	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
+
+	if (TargetASC == nullptr) return;
+	check(GameplayEffectClass);
 	
-	}
+	FGameplayEffectContextHandle EffectContext = TargetASC->MakeEffectContext();
+	EffectContext.AddSourceObject(this); 	
+	const FGameplayEffectSpecHandle EffectSpec = TargetASC->MakeOutgoingSpec(GameplayEffectClass,1.f,EffectContext);
+	TargetASC->ApplyGameplayEffectSpecToSelf(*EffectSpec.Data.Get());
+
 }
+
+
+
+
 

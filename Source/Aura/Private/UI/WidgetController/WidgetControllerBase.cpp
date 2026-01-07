@@ -6,3 +6,7 @@
 void UWidgetControllerBase::BroadcastInitialValues()
 {
 }
+
+void UWidgetControllerBase::BindCallbacksToDependencies()
+{
+}

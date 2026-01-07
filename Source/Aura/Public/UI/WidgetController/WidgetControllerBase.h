@@ -19,6 +19,9 @@ class AURA_API UWidgetControllerBase : public UObject
 protected:
 	
 	virtual void BroadcastInitialValues();
+
+	
+	virtual void BindCallbacksToDependencies();
 	
 	UPROPERTY( BlueprintReadOnly, Category = "WidgetController")
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;

@@ -6,8 +6,9 @@
 
 UCoreAttributeSet::UCoreAttributeSet()
 {
-	InitHealth(75.f);
+	InitHealth(50.f);
 	InitMaxHealth(100.f);
+	InitMana(125.f);
 	InitMaxMana(200.f);
 }
 
@@ -26,7 +27,6 @@ void UCoreAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimePropert
 void UCoreAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UCoreAttributeSet,Health,OldHealth);
-	
 }
 
 void UCoreAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth) const

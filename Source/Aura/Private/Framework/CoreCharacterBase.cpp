@@ -24,4 +24,8 @@ void ACoreCharacterBase::BeginPlay()
 	
 }
 
+void ACoreCharacterBase::InitAbilityActorInfo()
+{
+}
+
 

@@ -24,6 +24,6 @@ protected:
 	virtual void Move(const FVector2D& InputAxis) override;
 	
 private:
-	void InitAbilityActorInfo();
+	virtual void InitAbilityActorInfo() override;
 	
 };

@@ -28,6 +28,12 @@ void AEnemy::BeginPlay()
 	
 }
 
+void AEnemy::InitAbilityActorInfo()
+{
+	AbilitySystemComponent->InitAbilityActorInfo(this,this);
+	Cast<UCoreAbilitySystemComponent>(AbilitySystemComponent)->OnAbilityActorInfoSet();
+}
+
 void AEnemy::HighlightActor()
 {
 	GetMesh()->SetRenderCustomDepth(true);

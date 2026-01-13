@@ -12,5 +12,9 @@ void UCoreAbilitySystemComponent::OnAbilityActorInfoSet()
 void UCoreAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent,
 	const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)
 {
+	FGameplayTagContainer TagContainer;
+	EffectSpec.GetAllAssetTags(TagContainer);
+	OnEffectAssetTagsGet.Broadcast(TagContainer);
 	
+
 }

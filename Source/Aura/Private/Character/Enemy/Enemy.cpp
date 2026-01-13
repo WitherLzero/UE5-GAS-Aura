@@ -26,6 +26,7 @@ void AEnemy::BeginPlay()
 	GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
 	Weapon->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
 	
+	InitAbilityActorInfo();
 }
 
 void AEnemy::InitAbilityActorInfo()

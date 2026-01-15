@@ -24,6 +24,11 @@ void UCoreAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimePropert
 	DOREPLIFETIME_CONDITION_NOTIFY(UCoreAttributeSet,Mana,COND_None,REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UCoreAttributeSet,MaxMana,COND_None,REPNOTIFY_Always);
 		
+	DOREPLIFETIME_CONDITION_NOTIFY(UCoreAttributeSet,Strength,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UCoreAttributeSet,Intelligence,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UCoreAttributeSet,Resilience,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UCoreAttributeSet,Vigor,COND_None,REPNOTIFY_Always);
+
 
 }
 
@@ -91,6 +96,7 @@ void UCoreAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData
 	}
 }
 
+
 void UCoreAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UCoreAttributeSet,Health,OldHealth);
@@ -111,4 +117,22 @@ void UCoreAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) 
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UCoreAttributeSet,MaxMana,OldMaxMana);
 }
 
+void UCoreAttributeSet::OnRep_Strength(const FGameplayAttributeData& OldStrength) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCoreAttributeSet,Strength,OldStrength);
+}
 
+void UCoreAttributeSet::OnRep_Intelligence(const FGameplayAttributeData& OldIntelligence) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCoreAttributeSet,Intelligence,OldIntelligence);
+}
+
+void UCoreAttributeSet::OnRep_Resilience(const FGameplayAttributeData& OldResilience) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCoreAttributeSet,Resilience,OldResilience);
+}
+
+void UCoreAttributeSet::OnRep_Vigor(const FGameplayAttributeData& OldVigor) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCoreAttributeSet,Vigor,OldVigor);
+}

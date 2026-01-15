@@ -7,8 +7,9 @@
 #include "GameFramework/PlayerState.h"
 #include "CorePlayerState.generated.h"
 
+class UPrimaryAttributeSet;
+class UVitalAttributeSet;
 class UAbilitySystemComponent;
-class UAttributeSet;
 /**
  * 
  */
@@ -24,9 +25,12 @@ protected:
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 	
 	UPROPERTY()
-	TObjectPtr<UAttributeSet> AttributeSet;
+	TObjectPtr<UVitalAttributeSet> VitalAS;
+	UPROPERTY()
+	TObjectPtr<UPrimaryAttributeSet> PrimaryAS;
 	
 public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
-	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+	UVitalAttributeSet* GetVitalAttributeSet() const { return VitalAS; }
+	UPrimaryAttributeSet* GetPrimaryAttributeSet() const { return PrimaryAS; }
 };

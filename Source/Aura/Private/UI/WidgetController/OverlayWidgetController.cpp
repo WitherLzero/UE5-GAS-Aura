@@ -2,39 +2,42 @@
 
 
 #include "UI/WidgetController/OverlayWidgetController.h"
-
 #include "AbilitySystem/CoreAbilitySystemComponent.h"
-#include "AbilitySystem/CoreAttributeSet.h"
+#include "AbilitySystem/AttributeSets/VitalAttributeSet.h"
 
 void UOverlayWidgetController::BroadcastInitialValues()
 {
-	const UCoreAttributeSet* PlayerAttributeSet = CastChecked<UCoreAttributeSet>(AttributeSet);
-	
-	OnHealthChanged.Broadcast(PlayerAttributeSet->GetHealth());
-	OnMaxHealthChanged.Broadcast(PlayerAttributeSet->GetMaxHealth());
-	OnManaChanged.Broadcast(PlayerAttributeSet->GetMana());
-	OnMaxManaChanged.Broadcast(PlayerAttributeSet->GetMaxMana());
+	const UVitalAttributeSet* VitalSet = Cast<UVitalAttributeSet>(AbilitySystemComponent->GetAttributeSet(UVitalAttributeSet::StaticClass()));
+	if (VitalSet)
+	{
+		OnHealthChanged.Broadcast(VitalSet->GetHealth());
+		OnMaxHealthChanged.Broadcast(VitalSet->GetMaxHealth());
+		OnManaChanged.Broadcast(VitalSet->GetMana());
+		OnMaxManaChanged.Broadcast(VitalSet->GetMaxMana());
+	}
 }
 
 void UOverlayWidgetController::BindCallbacksToDependencies()
 {
-	const UCoreAttributeSet* PlayerAttributeSet = CastChecked<UCoreAttributeSet>(AttributeSet);
-	
+	const UVitalAttributeSet* VitalSet = Cast<UVitalAttributeSet>(AbilitySystemComponent->GetAttributeSet(UVitalAttributeSet::StaticClass()));
+	if (VitalSet)
+	{
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		PlayerAttributeSet->GetHealthAttribute()).AddLambda(
+			VitalSet->GetHealthAttribute()).AddLambda(
 			[this](const FOnAttributeChangeData& Data){ OnHealthChanged.Broadcast(Data.NewValue);});
 	
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		PlayerAttributeSet->GetMaxHealthAttribute()).AddLambda(
+			VitalSet->GetMaxHealthAttribute()).AddLambda(
 			[this](const FOnAttributeChangeData& Data){ OnMaxHealthChanged.Broadcast(Data.NewValue);});
 
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		PlayerAttributeSet->GetManaAttribute()).AddLambda(
+			VitalSet->GetManaAttribute()).AddLambda(
 			[this](const FOnAttributeChangeData& Data){ OnManaChanged.Broadcast(Data.NewValue);});
 	
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		PlayerAttributeSet->GetMaxManaAttribute()).AddLambda(
+			VitalSet->GetMaxManaAttribute()).AddLambda(
 			[this](const FOnAttributeChangeData& Data){ OnMaxManaChanged.Broadcast(Data.NewValue);});
+	}
 
 	Cast<UCoreAbilitySystemComponent>(AbilitySystemComponent)->OnEffectAssetTagsGet.AddLambda(
 		[this](const FGameplayTagContainer& AssetTags)

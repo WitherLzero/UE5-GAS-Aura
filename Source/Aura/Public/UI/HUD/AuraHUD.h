@@ -22,7 +22,7 @@ class AURA_API AAuraHUD : public AHUD
 public:
 	UOverlayWidgetController* GetOverlayWidgetController(const FWidgetControllerParams& WCParams);
 	
-	void InitOverlay(UAbilitySystemComponent* ASC,UAttributeSet* AS, APlayerController* PC, APlayerState* PS);
+	void InitOverlay(UAbilitySystemComponent* ASC, APlayerController* PC, APlayerState* PS);
 	
 protected:
 	

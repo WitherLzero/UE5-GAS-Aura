@@ -4,7 +4,8 @@
 #include "Framework/CorePlayerState.h"
 
 #include "AbilitySystem/CoreAbilitySystemComponent.h"
-#include "AbilitySystem/CoreAttributeSet.h"
+#include "AbilitySystem/AttributeSets/PrimaryAttributeSet.h"
+#include "AbilitySystem/AttributeSets/VitalAttributeSet.h"
 
 ACorePlayerState::ACorePlayerState()
 {
@@ -14,5 +15,6 @@ ACorePlayerState::ACorePlayerState()
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 	
-	AttributeSet = CreateDefaultSubobject<UCoreAttributeSet>("AttributeSet");
+	VitalAS = CreateDefaultSubobject<UVitalAttributeSet>("VitalAttributeSet");
+	PrimaryAS = CreateDefaultSubobject<UPrimaryAttributeSet>("PrimaryAttributeSet");
 }

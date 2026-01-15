@@ -5,7 +5,7 @@
 
 #include "AbilitySystemInterface.h"
 #include "AbilitySystemBlueprintLibrary.h"
-#include "AbilitySystem/CoreAttributeSet.h"
+#include "AbilitySystem/RPGAttributeSetBase.h"
 
 #include "GameplayEffect.h"
 

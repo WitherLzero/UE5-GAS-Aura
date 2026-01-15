@@ -17,14 +17,11 @@ struct FWidgetControllerParams
 	GENERATED_BODY()
 	
 	FWidgetControllerParams(){}
-	FWidgetControllerParams(UAbilitySystemComponent* ASC, UAttributeSet* AS, APlayerController* PC, APlayerState* PS)
-		:AbilitySystemComponent(ASC),AttributeSet(AS),PlayerController(PC),PlayerState(PS){}
+	FWidgetControllerParams(UAbilitySystemComponent* ASC, APlayerController* PC, APlayerState* PS)
+		:AbilitySystemComponent(ASC),PlayerController(PC),PlayerState(PS){}
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent = nullptr;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UAttributeSet> AttributeSet = nullptr;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<APlayerController> PlayerController = nullptr;

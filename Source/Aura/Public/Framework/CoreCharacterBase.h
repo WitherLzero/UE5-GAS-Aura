@@ -7,6 +7,7 @@
 #include "AbilitySystemInterface.h"
 #include "CoreCharacterBase.generated.h"
 
+class UGameplayEffect;
 class UAbilitySystemComponent;
 class UAttributeSet;
 
@@ -25,6 +26,8 @@ protected:
 	
 	virtual void InitAbilityActorInfo();
 	
+	void InitPrimaryAttributes() const;
+	
 	UPROPERTY(VisibleAnywhere, Category= "Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 	
@@ -33,6 +36,9 @@ protected:
 	
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
+	
+	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attributes")
+	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
 	
 public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }

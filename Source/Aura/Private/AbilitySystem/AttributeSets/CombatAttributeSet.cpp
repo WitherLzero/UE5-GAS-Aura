@@ -1,0 +1,50 @@
+﻿#include "AbilitySystem/AttributeSets/CombatAttributeSet.h"
+#include "Net/UnrealNetwork.h"
+#include "GameplayEffectExtension.h"
+
+UCombatAttributeSet::UCombatAttributeSet()
+{
+	// No initialization as requested
+}
+
+void UCombatAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, Armor, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, ArmorPenetration, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, BlockChance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, CriticalHitChance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, CriticalHitDamage, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, CriticalHitResistance, COND_None, REPNOTIFY_Always);
+}
+
+void UCombatAttributeSet::OnRep_Armor(const FGameplayAttributeData& OldArmor) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCombatAttributeSet, Armor, OldArmor);
+}
+
+void UCombatAttributeSet::OnRep_ArmorPenetration(const FGameplayAttributeData& OldArmorPenetration) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCombatAttributeSet, ArmorPenetration, OldArmorPenetration);
+}
+
+void UCombatAttributeSet::OnRep_BlockChance(const FGameplayAttributeData& OldBlockChance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCombatAttributeSet, BlockChance, OldBlockChance);
+}
+
+void UCombatAttributeSet::OnRep_CriticalHitChance(const FGameplayAttributeData& OldCriticalHitChance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCombatAttributeSet, CriticalHitChance, OldCriticalHitChance);
+}
+
+void UCombatAttributeSet::OnRep_CriticalHitDamage(const FGameplayAttributeData& OldCriticalHitDamage) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCombatAttributeSet, CriticalHitDamage, OldCriticalHitDamage);
+}
+
+void UCombatAttributeSet::OnRep_CriticalHitResistance(const FGameplayAttributeData& OldCriticalHitResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCombatAttributeSet, CriticalHitResistance, OldCriticalHitResistance);
+}

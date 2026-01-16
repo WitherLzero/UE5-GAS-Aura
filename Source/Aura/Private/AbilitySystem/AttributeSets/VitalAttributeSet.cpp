@@ -6,8 +6,10 @@ UVitalAttributeSet::UVitalAttributeSet()
 {
 	InitHealth(50.f);
 	InitMaxHealth(100.f);
+	InitHealthRegeneration(0.f);
 	InitMana(70.f);
 	InitMaxMana(200.f);
+	InitManaRegeneration(0.f);
 }
 
 void UVitalAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
@@ -16,8 +18,10 @@ void UVitalAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProper
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UVitalAttributeSet, Health, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UVitalAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UVitalAttributeSet, HealthRegeneration, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UVitalAttributeSet, Mana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UVitalAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UVitalAttributeSet, ManaRegeneration, COND_None, REPNOTIFY_Always);
 }
 
 void UVitalAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -58,6 +62,11 @@ void UVitalAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHea
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UVitalAttributeSet, MaxHealth, OldMaxHealth);
 }
 
+void UVitalAttributeSet::OnRep_HealthRegeneration(const FGameplayAttributeData& OldHealthRegeneration) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UVitalAttributeSet, HealthRegeneration, OldHealthRegeneration);
+}
+
 void UVitalAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldMana) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UVitalAttributeSet, Mana, OldMana);
@@ -66,4 +75,9 @@ void UVitalAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldMana) const
 void UVitalAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UVitalAttributeSet, MaxMana, OldMaxMana);
+}
+
+void UVitalAttributeSet::OnRep_ManaRegeneration(const FGameplayAttributeData& OldManaRegeneration) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UVitalAttributeSet, ManaRegeneration, OldManaRegeneration);
 }

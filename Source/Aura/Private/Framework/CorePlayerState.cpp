@@ -4,6 +4,7 @@
 #include "Framework/CorePlayerState.h"
 
 #include "AbilitySystem/CoreAbilitySystemComponent.h"
+#include "AbilitySystem/AttributeSets/CombatAttributeSet.h"
 #include "AbilitySystem/AttributeSets/PrimaryAttributeSet.h"
 #include "AbilitySystem/AttributeSets/VitalAttributeSet.h"
 
@@ -17,4 +18,5 @@ ACorePlayerState::ACorePlayerState()
 	
 	VitalAS = CreateDefaultSubobject<UVitalAttributeSet>("VitalAttributeSet");
 	PrimaryAS = CreateDefaultSubobject<UPrimaryAttributeSet>("PrimaryAttributeSet");
+	CombatAS = CreateDefaultSubobject<UCombatAttributeSet>("CombatAttributeSet");
 }

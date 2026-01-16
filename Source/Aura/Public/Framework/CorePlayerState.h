@@ -41,7 +41,7 @@ public:
 	UCombatAttributeSet* GetCombatAttributeSet() const { return CombatAS; }
 	
 private:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere,ReplicatedUsing = OnRep_Level)
 	int32 Level = 1;
 	
 	UFUNCTION()

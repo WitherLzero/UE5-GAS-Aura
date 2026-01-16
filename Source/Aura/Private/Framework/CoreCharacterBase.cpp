@@ -41,7 +41,8 @@ void ACoreCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> Gameplay
 	if (!GetAbilitySystemComponent()) return;
 	check(GameplayEffectClass);
 	
-	const FGameplayEffectContextHandle ContextHandle =GetAbilitySystemComponent()->MakeEffectContext();
+	FGameplayEffectContextHandle ContextHandle =GetAbilitySystemComponent()->MakeEffectContext();
+	ContextHandle.AddSourceObject(this);
 	const FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(GameplayEffectClass,Level,ContextHandle);
 	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
 }

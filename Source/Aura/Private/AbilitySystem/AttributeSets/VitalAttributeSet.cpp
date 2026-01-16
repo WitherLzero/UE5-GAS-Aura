@@ -4,12 +4,7 @@
 
 UVitalAttributeSet::UVitalAttributeSet()
 {
-	InitHealth(50.f);
-	InitMaxHealth(100.f);
-	InitHealthRegeneration(0.f);
-	InitMana(70.f);
-	InitMaxMana(200.f);
-	InitManaRegeneration(0.f);
+
 }
 
 void UVitalAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const

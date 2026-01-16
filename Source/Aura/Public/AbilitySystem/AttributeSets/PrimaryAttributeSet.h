@@ -17,6 +17,7 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
+protected:
 	/*
 	 * Primary Attributes
 	 */

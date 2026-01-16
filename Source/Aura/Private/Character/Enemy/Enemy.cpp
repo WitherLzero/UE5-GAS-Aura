@@ -47,6 +47,11 @@ void AEnemy::UnHighlightActor()
 	Weapon->SetRenderCustomDepth(false);
 }
 
+int32 AEnemy::GetCharacterLevel() const
+{
+	return Level;
+}
+
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

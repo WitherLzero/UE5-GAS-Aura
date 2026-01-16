@@ -20,6 +20,13 @@ void AAuraCharacter::BeginPlay()
 	
 }
 
+int32 AAuraCharacter::GetCharacterLevel() const
+{
+	ACorePlayerState* AuraPlayerState = GetPlayerState<ACorePlayerState>();
+	check(AuraPlayerState);
+	return AuraPlayerState->GetPlayerLevel();
+}
+
 void AAuraCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

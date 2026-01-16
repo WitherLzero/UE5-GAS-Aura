@@ -19,6 +19,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	
+	/* Combat Interface */
+	virtual int32 GetCharacterLevel() const override;
+	/* end Combat Interface */
 	
 	// Input handlers
 	virtual void Move(const FVector2D& InputAxis) override;

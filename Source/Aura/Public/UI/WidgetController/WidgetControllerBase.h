@@ -17,7 +17,7 @@ class AURA_API UWidgetControllerBase : public UObject
 	GENERATED_BODY()
 	
 protected:
-	
+	UFUNCTION(BlueprintCallable)
 	virtual void BroadcastInitialValues();
 
 	

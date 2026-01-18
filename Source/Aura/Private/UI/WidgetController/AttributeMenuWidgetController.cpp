@@ -3,7 +3,6 @@
 
 #include "UI/WidgetController/AttributeMenuWidgetController.h"
 
-#include "RPGGameplayTags.h"
 #include "AbilitySystem/AttributeSets/PrimaryAttributeSet.h"
 #include "AbilitySystem/Data/AttributeInfo.h"
 
@@ -13,9 +12,13 @@ void UAttributeMenuWidgetController::BroadcastInitialValues()
 	
 	check(AttributeInfo);
 	
-	FRPGAttributeInfo Info = AttributeInfo->FindAttributeInfoByTag(FRPGGameplayTags::Get().Attributes_Primary_Strength);
-	Info.AttributeValue = PrimaryAS->GetStrength();
-	OnAttributeInfoChanged.Broadcast(Info);
+	for (auto& Pair : PrimaryAS->TagsToAttributes)
+	{
+		FRPGAttributeInfo Info = AttributeInfo->FindAttributeInfoByTag(Pair.Key);
+		Info.AttributeValue = Pair.Value().GetNumericValue(PrimaryAS);
+		OnAttributeInfoChanged.Broadcast(Info);
+	}
+	
 	
 }
 

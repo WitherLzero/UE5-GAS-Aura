@@ -1,10 +1,16 @@
 ﻿#include "AbilitySystem/AttributeSets/PrimaryAttributeSet.h"
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
+#include "RPGGameplayTags.h"
 
 UPrimaryAttributeSet::UPrimaryAttributeSet()
 {
-
+	const FRPGGameplayTags GameplayTags = FRPGGameplayTags::Get();
+	
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Strength,GetStrengthAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Intelligence,GetIntelligenceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Resilience,GetResilienceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Vigor,GetVigorAttribute);
 }
 
 void UPrimaryAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const

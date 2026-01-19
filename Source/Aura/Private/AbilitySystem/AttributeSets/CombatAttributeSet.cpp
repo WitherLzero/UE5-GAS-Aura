@@ -1,10 +1,19 @@
 ﻿#include "AbilitySystem/AttributeSets/CombatAttributeSet.h"
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
+#include "RPGGameplayTags.h"
 
 UCombatAttributeSet::UCombatAttributeSet()
 {
-	// No initialization as requested
+	const FRPGGameplayTags GameplayTags = FRPGGameplayTags::Get();
+	
+	TagsToAttributes.Add(GameplayTags.Attributes_Combat_Armor,GetArmorAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Combat_ArmorPenetration,GetArmorPenetrationAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Combat_BlockChance,GetBlockChanceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Combat_CriticalHitChance,GetCriticalHitChanceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Combat_CriticalHitDamage,GetCriticalHitDamageAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Combat_CriticalHitResistance,GetCriticalHitResistanceAttribute);
+	
 }
 
 void UCombatAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const

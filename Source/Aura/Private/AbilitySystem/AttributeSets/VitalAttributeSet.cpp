@@ -1,10 +1,14 @@
 ﻿#include "AbilitySystem/AttributeSets/VitalAttributeSet.h"
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
+#include "RPGGameplayTags.h"
 
 UVitalAttributeSet::UVitalAttributeSet()
 {
+	const FRPGGameplayTags GameplayTags = FRPGGameplayTags::Get();
 
+	TagsToAttributes.Add(GameplayTags.Attributes_Vital_HealthRegeneration,GetHealthRegenerationAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Vital_ManaRegeneration,GetManaRegenerationAttribute);
 }
 
 void UVitalAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const

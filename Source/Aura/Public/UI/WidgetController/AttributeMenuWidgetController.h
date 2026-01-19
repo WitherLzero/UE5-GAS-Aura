@@ -31,4 +31,8 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UAttributeInfo> AttributeInfo;
+
+private:
+	void BroadcastAttributeInfo(const class URPGAttributeSetBase* AS) const;
+	void BindAttributeChangeDelegates(const class URPGAttributeSetBase* AS);
 };

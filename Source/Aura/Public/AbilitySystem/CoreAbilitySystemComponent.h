@@ -18,6 +18,8 @@ class AURA_API UCoreAbilitySystemComponent : public UAbilitySystemComponent
 public:
 	void OnAbilityActorInfoSet();
 	
+	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities);
+	
 	FOnEffectAssetTagsGet OnEffectAssetTagsGet;
 	
 protected:

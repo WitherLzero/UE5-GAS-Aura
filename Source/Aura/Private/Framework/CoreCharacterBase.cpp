@@ -4,6 +4,7 @@
 #include "Framework/CoreCharacterBase.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/CoreAbilitySystemComponent.h"
 
 ACoreCharacterBase::ACoreCharacterBase()
 {
@@ -46,6 +47,13 @@ void ACoreCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> Gameplay
 	ContextHandle.AddSourceObject(this);
 	const FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(GameplayEffectClass,Level,ContextHandle);
 	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+}
+
+void ACoreCharacterBase::AddCharacterAbilities()
+{
+	if (!HasAuthority()) return;
+	
+	CastChecked<UCoreAbilitySystemComponent>(AbilitySystemComponent)->AddCharacterAbilities(CharacterAbilities);
 }
 
 

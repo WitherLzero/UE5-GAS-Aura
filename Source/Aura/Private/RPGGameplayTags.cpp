@@ -79,4 +79,36 @@ void FRPGGameplayTags::InitializeNativeGameplayTags()
 		FName("Attributes.Combat.CriticalHitResistance"),
 		FString("Reduces Critical Hit Chance of attacking enemies")
 		);
+
+
+	GameplayTags.Inputs_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Inputs.LMB"),
+		FString("Input Tag for Left Mouse Button")
+		);
+	
+	GameplayTags.Inputs_RMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Inputs.RMB"),
+		FString("Input Tag for Right Mouse Button")
+		);
+	
+	GameplayTags.Inputs_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Inputs.1"),
+		FString("Input Tag for Key 1")
+		);
+	
+	GameplayTags.Inputs_2 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Inputs.2"),
+		FString("Input Tag for Key 2")
+		);
+	
+	GameplayTags.Inputs_3 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Inputs.3"),
+		FString("Input Tag for Key 3")
+		);
+	
+	GameplayTags.Inputs_4 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Inputs.4"),
+		FString("Input Tag for Key 4")
+		);
+	
 }

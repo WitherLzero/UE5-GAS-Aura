@@ -3,9 +3,11 @@
 
 #include "Character/Player/AuraCharacter.h"
 
+#include "RPGGameplayTags.h"
 #include "AbilitySystem/CoreAbilitySystemComponent.h"
 #include "Framework/CorePlayerController.h"
 #include "Framework/CorePlayerState.h"
+#include "Input/RPGInputConfig.h"
 #include "UI/HUD/AuraHUD.h"
 
 
@@ -26,6 +28,27 @@ int32 AAuraCharacter::GetCharacterLevel() const
 	check(AuraPlayerState);
 	return AuraPlayerState->GetPlayerLevel();
 }
+
+bool AAuraCharacter::HandleNativeInput(FGameplayTag Tag, ERPGInputEvent EventType, FInputActionValue Value)
+{
+	return OnNativeInput(Tag,EventType,Value);
+}
+
+bool AAuraCharacter::OnNativeInput_Implementation(FGameplayTag Tag, ERPGInputEvent EventType, FInputActionValue Value)
+{
+	if (Tag == FRPGGameplayTags::Get().Inputs_Move)
+	{
+		if (EventType == ERPGInputEvent::IE_Held)
+		{
+			const FVector2D InputAxis = Value.Get<FVector2D>();
+			Move(InputAxis);
+			return true;
+		}
+	}
+	
+	return false;
+}
+
 
 void AAuraCharacter::Tick(float DeltaTime)
 {

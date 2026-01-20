@@ -111,4 +111,9 @@ void FRPGGameplayTags::InitializeNativeGameplayTags()
 		FString("Input Tag for Key 4")
 		);
 	
+	GameplayTags.Inputs_Move = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Inputs.Move"),
+		FString("Input Tag for Movement")
+		);
+	
 }

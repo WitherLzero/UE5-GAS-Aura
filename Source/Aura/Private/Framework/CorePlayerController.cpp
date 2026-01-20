@@ -44,20 +44,7 @@ void ACorePlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 	URPGInputComponent* RPGInputComponent = CastChecked<URPGInputComponent>(InputComponent);
 	
-	RPGInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&ACorePlayerController::Move);
 	RPGInputComponent->BindTaggedAction(InputConfig,this,&ThisClass::OnInputTagPressed,&ThisClass::OnInputTagReleased,&ThisClass::OnInputTagHeld);
-}
-
-void ACorePlayerController::Move(const FInputActionValue& InputActionValue)
-{
-	const FVector2D InputAxis = InputActionValue.Get<FVector2D>();
-
-	// TODO: Use interface in the future 
-	if (auto* ControlledPawn = GetPawn<ACoreCharacterBase>())
-	{
-		ControlledPawn->Move(InputAxis);
-	}
-
 }
 
 void ACorePlayerController::CursorTrace()
@@ -134,8 +121,16 @@ void ACorePlayerController::OnInputTagHeld(const FInputActionValue& InputActionV
 void ACorePlayerController::ProcessInputTag(FGameplayTag InputTag, ERPGInputEvent EventType,
                                             const FInputActionValue& InputActionValue)
 {
-	if (EventType == ERPGInputEvent::IE_Released) GetASC()->AbilityInputTagReleased(InputTag);
-	if (EventType == ERPGInputEvent::IE_Held) GetASC()->AbilityInputTagHeld(InputTag);
+	if (IInputInteractable* Interface = Cast<IInputInteractable>(GetPawn()))
+	{
+		if (Interface->HandleNativeInput(InputTag,EventType,InputActionValue)) return;
+	}
+
+	if (GetASC())
+	{
+		if (EventType == ERPGInputEvent::IE_Released) GetASC()->AbilityInputTagReleased(InputTag);
+		if (EventType == ERPGInputEvent::IE_Held) GetASC()->AbilityInputTagHeld(InputTag);
+	}
 
 }
 

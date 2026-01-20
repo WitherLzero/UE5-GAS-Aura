@@ -33,13 +33,9 @@ protected:
 	virtual void SetupInputComponent() override;
 	
 private:
-	// Input Callbacks
-	// TODO: Extend to Tag-distribution pattern 
-	void Move(const FInputActionValue& InputActionValue);
-	void CursorTrace();
-	
 	// helpers
 	void UpdateMouse();
+	void CursorTrace();
 	 
 	// IA Callbacks
 	void OnInputTagPressed(FGameplayTag InputTag);

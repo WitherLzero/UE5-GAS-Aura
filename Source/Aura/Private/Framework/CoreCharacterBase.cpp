@@ -4,6 +4,7 @@
 #include "Framework/CoreCharacterBase.h"
 
 #include "AbilitySystemComponent.h"
+#include "InputActionValue.h"
 #include "AbilitySystem/CoreAbilitySystemComponent.h"
 
 ACoreCharacterBase::ACoreCharacterBase()
@@ -25,6 +26,11 @@ void ACoreCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+bool ACoreCharacterBase::HandleNativeInput(FGameplayTag Tag, ERPGInputEvent EventType, FInputActionValue Value)
+{
+	return false;
 }
 
 void ACoreCharacterBase::InitAbilityActorInfo()
@@ -55,5 +61,14 @@ void ACoreCharacterBase::AddCharacterAbilities()
 	
 	CastChecked<UCoreAbilitySystemComponent>(AbilitySystemComponent)->AddCharacterAbilities(CharacterAbilities);
 }
+
+bool ACoreCharacterBase::OnNativeInput_Implementation(FGameplayTag Tag, ERPGInputEvent EventType,
+	FInputActionValue Value)
+{
+	return false;
+}
+
+
+
 
 

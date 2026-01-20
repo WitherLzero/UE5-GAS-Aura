@@ -3,9 +3,9 @@
 
 #include "Input/RPGInputConfig.h"
 
-const UInputAction* URPGInputConfig::FindAbilityInputActionForTag(const FGameplayTag& InputTag, bool bLogNotFound) const
+const UInputAction* URPGInputConfig::FindInputActionForTag(const FGameplayTag& InputTag, bool bLogNotFound) const
 {
-	for (const FRPGInputAction& Action : AbilityInputActions)
+	for (const FRPGInputAction& Action : TaggedInputActions)
 	{
 		if (Action.InputAction && Action.InputTag == InputTag)
 		{

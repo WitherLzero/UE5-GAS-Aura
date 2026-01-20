@@ -4,7 +4,7 @@
 #include "Framework/CorePlayerController.h"
 #include "Framework/CoreCharacterBase.h"
 #include "EnhancedInputSubsystems.h"
-#include "EnhancedInputComponent.h"
+#include "Input/RPGInputComponent.h"
 #include "Interaction/EnemyInterface.h"
 
 
@@ -39,9 +39,10 @@ void ACorePlayerController::BeginPlay()
 void ACorePlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
+	URPGInputComponent* RPGInputComponent = CastChecked<URPGInputComponent>(InputComponent);
 	
-	EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&ACorePlayerController::Move);
+	RPGInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&ACorePlayerController::Move);
+	RPGInputComponent->BindTaggedAction(InputConfig,this,&ThisClass::OnInputTagPressed,&ThisClass::OnInputTagReleased,&ThisClass::OnInputTagHeld);
 }
 
 void ACorePlayerController::Move(const FInputActionValue& InputActionValue)
@@ -111,3 +112,29 @@ void ACorePlayerController::UpdateMouse()
 	InputModeData.SetHideCursorDuringCapture(false);
 	SetInputMode(InputModeData);
 }
+
+void ACorePlayerController::OnInputTagPressed(FGameplayTag InputTag)
+{
+	ProcessInputTag(InputTag,ERPGInputEvent::IE_Pressed);
+}
+
+void ACorePlayerController::OnInputTagReleased(FGameplayTag InputTag)
+{
+	ProcessInputTag(InputTag,ERPGInputEvent::IE_Released);
+}
+
+void ACorePlayerController::OnInputTagHeld(const FInputActionValue& InputActionValue,FGameplayTag InputTag)
+{
+	ProcessInputTag(InputTag,ERPGInputEvent::IE_Held,InputActionValue);
+}
+
+void ACorePlayerController::ProcessInputTag(FGameplayTag InputTag, ERPGInputEvent EventType,
+                                            const FInputActionValue& InputActionValue)
+{
+	if (EventType == ERPGInputEvent::IE_Pressed) GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, *InputTag.ToString());
+	if (EventType == ERPGInputEvent::IE_Released) GEngine->AddOnScreenDebugMessage(2, 3.f, FColor::Green, *InputTag.ToString());
+	if (EventType == ERPGInputEvent::IE_Held) GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Blue, *InputTag.ToString());
+
+}
+
+

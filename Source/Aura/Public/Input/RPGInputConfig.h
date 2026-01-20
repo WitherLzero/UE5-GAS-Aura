@@ -10,6 +10,13 @@
 /**
  * 
  */
+UENUM(BlueprintType)
+enum class ERPGInputEvent: uint8
+{
+	IE_Pressed,
+	IE_Released,
+	IE_Held
+};
 
 USTRUCT(BlueprintType)
 struct FRPGInputAction
@@ -30,8 +37,8 @@ class AURA_API URPGInputConfig : public UDataAsset
 	
 public:
 	
-	const UInputAction* FindAbilityInputActionForTag(const FGameplayTag& InputTag, bool bLogNotFound) const;
+	const UInputAction* FindInputActionForTag(const FGameplayTag& InputTag, bool bLogNotFound) const;
 	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	TArray<FRPGInputAction> AbilityInputActions;
+	TArray<FRPGInputAction> TaggedInputActions;
 };

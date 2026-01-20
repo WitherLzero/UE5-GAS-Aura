@@ -8,6 +8,7 @@
 #include "GameFramework/PlayerController.h"
 #include "CorePlayerController.generated.h"
 
+class UCoreAbilitySystemComponent;
 enum class ERPGInputEvent : uint8;
 class URPGInputConfig;
 class IEnemyInterface;
@@ -48,6 +49,8 @@ private:
 	// Input handler 
 	void ProcessInputTag(FGameplayTag InputTag, ERPGInputEvent EventType, const FInputActionValue& InputActionValue = FInputActionValue());
 	
+	UCoreAbilitySystemComponent* GetASC();
+	
 	UPROPERTY(EditAnywhere, Category= "Input")
 	TObjectPtr<UInputMappingContext> CurrentMappingContext;
 	
@@ -56,6 +59,9 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category= "Input")
 	TObjectPtr<UInputAction> MoveAction;
+	
+	UPROPERTY()
+	TObjectPtr<UCoreAbilitySystemComponent> AbilitySystemComponent;
 	
 	TScriptInterface<IEnemyInterface> LastActor;
 	TScriptInterface<IEnemyInterface> ThisActor;

@@ -2,8 +2,11 @@
 
 
 #include "Framework/CorePlayerController.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
 #include "Framework/CoreCharacterBase.h"
 #include "EnhancedInputSubsystems.h"
+#include "AbilitySystem/CoreAbilitySystemComponent.h"
 #include "Input/RPGInputComponent.h"
 #include "Interaction/EnemyInterface.h"
 
@@ -131,10 +134,18 @@ void ACorePlayerController::OnInputTagHeld(const FInputActionValue& InputActionV
 void ACorePlayerController::ProcessInputTag(FGameplayTag InputTag, ERPGInputEvent EventType,
                                             const FInputActionValue& InputActionValue)
 {
-	if (EventType == ERPGInputEvent::IE_Pressed) GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, *InputTag.ToString());
-	if (EventType == ERPGInputEvent::IE_Released) GEngine->AddOnScreenDebugMessage(2, 3.f, FColor::Green, *InputTag.ToString());
-	if (EventType == ERPGInputEvent::IE_Held) GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Blue, *InputTag.ToString());
+	if (EventType == ERPGInputEvent::IE_Released) GetASC()->AbilityInputTagReleased(InputTag);
+	if (EventType == ERPGInputEvent::IE_Held) GetASC()->AbilityInputTagHeld(InputTag);
 
+}
+
+UCoreAbilitySystemComponent* ACorePlayerController::GetASC()
+{
+	if (AbilitySystemComponent == nullptr)
+	{
+		AbilitySystemComponent = Cast<UCoreAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn<APawn>()));
+	}
+	return AbilitySystemComponent;
 }
 
 

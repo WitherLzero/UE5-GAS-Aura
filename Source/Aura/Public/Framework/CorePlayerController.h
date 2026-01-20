@@ -61,4 +61,8 @@ private:
 	
 	TScriptInterface<IEnemyInterface> LastActor;
 	TScriptInterface<IEnemyInterface> ThisActor;
+	
+public:
+	bool GetCursorHit(FHitResult& HitResult);
+	bool HitEnemyActor() const { return ThisActor?true:false;}
 };

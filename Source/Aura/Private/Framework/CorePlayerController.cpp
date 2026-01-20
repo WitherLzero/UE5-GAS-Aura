@@ -143,4 +143,9 @@ UCoreAbilitySystemComponent* ACorePlayerController::GetASC()
 	return AbilitySystemComponent;
 }
 
+bool ACorePlayerController::GetCursorHit(FHitResult& HitResult)
+{
+	return GetHitResultUnderCursor(ECC_Visibility, false, HitResult);
+}
+
 

@@ -5,6 +5,7 @@
 
 #include "RPGGameplayTags.h"
 #include "AbilitySystem/CoreAbilitySystemComponent.h"
+#include "Components/SplineComponent.h"
 #include "Framework/CorePlayerController.h"
 #include "Framework/CorePlayerState.h"
 #include "Input/RPGInputConfig.h"
@@ -14,6 +15,8 @@
 AAuraCharacter::AAuraCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	
+	Spline = CreateDefaultSubobject<USplineComponent>("Spline");
 }
 
 void AAuraCharacter::BeginPlay()
@@ -43,6 +46,31 @@ bool AAuraCharacter::OnNativeInput_Implementation(FGameplayTag Tag, ERPGInputEve
 			const FVector2D InputAxis = Value.Get<FVector2D>();
 			Move(InputAxis);
 			return true;
+		}
+	}
+
+	if (Tag == FRPGGameplayTags::Get().Inputs_LMB)
+	{
+		if (EventType == ERPGInputEvent::IE_Pressed)
+		{
+			bTargeting = GetPC()->HitEnemyActor();
+			bAutoRunning = false;
+		}
+		if (EventType == ERPGInputEvent::IE_Held)
+		{
+			if (!bTargeting)
+			{
+				FollowTime += GetWorld()->GetDeltaSeconds();
+				FHitResult Hit;
+				if (GetPC()->GetCursorHit(Hit))
+				{
+					CachedDestination = Hit.ImpactPoint;
+				}
+				
+				const FVector WorldDirection = (CachedDestination - GetActorLocation()).GetSafeNormal();
+				AddMovementInput(WorldDirection);
+				return true;
+			}
 		}
 	}
 	
@@ -87,6 +115,15 @@ void AAuraCharacter::InitAbilityActorInfo()
 			AuraHUD->InitOverlay(AbilitySystemComponent,AuraPlayerController,AuraPlayerState);
 		}
 	}
+}
+
+ACorePlayerController* AAuraCharacter::GetPC()
+{
+	if (PlayerController == nullptr)
+	{
+		PlayerController = Cast<ACorePlayerController>(GetController());
+	}
+	return PlayerController;
 }
 
 void AAuraCharacter::Move(const FVector2D& InputAxis)

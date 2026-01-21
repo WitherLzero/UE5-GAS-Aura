@@ -3,6 +3,8 @@
 
 #include "Character/Player/AuraCharacter.h"
 
+#include "NavigationPath.h"
+#include "NavigationSystem.h"
 #include "RPGGameplayTags.h"
 #include "AbilitySystem/CoreAbilitySystemComponent.h"
 #include "Components/SplineComponent.h"
@@ -55,6 +57,7 @@ bool AAuraCharacter::OnNativeInput_Implementation(FGameplayTag Tag, ERPGInputEve
 		{
 			bTargeting = GetPC()->HitEnemyActor();
 			bAutoRunning = false;
+			return true;
 		}
 		if (EventType == ERPGInputEvent::IE_Held)
 		{
@@ -70,6 +73,28 @@ bool AAuraCharacter::OnNativeInput_Implementation(FGameplayTag Tag, ERPGInputEve
 				const FVector WorldDirection = (CachedDestination - GetActorLocation()).GetSafeNormal();
 				AddMovementInput(WorldDirection);
 				return true;
+			}
+		}
+		if (EventType == ERPGInputEvent::IE_Released)
+		{
+			if (!bTargeting)
+			{
+				if (FollowTime <= ShortPressThreshold)
+				{
+					if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(
+						this,GetActorLocation(),CachedDestination))
+					{
+						Spline->ClearSplinePoints();
+						for (const FVector& PointLoc: NavPath->PathPoints)
+						{
+							Spline->AddSplinePoint(PointLoc,ESplineCoordinateSpace::World);
+							DrawDebugSphere(GetWorld(),PointLoc,8.f,8,FColor::Green,false,5.f);
+						}
+					}
+					bAutoRunning = true;
+				}
+				FollowTime = 0.f;
+				bTargeting = false;
 			}
 		}
 	}

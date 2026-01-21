@@ -56,37 +56,10 @@ void ACorePlayerController::CursorTrace()
 	LastActor = ThisActor;
 	ThisActor = CursorHit.GetActor();
 
-	if (LastActor == nullptr)
+	if (LastActor != ThisActor)
 	{
-		if (ThisActor != nullptr) 
-		{
-			/* Last->null, This->valid 
-			 * First trace, highlight the new enemy */
-			ThisActor->HighlightActor();
-		}
-		/* Last/This->null 
-		 * Do nothing */
-	}
-	else
-	{
-		if (ThisActor == nullptr) 
-		{
-			/* Last->valid, This->null 
-			 * UnHighlight Last */
-			LastActor->UnHighlightActor();
-		}
-		else
-		{
-			if (ThisActor != LastActor)
-			{
-				/* Last/This->valid, Last != This 
-				* UnHighlight Last, Highlight This */
-				LastActor->UnHighlightActor();
-				ThisActor->HighlightActor();
-			}
-			/* Last == This
-			 * Do nothing */
-		}
+		if (LastActor) LastActor->UnHighlightActor();
+		if (ThisActor) ThisActor->HighlightActor();
 	}
 }
 

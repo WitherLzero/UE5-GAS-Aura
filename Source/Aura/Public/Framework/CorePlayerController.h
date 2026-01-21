@@ -53,8 +53,6 @@ private:
 	UPROPERTY(EditDefaultsOnly,Category= "Input")
 	TObjectPtr<URPGInputConfig> InputConfig;
 	
-	UPROPERTY(EditAnywhere, Category= "Input")
-	TObjectPtr<UInputAction> MoveAction;
 	
 	UPROPERTY()
 	TObjectPtr<UCoreAbilitySystemComponent> AbilitySystemComponent;

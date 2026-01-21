@@ -27,9 +27,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	
-	/* Input Interactable */
-	virtual bool HandleNativeInput(FGameplayTag Tag, ERPGInputEvent EventType, FInputActionValue Value) override;
-	/* end Input Interactable*/
+	/* ICombatInterface */
+	virtual FVector GetCombatSocketLocation() const override;
+	/* end ICombatInterface */
 	
 	virtual void InitAbilityActorInfo();
 	
@@ -43,6 +43,9 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, Category= "Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
+
+	UPROPERTY(EditAnywhere, Category= "Combat")
+	FName WeaponTipSocketName;
 	
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;

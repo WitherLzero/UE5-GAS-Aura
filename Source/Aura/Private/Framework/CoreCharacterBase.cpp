@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "InputActionValue.h"
 #include "AbilitySystem/CoreAbilitySystemComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 ACoreCharacterBase::ACoreCharacterBase()
 {
@@ -28,10 +29,12 @@ void ACoreCharacterBase::BeginPlay()
 	
 }
 
-bool ACoreCharacterBase::HandleNativeInput(FGameplayTag Tag, ERPGInputEvent EventType, FInputActionValue Value)
+FVector ACoreCharacterBase::GetCombatSocketLocation() const
 {
-	return false;
+	check(Weapon);
+	return Weapon->GetSocketLocation(WeaponTipSocketName);
 }
+
 
 void ACoreCharacterBase::InitAbilityActorInfo()
 {
@@ -67,6 +70,7 @@ bool ACoreCharacterBase::OnNativeInput_Implementation(FGameplayTag Tag, ERPGInpu
 {
 	return false;
 }
+
 
 
 

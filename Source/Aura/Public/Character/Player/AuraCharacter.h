@@ -23,6 +23,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	
+
 	/* Combat Interface */
 	virtual int32 GetCharacterLevel() const override;
 	/* end Combat Interface */
@@ -34,6 +35,9 @@ protected:
 	// Input handlers
 	virtual bool OnNativeInput_Implementation(FGameplayTag Tag, ERPGInputEvent EventType, FInputActionValue Value) override;
 	virtual void Move(const FVector2D& InputAxis) override;
+	bool HoldToMove();
+	bool SetupNavPoints();
+	void AutoRun();
 	
 	
 	UPROPERTY()

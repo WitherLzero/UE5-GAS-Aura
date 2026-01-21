@@ -27,6 +27,13 @@ void AAuraCharacter::BeginPlay()
 	
 }
 
+void AAuraCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	AutoRun();
+
+}
+
 int32 AAuraCharacter::GetCharacterLevel() const
 {
 	ACorePlayerState* AuraPlayerState = GetPlayerState<ACorePlayerState>();
@@ -38,6 +45,7 @@ bool AAuraCharacter::HandleNativeInput(FGameplayTag Tag, ERPGInputEvent EventTyp
 {
 	return OnNativeInput(Tag,EventType,Value);
 }
+
 
 bool AAuraCharacter::OnNativeInput_Implementation(FGameplayTag Tag, ERPGInputEvent EventType, FInputActionValue Value)
 {
@@ -61,51 +69,15 @@ bool AAuraCharacter::OnNativeInput_Implementation(FGameplayTag Tag, ERPGInputEve
 		}
 		if (EventType == ERPGInputEvent::IE_Held)
 		{
-			if (!bTargeting)
-			{
-				FollowTime += GetWorld()->GetDeltaSeconds();
-				FHitResult Hit;
-				if (GetPC()->GetCursorHit(Hit))
-				{
-					CachedDestination = Hit.ImpactPoint;
-				}
-				
-				const FVector WorldDirection = (CachedDestination - GetActorLocation()).GetSafeNormal();
-				AddMovementInput(WorldDirection);
-				return true;
-			}
+			if (HoldToMove()) return true;
 		}
 		if (EventType == ERPGInputEvent::IE_Released)
 		{
-			if (!bTargeting)
-			{
-				if (FollowTime <= ShortPressThreshold)
-				{
-					if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(
-						this,GetActorLocation(),CachedDestination))
-					{
-						Spline->ClearSplinePoints();
-						for (const FVector& PointLoc: NavPath->PathPoints)
-						{
-							Spline->AddSplinePoint(PointLoc,ESplineCoordinateSpace::World);
-							DrawDebugSphere(GetWorld(),PointLoc,8.f,8,FColor::Green,false,5.f);
-						}
-					}
-					bAutoRunning = true;
-				}
-				FollowTime = 0.f;
-				bTargeting = false;
-			}
+			if (SetupNavPoints()) return true;
 		}
 	}
 	
 	return false;
-}
-
-
-void AAuraCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 }
 
 
@@ -162,4 +134,63 @@ void AAuraCharacter::Move(const FVector2D& InputAxis)
 	AddMovementInput(Right,InputAxis.X);
 }
 
+bool AAuraCharacter::HoldToMove()
+{
+	if (!bTargeting)
+	{
+		FollowTime += GetWorld()->GetDeltaSeconds();
+		FHitResult Hit;
+		if (GetPC()->GetCursorHit(Hit))
+		{
+			CachedDestination = Hit.ImpactPoint;
+		}
+				
+		const FVector WorldDirection = (CachedDestination - GetActorLocation()).GetSafeNormal();
+		AddMovementInput(WorldDirection);
+		return true;
+	}
+	return false;
+}
+
+bool AAuraCharacter::SetupNavPoints()
+{
+	if (!bTargeting)
+	{
+		if (FollowTime <= ShortPressThreshold)
+		{
+			if (UNavigationPath* NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(
+				this,GetActorLocation(),CachedDestination))
+			{
+				Spline->ClearSplinePoints();
+				for (const FVector& PointLoc: NavPath->PathPoints)
+				{
+					Spline->AddSplinePoint(PointLoc,ESplineCoordinateSpace::World);
+					DrawDebugSphere(GetWorld(),PointLoc,8.f,8,FColor::Green,false,5.f);
+				}
+				CachedDestination = NavPath->PathPoints[NavPath->PathPoints.Num() - 1];
+			}
+			bAutoRunning = true;
+		}
+		FollowTime = 0.f;
+		bTargeting = false;
+		return true;
+	}
+	return false;
+}
+
+void AAuraCharacter::AutoRun()
+{
+	if (bAutoRunning)
+	{
+		const FVector LocationOnSpline = Spline->FindLocationClosestToWorldLocation(GetActorLocation(), ESplineCoordinateSpace::World);
+		const FVector Direction = Spline->FindDirectionClosestToWorldLocation(LocationOnSpline, ESplineCoordinateSpace::World);
+		AddMovementInput(Direction);
+		
+		const float DistanceToDestination = (LocationOnSpline - CachedDestination).Length();
+		if (DistanceToDestination <= AutoRunAcceptanceRadius)
+		{
+			bAutoRunning = false;
+		}
+	}
+}
 

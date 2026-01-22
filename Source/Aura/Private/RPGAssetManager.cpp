@@ -3,6 +3,8 @@
 
 #include "RPGAssetManager.h"
 
+#include "AbilitySystemGlobals.h"
+
 #include "RPGGameplayTags.h"
 
 URPGAssetManager& URPGAssetManager::Get()
@@ -16,4 +18,6 @@ void URPGAssetManager::StartInitialLoading()
 	Super::StartInitialLoading();
 	
 	FRPGGameplayTags::InitializeNativeGameplayTags();
+	
+	UAbilitySystemGlobals::Get().InitGlobalData();
 }

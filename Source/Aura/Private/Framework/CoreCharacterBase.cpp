@@ -6,11 +6,15 @@
 #include "AbilitySystemComponent.h"
 #include "InputActionValue.h"
 #include "AbilitySystem/CoreAbilitySystemComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 ACoreCharacterBase::ACoreCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera,ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Camera,ECR_Ignore);
 	
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
 	Weapon->SetupAttachment(GetMesh(),FName("WeaponSocket"));

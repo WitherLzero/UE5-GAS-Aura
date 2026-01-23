@@ -58,7 +58,6 @@ bool AAuraCharacter::OnNativeInput_Implementation(FGameplayTag Tag, ERPGInputEve
 			return true;
 		}
 	}
-
 	if (Tag == FRPGGameplayTags::Get().Inputs_LMB)
 	{
 		if (EventType == ERPGInputEvent::IE_Pressed)

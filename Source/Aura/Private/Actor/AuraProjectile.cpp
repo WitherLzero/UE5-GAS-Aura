@@ -4,7 +4,10 @@
 #include "Actor/AuraProjectile.h"
 
 #include "Components/SphereComponent.h"
+#include "Components/AudioComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 
 AAuraProjectile::AAuraProjectile()
@@ -32,13 +35,39 @@ AAuraProjectile::AAuraProjectile()
 void AAuraProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+	SetLifeSpan(LifeTime);
 	
 	Sphere->OnComponentBeginOverlap.AddDynamic(this,&ThisClass::OnSphereOverlap);
+	LoopingAudioComponent = UGameplayStatics::SpawnSoundAttached(ImpactSound,GetRootComponent());
+}
+
+void AAuraProjectile::Destroyed()
+{
+	if (!bHit && !HasAuthority())
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this,ImpactEffect,GetActorLocation());
+		UGameplayStatics::PlaySoundAtLocation(this,ImpactSound,GetActorLocation(),FRotator::ZeroRotator);
+		LoopingAudioComponent->Stop();
+	}
+	Super::Destroyed();
 }
 
 void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                      UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this,ImpactEffect,GetActorLocation());
+	UGameplayStatics::PlaySoundAtLocation(this,ImpactSound,GetActorLocation(),FRotator::ZeroRotator);
+	LoopingAudioComponent->Stop();
+
+	if (HasAuthority())
+	{
+		Destroy();
+	}
+	else  // Determine whether the clients spawned the FXs before server destroyed
+	{
+		bHit=true;
+	}
+	
 }
 
 

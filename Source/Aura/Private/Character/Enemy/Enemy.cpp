@@ -4,6 +4,7 @@
 #include "Character/Enemy/Enemy.h"
 
 #include "AbilitySystem/CoreAbilitySystemComponent.h"
+#include "AbilitySystem/RPGAbilitySystemLibrary.h"
 #include "AbilitySystem/RPGAttributeSetBase.h"
 #include "AbilitySystem/AttributeSets/CombatAttributeSet.h"
 #include "AbilitySystem/AttributeSets/PrimaryAttributeSet.h"
@@ -62,6 +63,11 @@ void AEnemy::InitAbilityActorInfo()
 	Cast<UCoreAbilitySystemComponent>(AbilitySystemComponent)->OnAbilityActorInfoSet();
 	
 	InitDefaultAttributes();
+}
+
+void AEnemy::InitDefaultAttributes() const
+{
+	URPGAbilitySystemLibrary::InitDefaultAttributes(this,GetAbilitySystemComponent(),CharacterClass,Level);
 }
 
 void AEnemy::HighlightActor()

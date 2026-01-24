@@ -3,9 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Data/CharacterClassInfo.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "RPGAbilitySystemLibrary.generated.h"
 
+enum class ECharacterClass : uint8;
+class UAbilitySystemComponent;
 class UAttributeMenuWidgetController;
 /**
  * 
@@ -18,5 +21,13 @@ class AURA_API URPGAbilitySystemLibrary : public UBlueprintFunctionLibrary
 public:
 	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|WidgetController")
 	static UAttributeMenuWidgetController* GetAttributeMenuWidgetController(const UObject* WorldContextObject);
-	
+
+	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystem|CharacterClassDefaults")
+	static void InitDefaultAttributes(const UObject* WorldContextObject,UAbilitySystemComponent* ASC, ECharacterClass CharacterClass, float Level);
+
+private:
+	static void ApplyEffectToSelf(UAbilitySystemComponent* ASC, AActor* Avatar,
+							  TSubclassOf<UGameplayEffect> EffectClass,
+							  float Level);
+
 };

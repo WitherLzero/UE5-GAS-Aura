@@ -9,6 +9,8 @@
 #include "AbilitySystem/AttributeSets/PrimaryAttributeSet.h"
 #include "AbilitySystem/AttributeSets/VitalAttributeSet.h"
 #include "Aura/Aura.h"
+#include "Components/WidgetComponent.h"
+#include "UI/Widget/UserWidgetBase.h"
 
 
 AEnemy::AEnemy()
@@ -23,6 +25,9 @@ AEnemy::AEnemy()
 	VitalAS = CreateDefaultSubobject<UVitalAttributeSet>("VitalAttributeSet");
 	PrimaryAS = CreateDefaultSubobject<UPrimaryAttributeSet>("PrimaryAttributeSet");
 	CombatAS = CreateDefaultSubobject<UCombatAttributeSet>("CombatAttributeSet");
+
+	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
+	HealthBar->SetupAttachment(GetRootComponent());
 }
 
 void AEnemy::BeginPlay()
@@ -32,6 +37,23 @@ void AEnemy::BeginPlay()
 	Weapon->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
 	
 	InitAbilityActorInfo();
+
+	if (UUserWidgetBase* HealthWidget = Cast<UUserWidgetBase>(HealthBar->GetUserWidgetObject()))
+	{
+		HealthWidget->SetWidgetController(this);
+	}
+	
+	OnHealthChanged.Broadcast(VitalAS->GetHealth());
+	OnMaxHealthChanged.Broadcast(VitalAS->GetMaxHealth());
+	
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+		VitalAS->GetHealthAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data){ OnHealthChanged.Broadcast(Data.NewValue);});
+	
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+			VitalAS->GetMaxHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData& Data){ OnMaxHealthChanged.Broadcast(Data.NewValue);});
+	
 }
 
 void AEnemy::InitAbilityActorInfo()

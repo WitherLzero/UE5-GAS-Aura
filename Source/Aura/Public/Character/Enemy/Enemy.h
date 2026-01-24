@@ -5,8 +5,10 @@
 #include "CoreMinimal.h"
 #include "Framework/CoreCharacterBase.h"
 #include "Interaction/EnemyInterface.h"
+#include "UI/WidgetController/OverlayWidgetController.h"
 #include "Enemy.generated.h"
 
+class UWidgetComponent;
 class UCombatAttributeSet;
 class UPrimaryAttributeSet;
 class UVitalAttributeSet;
@@ -20,6 +22,11 @@ public:
 	AEnemy();
 	virtual void Tick(float DeltaTime) override;
 	
+	UPROPERTY(BlueprintAssignable, Category="GAS | Attributes")
+	FOnAttributeChanged OnHealthChanged;
+
+	UPROPERTY(BlueprintAssignable, Category="GAS | Attributes")
+	FOnAttributeChanged OnMaxHealthChanged;
 
 protected:
 	virtual void BeginPlay() override;
@@ -41,6 +48,9 @@ protected:
 	TObjectPtr<UPrimaryAttributeSet> PrimaryAS;
 	UPROPERTY()
 	TObjectPtr<UCombatAttributeSet> CombatAS;
+	
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	TObjectPtr<UWidgetComponent> HealthBar;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	int32 Level = 1;

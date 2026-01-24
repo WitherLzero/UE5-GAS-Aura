@@ -15,9 +15,8 @@ URPGAttributeSetBase::URPGAttributeSetBase()
 void URPGAttributeSetBase::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
-
-	FEffectProperties Props;
-	SetEffectProperties(Data, Props);
+	
+	SetEffectProperties(Data, EffectProps);
 }
 
 void URPGAttributeSetBase::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const

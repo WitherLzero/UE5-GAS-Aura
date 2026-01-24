@@ -7,6 +7,10 @@
 #include "Interaction/EnemyInterface.h"
 #include "Enemy.generated.h"
 
+class UCombatAttributeSet;
+class UPrimaryAttributeSet;
+class UVitalAttributeSet;
+
 UCLASS()
 class AURA_API AEnemy : public ACoreCharacterBase, public IEnemyInterface
 {
@@ -30,6 +34,13 @@ protected:
 	/* Combat Interface */
 	virtual int32 GetCharacterLevel() const override;
 	/* end Combat Interface */
+	
+	UPROPERTY()
+	TObjectPtr<UVitalAttributeSet> VitalAS;
+	UPROPERTY()
+	TObjectPtr<UPrimaryAttributeSet> PrimaryAS;
+	UPROPERTY()
+	TObjectPtr<UCombatAttributeSet> CombatAS;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	int32 Level = 1;

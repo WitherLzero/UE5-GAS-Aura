@@ -5,6 +5,9 @@
 
 #include "AbilitySystem/CoreAbilitySystemComponent.h"
 #include "AbilitySystem/RPGAttributeSetBase.h"
+#include "AbilitySystem/AttributeSets/CombatAttributeSet.h"
+#include "AbilitySystem/AttributeSets/PrimaryAttributeSet.h"
+#include "AbilitySystem/AttributeSets/VitalAttributeSet.h"
 #include "Aura/Aura.h"
 
 
@@ -17,7 +20,9 @@ AEnemy::AEnemy()
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 	
-	AttributeSet = CreateDefaultSubobject<URPGAttributeSetBase>("AttributeSet");
+	VitalAS = CreateDefaultSubobject<UVitalAttributeSet>("VitalAttributeSet");
+	PrimaryAS = CreateDefaultSubobject<UPrimaryAttributeSet>("PrimaryAttributeSet");
+	CombatAS = CreateDefaultSubobject<UCombatAttributeSet>("CombatAttributeSet");
 }
 
 void AEnemy::BeginPlay()
@@ -33,6 +38,8 @@ void AEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);
 	Cast<UCoreAbilitySystemComponent>(AbilitySystemComponent)->OnAbilityActorInfoSet();
+	
+	InitDefaultAttributes();
 }
 
 void AEnemy::HighlightActor()

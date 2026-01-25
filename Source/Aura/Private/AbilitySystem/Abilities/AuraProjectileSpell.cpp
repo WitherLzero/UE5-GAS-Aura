@@ -39,13 +39,13 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLoc)
 			SpawnTransform,
 			GetOwningActorFromActorInfo(),Cast<APawn>(GetOwningActorFromActorInfo()),
 			ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
-	
-		// TODO: Give the Projectile a Gameplay Effect Spec for causing Damage.  
+		
 		const UAbilitySystemComponent* SourceASC =  UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
 		const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass,GetAbilityLevel(),SourceASC->MakeEffectContext());
 		
 		FRPGGameplayTags GameplayTags = FRPGGameplayTags::Get();
-		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle,GameplayTags.Damage,60.f);
+		const float ScaledDamage = Damage.GetValueAtLevel(GetAbilityLevel());
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle,GameplayTags.Damage,ScaledDamage);
 		
 		Projectile->DamageEffectSpecHandle = SpecHandle;
 		

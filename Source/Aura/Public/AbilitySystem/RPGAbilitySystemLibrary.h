@@ -25,6 +25,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystem|CharacterClassDefaults")
 	static void InitDefaultAttributes(const UObject* WorldContextObject,UAbilitySystemComponent* ASC, ECharacterClass CharacterClass, float Level);
 
+	UFUNCTION(BlueprintCallable, Category="AuraAbilitySystemLibrary|CharacterClassDefaults")
+	static void GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC);
 private:
 	static void ApplyEffectToSelf(UAbilitySystemComponent* ASC, AActor* Avatar,
 							  TSubclassOf<UGameplayEffect> EffectClass,

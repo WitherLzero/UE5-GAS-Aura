@@ -59,6 +59,12 @@ void UVitalAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
 			
 			const bool bFatal = NewHealth <= 0.f;
+			if (!bFatal)
+			{
+				FGameplayTagContainer TagContainer;
+				TagContainer.AddTag(FRPGGameplayTags::Get().Effects_HitReact);
+				EffectProps.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+			}
 		}
 	}
 }

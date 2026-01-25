@@ -66,6 +66,7 @@ void AEnemy::InitAbilityActorInfo()
 	Cast<UCoreAbilitySystemComponent>(AbilitySystemComponent)->OnAbilityActorInfoSet();
 	
 	InitDefaultAttributes();
+	URPGAbilitySystemLibrary::GiveStartupAbilities(this,AbilitySystemComponent);
 }
 
 void AEnemy::InitDefaultAttributes() const

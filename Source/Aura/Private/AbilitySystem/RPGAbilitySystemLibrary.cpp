@@ -46,6 +46,21 @@ void URPGAbilitySystemLibrary::InitDefaultAttributes(const UObject* WorldContext
 	ApplyEffectToSelf(ASC, Avatar, CharacterClassInfo->VitalAttributes, Level);
 }
 
+void URPGAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
+{
+	ACoreGameModeBase* GameMode = Cast<ACoreGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if (!GameMode) return;
+	
+	UCharacterClassInfo* CharacterClassInfo = GameMode->CharacterClassInfo;
+	for (const TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbilities)
+	{
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass,1);
+		ASC->GiveAbility(AbilitySpec);
+	}
+	
+	
+}
+
 void URPGAbilitySystemLibrary::ApplyEffectToSelf(UAbilitySystemComponent* ASC, AActor* Avatar, TSubclassOf<UGameplayEffect> EffectClass, float Level)
 {
 	FGameplayEffectContextHandle ContextHandle =ASC->MakeEffectContext();

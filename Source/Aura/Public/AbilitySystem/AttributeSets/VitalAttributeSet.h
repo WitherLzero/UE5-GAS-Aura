@@ -63,4 +63,12 @@ public:
 
 	UFUNCTION()
 	void OnRep_ManaRegeneration(const FGameplayAttributeData& OldManaRegeneration) const;
+	
+	/*
+	*  Meta Attributes
+	*/
+	
+	UPROPERTY(BlueprintReadOnly, Category="Meta Attributes")
+	FGameplayAttributeData IncomingDamage;
+	ATTRIBUTE_ACCESSORS(UVitalAttributeSet, IncomingDamage)
 };

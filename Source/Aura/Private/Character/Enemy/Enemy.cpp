@@ -3,6 +3,7 @@
 
 #include "Character/Enemy/Enemy.h"
 
+#include "RPGGameplayTags.h"
 #include "AbilitySystem/CoreAbilitySystemComponent.h"
 #include "AbilitySystem/RPGAbilitySystemLibrary.h"
 #include "AbilitySystem/RPGAttributeSetBase.h"
@@ -55,6 +56,8 @@ void AEnemy::BeginPlay()
 			VitalAS->GetMaxHealthAttribute()).AddLambda(
 			[this](const FOnAttributeChangeData& Data){ OnMaxHealthChanged.Broadcast(Data.NewValue);});
 	
+	AbilitySystemComponent->RegisterGameplayTagEvent(FRPGGameplayTags::Get().Effects_HitReact,EGameplayTagEventType::NewOrRemoved).AddUObject(
+		this,&ThisClass::HitReactTagChanged);
 }
 
 void AEnemy::InitAbilityActorInfo()
@@ -85,6 +88,11 @@ void AEnemy::UnHighlightActor()
 int32 AEnemy::GetCharacterLevel() const
 {
 	return Level;
+}
+
+void AEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
+{
+	bHitReacting = NewCount > 0;
 }
 
 void AEnemy::Tick(float DeltaTime)

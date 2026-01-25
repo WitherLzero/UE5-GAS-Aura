@@ -46,8 +46,17 @@ public:
 	FGameplayTag Inputs_4;
 	FGameplayTag Inputs_Move;
 	
+	
+	/*
+	 *  Damage Tags
+	 */
 	FGameplayTag Damage;
 	
+	
+	/*
+	 *  Effect Tags
+	 */
+	FGameplayTag Effects_HitReact;
 	
 protected:
 	

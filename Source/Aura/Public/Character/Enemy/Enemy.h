@@ -44,6 +44,9 @@ protected:
 	virtual int32 GetCharacterLevel() const override;
 	/* end Combat Interface */
 	
+	void HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
+	
+	
 	UPROPERTY()
 	TObjectPtr<UVitalAttributeSet> VitalAS;
 	UPROPERTY()
@@ -53,6 +56,9 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthBar;
+	
+	UPROPERTY(BlueprintReadOnly, Category = "Combat")
+	bool bHitReacting = false;
 	
 	UPROPERTY(EditAnywhere,Category = "Character Class Defaults")
 	int32 Level = 1;

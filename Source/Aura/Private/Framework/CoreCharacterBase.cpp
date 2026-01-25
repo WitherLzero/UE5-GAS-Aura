@@ -42,6 +42,11 @@ FVector ACoreCharacterBase::GetCombatSocketLocation() const
 	return Weapon->GetSocketLocation(WeaponTipSocketName);
 }
 
+UAnimMontage* ACoreCharacterBase::GetHitReactMontage_Implementation()
+{
+	return HitReactMontage;
+}
+
 
 void ACoreCharacterBase::InitAbilityActorInfo()
 {

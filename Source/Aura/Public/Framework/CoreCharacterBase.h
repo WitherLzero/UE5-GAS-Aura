@@ -29,6 +29,7 @@ protected:
 	
 	/* ICombatInterface */
 	virtual FVector GetCombatSocketLocation() const override;
+	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
 	/* end ICombatInterface */
 	
 	virtual void InitAbilityActorInfo();
@@ -46,6 +47,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category= "Combat")
 	FName WeaponTipSocketName;
+	
+	UPROPERTY(EditAnywhere, Category = "Montages")
+	TObjectPtr<UAnimMontage> HitReactMontage;
 	
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;

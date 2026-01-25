@@ -46,6 +46,8 @@ public:
 	FGameplayTag Inputs_4;
 	FGameplayTag Inputs_Move;
 	
+	FGameplayTag Damage;
+	
 	
 protected:
 	

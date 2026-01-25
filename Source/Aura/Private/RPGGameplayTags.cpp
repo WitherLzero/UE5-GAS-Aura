@@ -116,4 +116,10 @@ void FRPGGameplayTags::InitializeNativeGameplayTags()
 		FString("Input Tag for Movement")
 		);
 	
+	
+	GameplayTags.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Damage"),
+	FString("Damage")
+		);
+	
 }

@@ -42,6 +42,7 @@ protected:
 	
 	/* Combat Interface */
 	virtual int32 GetCharacterLevel() const override;
+	virtual void Die() override;
 	/* end Combat Interface */
 	
 	void HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
@@ -59,6 +60,9 @@ protected:
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Combat")
 	bool bHitReacting = false;
+	
+	UPROPERTY(BlueprintReadOnly, Category = "Combat")
+	float LifeSpan = 3.f;
 	
 	UPROPERTY(EditAnywhere,Category = "Character Class Defaults")
 	int32 Level = 1;

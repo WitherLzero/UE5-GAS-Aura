@@ -36,6 +36,12 @@ void ACoreCharacterBase::BeginPlay()
 	
 }
 
+void ACoreCharacterBase::Die()
+{
+	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
+	MulticastHandleDeath();
+}
+
 FVector ACoreCharacterBase::GetCombatSocketLocation() const
 {
 	check(Weapon);
@@ -77,8 +83,22 @@ void ACoreCharacterBase::AddCharacterAbilities()
 	CastChecked<UCoreAbilitySystemComponent>(AbilitySystemComponent)->AddCharacterAbilities(CharacterAbilities);
 }
 
+void ACoreCharacterBase::MulticastHandleDeath_Implementation()
+{
+	Weapon->SetSimulatePhysics(true);
+	Weapon->SetEnableGravity(true);
+	Weapon->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->SetEnableGravity(true);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	GetMesh()->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+	
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
 bool ACoreCharacterBase::OnNativeInput_Implementation(FGameplayTag Tag, ERPGInputEvent EventType,
-	FInputActionValue Value)
+                                                      FInputActionValue Value)
 {
 	return false;
 }

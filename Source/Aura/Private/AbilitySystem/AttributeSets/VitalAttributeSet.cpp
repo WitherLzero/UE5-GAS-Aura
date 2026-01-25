@@ -2,6 +2,7 @@
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
 #include "RPGGameplayTags.h"
+#include "Interaction/CombatInterface.h"
 
 UVitalAttributeSet::UVitalAttributeSet()
 {
@@ -64,6 +65,13 @@ void UVitalAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 				FGameplayTagContainer TagContainer;
 				TagContainer.AddTag(FRPGGameplayTags::Get().Effects_HitReact);
 				EffectProps.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+			}else
+			{
+				ICombatInterface* CombatInterface = Cast<ICombatInterface>(EffectProps.TargetAvatarActor);
+				if (CombatInterface)
+				{
+					CombatInterface->Die();
+				}
 			}
 		}
 	}

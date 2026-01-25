@@ -28,6 +28,7 @@ protected:
 	virtual void BeginPlay() override;
 	
 	/* ICombatInterface */
+	virtual void Die() override;
 	virtual FVector GetCombatSocketLocation() const override;
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
 	/* end ICombatInterface */
@@ -38,6 +39,9 @@ protected:
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const;
 	
 	void AddCharacterAbilities();
+	
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleDeath();
 	
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable,Category="Input | Native")
 	bool OnNativeInput(FGameplayTag Tag, ERPGInputEvent EventType, FInputActionValue Value);

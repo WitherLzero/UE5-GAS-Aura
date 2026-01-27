@@ -2,7 +2,9 @@
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
 #include "RPGGameplayTags.h"
+#include "Framework/CorePlayerController.h"
 #include "Interaction/CombatInterface.h"
+#include "Kismet/GameplayStatics.h"
 
 UVitalAttributeSet::UVitalAttributeSet()
 {
@@ -60,6 +62,15 @@ void UVitalAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
 			
 			const bool bFatal = NewHealth <= 0.f;
+
+			if (EffectProps.SourceCharacter != EffectProps.TargetCharacter)
+			{
+				if (ACorePlayerController* PC = Cast<ACorePlayerController>(UGameplayStatics::GetPlayerController(EffectProps.TargetAvatarActor,0)))
+				{
+					PC->ShowDamageNumber(EffectProps.TargetCharacter,LocalIncomingDamage);
+				}
+			}
+			
 			if (!bFatal)
 			{
 				FGameplayTagContainer TagContainer;

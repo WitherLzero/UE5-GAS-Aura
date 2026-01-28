@@ -34,11 +34,9 @@ UAttributeMenuWidgetController* URPGAbilitySystemLibrary::GetAttributeMenuWidget
 void URPGAbilitySystemLibrary::InitDefaultAttributes(const UObject* WorldContextObject, UAbilitySystemComponent* ASC,
                                                      ECharacterClass CharacterClass, float Level)
 {
-	ACoreGameModeBase* GameMode = Cast<ACoreGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (!GameMode) return;
+	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
 	
 	AActor* Avatar = ASC->GetAvatarActor();
-	UCharacterClassInfo* CharacterClassInfo = GameMode->CharacterClassInfo;
 	FCharacterClassDefaultInfo ClassDefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
 	
 	ApplyEffectToSelf(ASC, Avatar, ClassDefaultInfo.PrimaryAttributes, Level);
@@ -46,12 +44,10 @@ void URPGAbilitySystemLibrary::InitDefaultAttributes(const UObject* WorldContext
 	ApplyEffectToSelf(ASC, Avatar, CharacterClassInfo->VitalAttributes, Level);
 }
 
+
 void URPGAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
 {
-	ACoreGameModeBase* GameMode = Cast<ACoreGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (!GameMode) return;
-	
-	UCharacterClassInfo* CharacterClassInfo = GameMode->CharacterClassInfo;
+	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
 	for (const TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbilities)
 	{
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass,1);
@@ -60,6 +56,15 @@ void URPGAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContextO
 	
 	
 }
+
+UCharacterClassInfo* URPGAbilitySystemLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)
+{
+	ACoreGameModeBase* GameMode = Cast<ACoreGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if (!GameMode) return nullptr;
+	
+	return GameMode->CharacterClassInfo;
+}
+
 
 void URPGAbilitySystemLibrary::ApplyEffectToSelf(UAbilitySystemComponent* ASC, AActor* Avatar, TSubclassOf<UGameplayEffect> EffectClass, float Level)
 {

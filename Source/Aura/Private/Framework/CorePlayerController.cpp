@@ -48,7 +48,7 @@ void ACorePlayerController::SetupInputComponent()
 	RPGInputComponent->BindTaggedAction(InputConfig,this,&ThisClass::OnInputTagPressed,&ThisClass::OnInputTagReleased,&ThisClass::OnInputTagHeld);
 }
 
-void ACorePlayerController::ShowDamageNumber_Implementation(ACharacter* TargetCharacter, float DamageAmount)
+void ACorePlayerController::ShowDamageNumber_Implementation(ACharacter* TargetCharacter, float DamageAmount, bool bBlockedHit, bool bCriticalHit)
 {
 	if (IsValid(TargetCharacter) && DamageTextCompClass)
 	{
@@ -56,7 +56,7 @@ void ACorePlayerController::ShowDamageNumber_Implementation(ACharacter* TargetCh
 		DamageText->RegisterComponent();
 		DamageText->AttachToComponent(TargetCharacter->GetRootComponent(),FAttachmentTransformRules::KeepRelativeTransform);
 		DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-		DamageText->SetDamageText(DamageAmount);
+		DamageText->SetDamageText(DamageAmount,bBlockedHit,bCriticalHit);
 	}
 }
 

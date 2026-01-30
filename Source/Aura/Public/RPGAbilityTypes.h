@@ -13,7 +13,20 @@ public:
 	/** Returns the actual struct used for serialization, subclasses must override this! */
 	virtual UScriptStruct* GetScriptStruct() const override
 	{
-		return FGameplayEffectContext::StaticStruct();
+		return StaticStruct();
+	}
+	
+	/** Creates a copy of this context, used to duplicate for later modifications */
+	virtual FRPGGameplayEffectContext* Duplicate() const
+	{
+		FRPGGameplayEffectContext* NewContext = new FRPGGameplayEffectContext();
+		*NewContext = *this;
+		if (GetHitResult())
+		{
+			// Does a deep copy of the hit result
+			NewContext->AddHitResult(*GetHitResult(), true);
+		}
+		return NewContext;
 	}
 	
 	/** Custom serialization, subclasses must override this */
@@ -32,4 +45,15 @@ public:
 	
 	void SetIsCriticalHit(bool bInIsCriticalHit) { bIsCriticalHit = bInIsCriticalHit; }
 	void SetIsBlockedHit(bool bInIsBlockedHit) { bIsBlockedHit = bInIsBlockedHit; }
+};
+
+
+template<>
+struct TStructOpsTypeTraits< FRPGGameplayEffectContext > : public TStructOpsTypeTraitsBase2< FRPGGameplayEffectContext >
+{
+	enum
+	{
+		WithNetSerializer = true,
+		WithCopy = true		// Necessary so that TSharedPtr<FHitResult> Data is copied around
+	};
 };

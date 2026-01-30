@@ -2,6 +2,7 @@
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
 #include "RPGGameplayTags.h"
+#include "AbilitySystem/RPGAbilitySystemLibrary.h"
 #include "Framework/CorePlayerController.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
@@ -40,6 +41,7 @@ void UVitalAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute,
 	}
 }
 
+
 void UVitalAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
@@ -61,16 +63,11 @@ void UVitalAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 			const float NewHealth = GetHealth() - LocalIncomingDamage;
 			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
 			
-			const bool bFatal = NewHealth <= 0.f;
-
-			if (EffectProps.SourceCharacter != EffectProps.TargetCharacter)
-			{
-				if (ACorePlayerController* PC = Cast<ACorePlayerController>(UGameplayStatics::GetPlayerController(EffectProps.TargetAvatarActor,0)))
-				{
-					PC->ShowDamageNumber(EffectProps.TargetCharacter,LocalIncomingDamage);
-				}
-			}
+			const bool bBlocked = URPGAbilitySystemLibrary::IsBlockedHit(EffectProps.EffectContextHandle);
+			const bool bCriticalHit = URPGAbilitySystemLibrary::IsCriticalHit(EffectProps.EffectContextHandle);
+			ShowFloatingText(LocalIncomingDamage,bBlocked,bCriticalHit);
 			
+			const bool bFatal = NewHealth <= 0.f;
 			if (!bFatal)
 			{
 				FGameplayTagContainer TagContainer;
@@ -84,6 +81,17 @@ void UVitalAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 					CombatInterface->Die();
 				}
 			}
+		}
+	}
+}
+
+void UVitalAttributeSet::ShowFloatingText(const float Damage, bool bBlockedHit, bool bCriticalHit) const
+{
+	if (EffectProps.SourceCharacter != EffectProps.TargetCharacter)
+	{
+		if (ACorePlayerController* PC = Cast<ACorePlayerController>(UGameplayStatics::GetPlayerController(EffectProps.TargetAvatarActor,0)))
+		{
+			PC->ShowDamageNumber(EffectProps.TargetCharacter,Damage);
 		}
 	}
 }

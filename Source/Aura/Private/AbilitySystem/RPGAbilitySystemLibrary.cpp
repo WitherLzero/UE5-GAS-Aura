@@ -4,6 +4,7 @@
 #include "AbilitySystem/RPGAbilitySystemLibrary.h"
 
 #include "AbilitySystemComponent.h"
+#include "RPGAbilityTypes.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Framework/CoreGameModeBase.h"
 #include "Framework/CorePlayerState.h"
@@ -63,6 +64,41 @@ UCharacterClassInfo* URPGAbilitySystemLibrary::GetCharacterClassInfo(const UObje
 	if (!GameMode) return nullptr;
 	
 	return GameMode->CharacterClassInfo;
+}
+
+bool URPGAbilitySystemLibrary::IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const FRPGGameplayEffectContext* EffectContext = static_cast<const FRPGGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		return EffectContext->IsBlockedHit();
+	}
+	return false;
+}
+
+bool URPGAbilitySystemLibrary::IsCriticalHit(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const FRPGGameplayEffectContext* EffectContext = static_cast<const FRPGGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		return EffectContext->IsCriticalHit();
+	}
+	return false;
+}
+
+void URPGAbilitySystemLibrary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle, bool bInIsBlockedHit)
+{
+	if (FRPGGameplayEffectContext* EffectContext = static_cast<FRPGGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		EffectContext->SetIsBlockedHit(bInIsBlockedHit);
+	}
+}
+
+void URPGAbilitySystemLibrary::SetIsCriticalHit(FGameplayEffectContextHandle& EffectContextHandle,
+	bool bInIsCriticalHit)
+{
+	if (FRPGGameplayEffectContext* EffectContext = static_cast<FRPGGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		EffectContext->SetIsCriticalHit(bInIsCriticalHit);
+	}
 }
 
 

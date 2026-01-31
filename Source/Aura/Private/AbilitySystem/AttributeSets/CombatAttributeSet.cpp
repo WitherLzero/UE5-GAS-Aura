@@ -13,6 +13,11 @@ UCombatAttributeSet::UCombatAttributeSet()
 	TagsToAttributes.Add(GameplayTags.Attributes_Combat_CriticalHitChance,GetCriticalHitChanceAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Combat_CriticalHitDamage,GetCriticalHitDamageAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Combat_CriticalHitResistance,GetCriticalHitResistanceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Resistance_Fire,GetFireResistanceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Resistance_Lightning,GetLightningResistanceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Resistance_Arcane,GetArcaneResistanceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Resistance_Physical,GetPhysicalResistanceAttribute);
+	
 	
 }
 
@@ -26,6 +31,10 @@ void UCombatAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimePrope
 	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, CriticalHitChance, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, CriticalHitDamage, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, CriticalHitResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, FireResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, LightningResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, ArcaneResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, PhysicalResistance, COND_None, REPNOTIFY_Always);
 }
 
 void UCombatAttributeSet::OnRep_Armor(const FGameplayAttributeData& OldArmor) const
@@ -56,4 +65,24 @@ void UCombatAttributeSet::OnRep_CriticalHitDamage(const FGameplayAttributeData& 
 void UCombatAttributeSet::OnRep_CriticalHitResistance(const FGameplayAttributeData& OldCriticalHitResistance) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UCombatAttributeSet, CriticalHitResistance, OldCriticalHitResistance);
+}
+
+void UCombatAttributeSet::OnRep_FireResistance(const FGameplayAttributeData& OldFireResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCombatAttributeSet, FireResistance, OldFireResistance);
+}
+
+void UCombatAttributeSet::OnRep_LightningResistance(const FGameplayAttributeData& OldLightningResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCombatAttributeSet, LightningResistance, OldLightningResistance);
+}
+
+void UCombatAttributeSet::OnRep_ArcaneResistance(const FGameplayAttributeData& OldArcaneResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCombatAttributeSet, ArcaneResistance, OldArcaneResistance);
+}
+
+void UCombatAttributeSet::OnRep_PhysicalResistance(const FGameplayAttributeData& OldPhysicalResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCombatAttributeSet, PhysicalResistance, OldPhysicalResistance);
 }

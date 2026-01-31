@@ -4,6 +4,7 @@
 #include "RPGGameplayTags.h"
 #include "AbilitySystem/RPGAbilitySystemLibrary.h"
 #include "Framework/CorePlayerController.h"
+#include "GameFramework/Character.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -89,7 +90,7 @@ void UVitalAttributeSet::ShowFloatingText(const float Damage, bool bBlockedHit, 
 {
 	if (EffectProps.SourceCharacter != EffectProps.TargetCharacter)
 	{
-		if (ACorePlayerController* PC = Cast<ACorePlayerController>(UGameplayStatics::GetPlayerController(EffectProps.TargetAvatarActor,0)))
+		if (ACorePlayerController* PC = Cast<ACorePlayerController>(EffectProps.SourceCharacter->Controller))
 		{
 			PC->ShowDamageNumber(EffectProps.TargetCharacter,Damage,bBlockedHit,bCriticalHit);
 		}

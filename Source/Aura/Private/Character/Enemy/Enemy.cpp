@@ -45,28 +45,40 @@ void AEnemy::BeginPlay()
 		HealthWidget->SetWidgetController(this);
 	}
 	
-	OnHealthChanged.Broadcast(VitalAS->GetHealth());
-	OnMaxHealthChanged.Broadcast(VitalAS->GetMaxHealth());
-	
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		VitalAS->GetHealthAttribute()).AddLambda(
-		[this](const FOnAttributeChangeData& Data){ OnHealthChanged.Broadcast(Data.NewValue);});
-	
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-			VitalAS->GetMaxHealthAttribute()).AddLambda(
-			[this](const FOnAttributeChangeData& Data){ OnMaxHealthChanged.Broadcast(Data.NewValue);});
-	
-	AbilitySystemComponent->RegisterGameplayTagEvent(FRPGGameplayTags::Get().Effects_HitReact,EGameplayTagEventType::NewOrRemoved).AddUObject(
-		this,&ThisClass::HitReactTagChanged);
+	// Wait one tick to ensure InitAbilityActorInfo is fully settled and Replication potentially processed.
+	// This solves the race condition where BeginPlay runs before attributes are replicated, catching up with the correct values.
+	GetWorldTimerManager().SetTimerForNextTick([this]()
+	{
+		if (IsValid(this) && IsValid(AbilitySystemComponent) && IsValid(VitalAS))
+		{
+			AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+				VitalAS->GetHealthAttribute()).AddLambda(
+				[this](const FOnAttributeChangeData& Data){ OnHealthChanged.Broadcast(Data.NewValue);});
+			
+			AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+					VitalAS->GetMaxHealthAttribute()).AddLambda(
+					[this](const FOnAttributeChangeData& Data){ OnMaxHealthChanged.Broadcast(Data.NewValue);});
+			
+			AbilitySystemComponent->RegisterGameplayTagEvent(FRPGGameplayTags::Get().Effects_HitReact,EGameplayTagEventType::NewOrRemoved).AddUObject(
+				this,&ThisClass::HitReactTagChanged);
+
+			// Broadcast initial values AFTER binding, ensuring we catch the latest replicated data
+			OnHealthChanged.Broadcast(VitalAS->GetHealth());
+			OnMaxHealthChanged.Broadcast(VitalAS->GetMaxHealth());
+		}
+	});
 }
 
 void AEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);
 	Cast<UCoreAbilitySystemComponent>(AbilitySystemComponent)->OnAbilityActorInfoSet();
-	
-	InitDefaultAttributes();
-	URPGAbilitySystemLibrary::GiveStartupAbilities(this,AbilitySystemComponent);
+
+	if (HasAuthority())
+	{
+		InitDefaultAttributes();
+		URPGAbilitySystemLibrary::GiveStartupAbilities(this,AbilitySystemComponent);
+	}
 }
 
 void AEnemy::InitDefaultAttributes() const

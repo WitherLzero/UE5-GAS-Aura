@@ -50,7 +50,9 @@ public:
 	/*
 	 *  Damage Tags
 	 */
+	TArray<FGameplayTag> DamageTypes;
 	FGameplayTag Damage;
+	FGameplayTag Damage_Fire;
 	
 	
 	/*

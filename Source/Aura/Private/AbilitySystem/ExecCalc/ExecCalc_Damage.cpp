@@ -70,7 +70,12 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	
 	
 	// Get damage set by caller Magnitude
-	float Damage = Spec.GetSetByCallerMagnitude(FRPGGameplayTags::Get().Damage);
+	float Damage = 0.f;
+	for (const FGameplayTag DamageTypeTag : FRPGGameplayTags::Get().DamageTypes )
+	{
+		const float DamageTypeValue = Spec.GetSetByCallerMagnitude(DamageTypeTag);
+		Damage+=DamageTypeValue;
+	}
 	
 	// Capture BlockChance on target, and determine if there was a successful Block
 	// If Block. halve the damage

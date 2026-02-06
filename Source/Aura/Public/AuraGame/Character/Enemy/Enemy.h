@@ -9,6 +9,8 @@
 #include "AuraGame/UI/WidgetController/OverlayWidgetController.h"
 #include "Enemy.generated.h"
 
+class UBehaviorTree;
+class ARPGAIController;
 class UCombatComponent;
 class UWidgetComponent;
 class UCombatAttributeSet;
@@ -32,6 +34,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void PossessedBy(AController* NewController) override;
 
 	virtual void InitAbilityActorInfo() override;
 	virtual void InitDefaultAttributes() const override;
@@ -55,6 +58,12 @@ protected:
 	TObjectPtr<UPrimaryAttributeSet> PrimaryAS;
 	UPROPERTY()
 	TObjectPtr<UCombatAttributeSet> CombatAS;
+	
+	UPROPERTY()
+	TObjectPtr<ARPGAIController> AIController;
+	
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UBehaviorTree> BehaviorTree;
 	
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthBar;

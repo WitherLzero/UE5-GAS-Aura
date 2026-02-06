@@ -3,6 +3,7 @@
 
 #include "AuraGame/Character/Enemy/Enemy.h"
 
+#include "AIController.h"
 #include "RPGFramework/Types/RPGGameplayTags.h"
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 #include "RPGFramework/GAS/RPGAbilitySystemLibrary.h"
@@ -12,6 +13,9 @@
 #include "Components/WidgetComponent.h"
 #include "AuraGame/GAS/AttributeSets/CombatAttributeSet.h"
 #include "AuraGame/GAS/AttributeSets/PrimaryAttributeSet.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "RPGFramework/AI/RPGAIController.h"
 #include "RPGFramework/UI/Widgets/UserWidgetBase.h"
 #include "RPGModules/Components/CombatComponent.h"
 
@@ -70,6 +74,16 @@ void AEnemy::BeginPlay()
 			OnMaxHealthChanged.Broadcast(VitalAS->GetMaxHealth());
 		}
 	});
+}
+
+void AEnemy::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	
+	if (!HasAuthority()) return;
+	AIController = Cast<ARPGAIController>(NewController);
+	AIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+	AIController->RunBehaviorTree(BehaviorTree);
 }
 
 void AEnemy::InitAbilityActorInfo()

@@ -84,6 +84,8 @@ void AEnemy::PossessedBy(AController* NewController)
 	AIController = Cast<ARPGAIController>(NewController);
 	AIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
 	AIController->RunBehaviorTree(BehaviorTree);
+	AIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), false);
+	AIController->GetBlackboardComponent()->SetValueAsBool(FName("RangedAttacker"), CharacterClass != ECharacterClass::Warrior);
 }
 
 void AEnemy::InitAbilityActorInfo()
@@ -129,6 +131,7 @@ void AEnemy::Die()
 void AEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
 {
 	bHitReacting = NewCount > 0;
+	AIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), bHitReacting);
 }
 
 void AEnemy::Tick(float DeltaTime)

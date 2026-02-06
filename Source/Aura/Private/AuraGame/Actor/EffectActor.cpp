@@ -24,6 +24,8 @@ void AEffectActor::BeginPlay()
 
 void AEffectActor::OnOverlap(AActor* TargetActor)
 {
+	if (TargetActor->ActorHasTag(FName("Enemy")) && !bApplyEffectsToEnemies) return;
+	
 	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 	{
 		for (const auto& EffectClass : InstantGameplayEffectClasses)
@@ -49,6 +51,8 @@ void AEffectActor::OnOverlap(AActor* TargetActor)
 
 void AEffectActor::OnEndOverlap(AActor* TargetActor)
 {
+	if (TargetActor->ActorHasTag(FName("Enemy")) && !bApplyEffectsToEnemies) return;
+	
 	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
 		for (const auto& EffectClass : InstantGameplayEffectClasses)
@@ -103,6 +107,11 @@ void AEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGamepla
 	if (bIsInfinite && InfiniteEffectRemovalPolicy == EEffectRemovalPolicy::RemoveOnEndOverlap)
 	{
 		ActiveEffectHandles.FindOrAdd(TargetASC).Add(ActiveEffectHandle);
+	}
+
+	if (bDestroyOnEffectApplication)
+	{
+		Destroy();
 	}
 }
 

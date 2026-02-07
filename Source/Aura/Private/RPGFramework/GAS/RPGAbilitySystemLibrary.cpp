@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "AuraGame/UI/HUD/AuraHUD.h"
 #include "AuraGame/GAS/Data/CharacterClassInfo.h"
+#include "RPGFramework/Interaction/CharacterDataInterface.h"
 #include "RPGFramework/UI/WidgetController/WidgetController.h"
 
 UAttributeMenuWidgetController* URPGAbilitySystemLibrary::GetAttributeMenuWidgetController(
@@ -46,13 +47,22 @@ void URPGAbilitySystemLibrary::InitDefaultAttributes(const UObject* WorldContext
 }
 
 
-void URPGAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
+void URPGAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC, ECharacterClass CharacterClass)
 {
 	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
 	for (const TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbilities)
 	{
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass,1);
 		ASC->GiveAbility(AbilitySpec);
+	}
+	FCharacterClassDefaultInfo ClassDefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
+	for (const TSubclassOf<UGameplayAbility> AbilityClass : ClassDefaultInfo.StartupAbilities)
+	{
+		if (ICharacterDataInterface* CharacterData =  Cast<ICharacterDataInterface>(ASC->GetAvatarActor()))
+		{
+			FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass,CharacterData->GetCharacterLevel());
+			ASC->GiveAbility(AbilitySpec);
+		}
 	}
 	
 	

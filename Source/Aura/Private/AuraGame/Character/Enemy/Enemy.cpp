@@ -96,7 +96,7 @@ void AEnemy::InitAbilityActorInfo()
 	if (HasAuthority())
 	{
 		InitDefaultAttributes();
-		URPGAbilitySystemLibrary::GiveStartupAbilities(this,AbilitySystemComponent);
+		URPGAbilitySystemLibrary::GiveStartupAbilities(this,AbilitySystemComponent, CharacterClass);
 	}
 }
 

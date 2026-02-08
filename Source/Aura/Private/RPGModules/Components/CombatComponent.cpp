@@ -29,13 +29,6 @@ FVector UCombatComponent::GetCombatSocketLocation() const
 	return WeaponMesh->GetSocketLocation(WeaponTipSocketName);
 }
 
-void UCombatComponent::UpdateFacingTarget(const FVector& TargetLoc)
-{
-	if (UMotionWarpingComponent* MWComp = GetOwner()->FindComponentByClass<UMotionWarpingComponent>())
-	{
-		MWComp->AddOrUpdateWarpTargetFromLocation(FacingTargetName, TargetLoc);
-	}
-}
 
 void UCombatComponent::BeginPlay()
 {

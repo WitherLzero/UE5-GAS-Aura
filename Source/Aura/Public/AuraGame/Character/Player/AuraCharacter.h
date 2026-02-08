@@ -7,6 +7,7 @@
 #include "AuraCharacter.generated.h"
 
 
+class UActionComponent;
 class UCombatComponent;
 class ACorePlayerController;
 class USplineComponent;
@@ -48,6 +49,9 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	TObjectPtr<UCombatComponent> CombatComp;
+	
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	TObjectPtr<UActionComponent> ActionComp;	
 	
 private:
 	virtual void InitAbilityActorInfo() override;

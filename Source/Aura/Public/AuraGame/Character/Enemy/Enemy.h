@@ -9,6 +9,7 @@
 #include "AuraGame/UI/WidgetController/OverlayWidgetController.h"
 #include "Enemy.generated.h"
 
+class UActionComponent;
 class UBehaviorTree;
 class ARPGAIController;
 class UCombatComponent;
@@ -70,6 +71,9 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	TObjectPtr<UCombatComponent> CombatComp;
+	
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	TObjectPtr<UActionComponent> ActionComp;
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Combat")
 	bool bHitReacting = false;

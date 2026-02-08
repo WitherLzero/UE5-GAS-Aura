@@ -17,6 +17,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "RPGFramework/AI/RPGAIController.h"
 #include "RPGFramework/UI/Widgets/UserWidgetBase.h"
+#include "RPGModules/ARPG/Components/ActionComponent.h"
 #include "RPGModules/Components/CombatComponent.h"
 
 
@@ -37,6 +38,7 @@ AEnemy::AEnemy()
 	HealthBar->SetupAttachment(GetRootComponent());
 	
 	CombatComp = CreateDefaultSubobject<UCombatComponent>("CombatComp");
+	ActionComp = CreateDefaultSubobject<UActionComponent>("ActionComp");
 }
 
 void AEnemy::BeginPlay()

@@ -21,9 +21,7 @@ public:
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	UAnimMontage* GetHitReactMontage();
-	
-	UFUNCTION(BlueprintCallable)
-	void UpdateFacingTarget(const FVector& TargetLoc);
+
 
 protected:
 	virtual void BeginPlay() override;

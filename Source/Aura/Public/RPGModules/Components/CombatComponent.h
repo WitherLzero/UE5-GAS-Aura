@@ -16,12 +16,17 @@ public:
 	UCombatComponent();
 
 	void RegisterWeaponMesh(USceneComponent* InMesh);
-	FVector GetCombatSocketLocation() const;
 	
+	FVector GetCombatSocketLocation() const;
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	UAnimMontage* GetHitReactMontage();
 
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void SetCombatTarget(AActor* InTarget) { CombatTarget = InTarget; }
+	
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE AActor* GetCombatTarget() const { return CombatTarget; }	
 
 protected:
 	virtual void BeginPlay() override;
@@ -32,6 +37,9 @@ private:
 	
 	UPROPERTY()
 	TObjectPtr<USceneComponent> WeaponMesh;
+	
+	UPROPERTY(VisibleAnywhere,Category= "Combat")
+	AActor* CombatTarget;
 	
 	UPROPERTY(EditAnywhere, Category= "Combat")
 	FName WeaponTipSocketName;

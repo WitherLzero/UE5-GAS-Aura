@@ -87,6 +87,11 @@ void UVitalAttributeSet::ShowFloatingText(const float Damage, bool bBlockedHit, 
 		if (ACorePlayerController* PC = Cast<ACorePlayerController>(EffectProps.SourceCharacter->Controller))
 		{
 			PC->ShowDamageNumber(EffectProps.TargetCharacter,Damage,bBlockedHit,bCriticalHit);
+			return;
+		}
+		if (ACorePlayerController* PC = Cast<ACorePlayerController>(EffectProps.TargetCharacter->Controller))
+		{
+			PC->ShowDamageNumber(EffectProps.TargetCharacter,Damage,bBlockedHit,bCriticalHit);
 		}
 	}
 }

@@ -17,6 +17,7 @@ public:
 
 	void RegisterWeaponMesh(USceneComponent* InMesh);
 	
+	UFUNCTION(BlueprintCallable)
 	FVector GetCombatSocketLocation() const;
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)

@@ -22,6 +22,8 @@ public:
 	
 	UPROPERTY(BlueprintAssignable, Category = "Vitality")
 	FOnDeathSignature OnDeath;
+	
+	FORCEINLINE bool IsDead() const { return bIsDead; }
 protected:
 	virtual void BeginPlay() override;
 	

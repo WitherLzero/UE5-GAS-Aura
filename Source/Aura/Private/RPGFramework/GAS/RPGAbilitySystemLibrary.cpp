@@ -12,6 +12,7 @@
 #include "AuraGame/GAS/Data/CharacterClassInfo.h"
 #include "RPGFramework/Interaction/CharacterDataInterface.h"
 #include "RPGFramework/UI/WidgetController/WidgetController.h"
+#include "RPGModules/Components/VitalityComponent.h"
 
 UAttributeMenuWidgetController* URPGAbilitySystemLibrary::GetAttributeMenuWidgetController(
 	const UObject* WorldContextObject)
@@ -74,6 +75,32 @@ UCharacterClassInfo* URPGAbilitySystemLibrary::GetCharacterClassInfo(const UObje
 	if (!GameMode) return nullptr;
 	
 	return GameMode->CharacterClassInfo;
+}
+
+void URPGAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldContextObject,
+	TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, float Radius,
+	const FVector& SphereOrigin)
+{
+	FCollisionQueryParams SphereParams;
+	SphereParams.AddIgnoredActors(ActorsToIgnore);
+	
+	if (const UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
+	{
+		TArray<FOverlapResult> Overlaps;
+		World->OverlapMultiByObjectType(Overlaps, SphereOrigin, FQuat::Identity, 
+			FCollisionObjectQueryParams(FCollisionObjectQueryParams::InitType::AllDynamicObjects), 
+			FCollisionShape::MakeSphere(Radius), SphereParams);
+		for (FOverlapResult& Overlap : Overlaps)
+		{
+			if (UVitalityComponent* VitalityComp =  Overlap.GetActor()->FindComponentByClass<UVitalityComponent>())
+			{
+				if (!VitalityComp->IsDead())
+				{
+					OutOverlappingActors.AddUnique(Overlap.GetActor());
+				}
+			}
+		}
+	}
 }
 
 bool URPGAbilitySystemLibrary::IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle)

@@ -23,7 +23,7 @@ public:
 	ACoreCharacterBase();
 
 	virtual void Move(const FVector2D& InputAxis);
-	
+
 protected:
 	virtual void BeginPlay() override;
 	
@@ -33,18 +33,12 @@ protected:
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const;
 	
 	
-	virtual void Die() override;
-	
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleDeath();
+
 	
 	
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable,Category="Input | Native")
 	bool OnNativeInput(FGameplayTag Tag, ERPGInputEvent EventType, FInputActionValue Value);
 	
-	
-	UPROPERTY(VisibleAnywhere, Category= "Combat")
-	TObjectPtr<USkeletalMeshComponent> Weapon;
 	
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
@@ -56,19 +50,7 @@ protected:
 	TArray<TSubclassOf<UGameplayAbility>> CharacterAbilities;
 	
 	
-	void Dissolve();
-	
-	UFUNCTION(BlueprintImplementableEvent)
-	void StartDissolveTimeline(UMaterialInstanceDynamic* DynamicMaterialInstance);
-	
-	UFUNCTION(BlueprintImplementableEvent)
-	void StartWeaponDissolveTimeline(UMaterialInstanceDynamic* DynamicMaterialInstance);
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<UMaterialInstance> DissolveMaterialInstance;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
+
 public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
 };

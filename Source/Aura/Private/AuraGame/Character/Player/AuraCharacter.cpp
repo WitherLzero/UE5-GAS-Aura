@@ -12,17 +12,14 @@
 #include "RPGFramework/Player/CorePlayerController.h"
 #include "RPGFramework/Player/CorePlayerState.h"
 #include "RPGFramework/Input/RPGInputConfig.h"
-#include "RPGModules/Components/CombatComponent.h"
 #include "AuraGame/UI/HUD/AuraHUD.h"
-#include "RPGModules/ARPG/Components/ActionComponent.h"
+
 
 
 AAuraCharacter::AAuraCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	
-	CombatComp = CreateDefaultSubobject<UCombatComponent>("CombatComp");
-	ActionComp = CreateDefaultSubobject<UActionComponent>("ActionComp");
 	Spline = CreateDefaultSubobject<USplineComponent>("Spline");
 }
 
@@ -30,7 +27,6 @@ void AAuraCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	CombatComp->RegisterWeaponMesh(Weapon);
 	
 }
 

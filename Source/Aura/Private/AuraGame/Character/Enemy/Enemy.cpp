@@ -17,8 +17,6 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "RPGFramework/AI/RPGAIController.h"
 #include "RPGFramework/UI/Widgets/UserWidgetBase.h"
-#include "RPGModules/ARPG/Components/ActionComponent.h"
-#include "RPGModules/Components/CombatComponent.h"
 
 
 AEnemy::AEnemy()
@@ -37,8 +35,6 @@ AEnemy::AEnemy()
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
 	HealthBar->SetupAttachment(GetRootComponent());
 	
-	CombatComp = CreateDefaultSubobject<UCombatComponent>("CombatComp");
-	ActionComp = CreateDefaultSubobject<UActionComponent>("ActionComp");
 }
 
 void AEnemy::BeginPlay()
@@ -46,7 +42,6 @@ void AEnemy::BeginPlay()
 	Super::BeginPlay();
 	GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
 	Weapon->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
-	CombatComp->RegisterWeaponMesh(Weapon);
 	
 	InitAbilityActorInfo();
 
@@ -101,6 +96,8 @@ void AEnemy::InitAbilityActorInfo()
 		InitDefaultAttributes();
 		URPGAbilitySystemLibrary::GiveStartupAbilities(this,AbilitySystemComponent, CharacterClass);
 	}
+	
+	Super::InitAbilityActorInfo();
 }
 
 void AEnemy::InitDefaultAttributes() const
@@ -125,11 +122,6 @@ int32 AEnemy::GetCharacterLevel() const
 	return Level;
 }
 
-void AEnemy::Die()
-{
-	SetLifeSpan(LifeSpan);
-	Super::Die();
-}
 
 void AEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
 {

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "RPGFramework/Character/CoreCharacterBase.h"
+#include "AuraGame/Character/AuraCharacterBase.h"
 #include "AuraCharacter.generated.h"
 
 
@@ -13,7 +13,7 @@ class ACorePlayerController;
 class USplineComponent;
 
 UCLASS()
-class AURA_API AAuraCharacter : public ACoreCharacterBase
+class AURA_API AAuraCharacter : public AAuraCharacterBase
 {
 	GENERATED_BODY()
 
@@ -47,11 +47,7 @@ protected:
 	UPROPERTY()
 	TObjectPtr<ACorePlayerController> PlayerController;
 	
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	TObjectPtr<UCombatComponent> CombatComp;
-	
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	TObjectPtr<UActionComponent> ActionComp;	
+
 	
 private:
 	virtual void InitAbilityActorInfo() override;

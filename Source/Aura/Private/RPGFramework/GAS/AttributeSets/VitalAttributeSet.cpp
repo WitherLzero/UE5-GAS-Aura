@@ -74,14 +74,8 @@ void UVitalAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 				FGameplayTagContainer TagContainer;
 				TagContainer.AddTag(FRPGGameplayTags::Get().Effects_HitReact);
 				EffectProps.TargetASC->TryActivateAbilitiesByTag(TagContainer);
-			}else
-			{
-				ICharacterDataInterface* CombatInterface = Cast<ICharacterDataInterface>(EffectProps.TargetAvatarActor);
-				if (CombatInterface)
-				{
-					CombatInterface->Die();
-				}
 			}
+
 		}
 	}
 }

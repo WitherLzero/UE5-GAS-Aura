@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AuraGame/Character/AuraCharacterBase.h"
 #include "AuraGame/GAS/Data/CharacterClassInfo.h"
-#include "RPGFramework/Character/CoreCharacterBase.h"
 #include "RPGFramework/Interaction/EnemyInterface.h"
 #include "AuraGame/UI/WidgetController/OverlayWidgetController.h"
 #include "Enemy.generated.h"
@@ -19,7 +19,7 @@ class UPrimaryAttributeSet;
 class UVitalAttributeSet;
 
 UCLASS()
-class AURA_API AEnemy : public ACoreCharacterBase, public IEnemyInterface
+class AURA_API AEnemy : public AAuraCharacterBase, public IEnemyInterface
 {
 	GENERATED_BODY()
 
@@ -47,7 +47,6 @@ protected:
 	
 	/* Combat Interface */
 	virtual int32 GetCharacterLevel() const override;
-	virtual void Die() override;
 	/* end Combat Interface */
 	
 	void HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
@@ -69,17 +68,10 @@ protected:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthBar;
 	
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	TObjectPtr<UCombatComponent> CombatComp;
-	
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	TObjectPtr<UActionComponent> ActionComp;
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Combat")
 	bool bHitReacting = false;
 	
-	UPROPERTY(BlueprintReadOnly, Category = "Combat")
-	float LifeSpan = 3.f;
 	
 	UPROPERTY(EditAnywhere,Category = "Character Class Defaults")
 	int32 Level = 1;

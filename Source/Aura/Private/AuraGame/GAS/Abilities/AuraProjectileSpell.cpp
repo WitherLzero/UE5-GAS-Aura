@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "AuraGame/Actor/AuraProjectile.h"
+#include "RPGFramework/Types/RPGGameplayTags.h"
 #include "RPGModules/Components/CombatComponent.h"
 
 
@@ -24,7 +25,7 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLoc)
 
 	if (UCombatComponent* CombatComp = GetAvatarActorFromActorInfo()->FindComponentByClass<UCombatComponent>())
 	{
-		const FVector SocketLocation = CombatComp->GetCombatSocketLocation();
+		const FVector SocketLocation = CombatComp->GetCombatSocketLocation(FRPGGameplayTags::Get().Montage_Attack_Weapon);
 		const FRotator Rotation = (ProjectileTargetLoc - SocketLocation).Rotation();
 		
 		FTransform SpawnTransform;

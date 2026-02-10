@@ -32,7 +32,7 @@ public:
 	void RegisterWeaponMesh(USceneComponent* InMesh);
 	
 	UFUNCTION(BlueprintCallable)
-	FVector GetCombatSocketLocation() const;
+	FVector GetCombatSocketLocation(const FGameplayTag& MontageTag) const;
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	TArray<FTaggedMontage> GetAttackMontages();
@@ -55,6 +55,9 @@ private:
 	
 	UPROPERTY()
 	TObjectPtr<USceneComponent> WeaponMesh;
+	
+	UPROPERTY(EditAnywhere,Category= "Combat")
+	TObjectPtr<class UCombatConfig> CombatConfig;
 	
 	UPROPERTY(EditAnywhere,Category= "Combat")
 	TArray<FTaggedMontage> AttackMontages;

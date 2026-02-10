@@ -139,7 +139,7 @@ void URPGAbilitySystemLibrary::SetIsCriticalHit(FGameplayEffectContextHandle& Ef
 	}
 }
 
-FTaggedMontage URPGAbilitySystemLibrary::PickRandomTaggedMontage(const TArray<FTaggedMontage> Montages)
+FTaggedMontage URPGAbilitySystemLibrary::PickRandomTaggedMontage(const TArray<FTaggedMontage>& Montages)
 {
 	const int32 Num = Montages.Num();
 	if (Num <= 0) return FTaggedMontage();

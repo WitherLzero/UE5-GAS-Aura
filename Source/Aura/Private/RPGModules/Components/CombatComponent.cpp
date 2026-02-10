@@ -2,7 +2,9 @@
 
 
 #include "RPGModules/Components/CombatComponent.h"
-#include "MotionWarpingComponent.h"
+
+#include "GameFramework/Character.h"
+#include "RPGModules/Data/CombatConfig.h"
 
 
 UCombatComponent::UCombatComponent()
@@ -30,10 +32,26 @@ UAnimMontage* UCombatComponent::GetHitReactMontage_Implementation()
 }
 
 
-FVector UCombatComponent::GetCombatSocketLocation() const
+FVector UCombatComponent::GetCombatSocketLocation(const FGameplayTag& MontageTag) const
 {
-	check(WeaponMesh);
-	return WeaponMesh->GetSocketLocation(WeaponTipSocketName);
+	if (CombatConfig)
+	{
+		const FName SocketName = CombatConfig->GetSocketNameByTag(MontageTag);
+		if (!SocketName.IsNone())
+		{
+			if (WeaponMesh && WeaponMesh->DoesSocketExist(SocketName))
+			{
+				return WeaponMesh->GetSocketLocation(WeaponTipSocketName);
+			}
+
+			if (ACharacter* Char = Cast<ACharacter>(GetOwner()))
+			{
+				return Char->GetMesh()->GetSocketLocation(SocketName);
+			}
+		}
+	}
+
+	return GetOwner()->GetActorLocation();
 }
 
 

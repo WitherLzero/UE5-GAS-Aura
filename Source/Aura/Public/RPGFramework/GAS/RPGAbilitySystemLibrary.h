@@ -50,7 +50,7 @@ public:
 	static void SetIsCriticalHit(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, bool bInIsCriticalHit);
 	
 	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLibrary|GameplayHelpers")
-	static FTaggedMontage PickRandomTaggedMontage (const TArray<FTaggedMontage> Montages);
+	static FTaggedMontage PickRandomTaggedMontage (const TArray<FTaggedMontage>& Montages);
 	
 private:
 	static void ApplyEffectToSelf(UAbilitySystemComponent* ASC, AActor* Avatar,

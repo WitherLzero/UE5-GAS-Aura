@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "RPGAbilitySystemLibrary.generated.h"
 
+struct FTaggedMontage;
 class UCharacterClassInfo;
 class UGameplayEffect;
 struct FGameplayEffectContextHandle;
@@ -48,9 +49,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayEffects")
 	static void SetIsCriticalHit(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, bool bInIsCriticalHit);
 	
+	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLibrary|GameplayHelpers")
+	static FTaggedMontage PickRandomTaggedMontage (const TArray<FTaggedMontage> Montages);
+	
 private:
 	static void ApplyEffectToSelf(UAbilitySystemComponent* ASC, AActor* Avatar,
 							  TSubclassOf<UGameplayEffect> EffectClass,
 							  float Level);
 
 };
+
+

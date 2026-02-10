@@ -12,6 +12,7 @@
 #include "AuraGame/GAS/Data/CharacterClassInfo.h"
 #include "RPGFramework/Interaction/CharacterDataInterface.h"
 #include "RPGFramework/UI/WidgetController/WidgetController.h"
+#include "RPGModules/Components/CombatComponent.h"
 #include "RPGModules/Components/VitalityComponent.h"
 
 UAttributeMenuWidgetController* URPGAbilitySystemLibrary::GetAttributeMenuWidgetController(
@@ -136,6 +137,14 @@ void URPGAbilitySystemLibrary::SetIsCriticalHit(FGameplayEffectContextHandle& Ef
 	{
 		EffectContext->SetIsCriticalHit(bInIsCriticalHit);
 	}
+}
+
+FTaggedMontage URPGAbilitySystemLibrary::PickRandomTaggedMontage(const TArray<FTaggedMontage> Montages)
+{
+	const int32 Num = Montages.Num();
+	if (Num <= 0) return FTaggedMontage();
+	const int32 Index = FMath::RandRange(0,Num - 1);
+	return Montages[Index];
 }
 
 

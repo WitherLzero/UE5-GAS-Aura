@@ -3,9 +3,23 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Components/ActorComponent.h"
 #include "CombatComponent.generated.h"
 
+
+USTRUCT(BlueprintType)
+struct FTaggedMontage
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UAnimMontage* Montage = nullptr;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FGameplayTag MontageTag;	
+	
+};
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class AURA_API UCombatComponent : public UActorComponent
@@ -19,6 +33,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	FVector GetCombatSocketLocation() const;
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	TArray<FTaggedMontage> GetAttackMontages();
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	UAnimMontage* GetHitReactMontage();
@@ -38,6 +55,9 @@ private:
 	
 	UPROPERTY()
 	TObjectPtr<USceneComponent> WeaponMesh;
+	
+	UPROPERTY(EditAnywhere,Category= "Combat")
+	TArray<FTaggedMontage> AttackMontages;
 	
 	UPROPERTY(VisibleAnywhere,Category= "Combat")
 	AActor* CombatTarget;

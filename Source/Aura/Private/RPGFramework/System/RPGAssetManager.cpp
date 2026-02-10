@@ -4,6 +4,7 @@
 #include "RPGFramework/System/RPGAssetManager.h"
 
 #include "AbilitySystemGlobals.h"
+#include "AuraGame/Types/AuraGameplayTags.h"
 
 #include "RPGFramework/Types/RPGGameplayTags.h"
 
@@ -18,6 +19,8 @@ void URPGAssetManager::StartInitialLoading()
 	Super::StartInitialLoading();
 	
 	FRPGGameplayTags::InitializeNativeGameplayTags();
+	
+	FAuraGameplayTags::InitializeNativeGameplayTags();
 	
 	UAbilitySystemGlobals::Get().InitGlobalData();
 }

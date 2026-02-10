@@ -67,7 +67,7 @@ public:
 	 */
 	FGameplayTag Effects_HitReact;
 	
-protected:
+
 	
 private:
 	static FRPGGameplayTags GameplayTags;

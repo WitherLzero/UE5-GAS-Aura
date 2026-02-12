@@ -8,6 +8,8 @@
 #include "CombatComponent.generated.h"
 
 
+class UNiagaraSystem;
+
 USTRUCT(BlueprintType)
 struct FTaggedMontage
 {
@@ -19,6 +21,8 @@ struct FTaggedMontage
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FGameplayTag MontageTag;	
 	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	USoundBase* ImpactSound = nullptr;
 };
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -39,6 +43,9 @@ public:
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	UAnimMontage* GetHitReactMontage();
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UNiagaraSystem* GetHitReactEffect();
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE void SetCombatTarget(AActor* InTarget) { CombatTarget = InTarget; }
@@ -53,6 +60,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Montages")
 	TObjectPtr<UAnimMontage> HitReactMontage;
 	
+	UPROPERTY(EditAnywhere, Category = "Montages")
+	TObjectPtr<UNiagaraSystem> HitReactEffect;
+	
 	UPROPERTY()
 	TObjectPtr<USceneComponent> WeaponMesh;
 	
@@ -65,9 +75,4 @@ private:
 	UPROPERTY(VisibleAnywhere,Category= "Combat")
 	AActor* CombatTarget;
 	
-	UPROPERTY(EditAnywhere, Category= "Combat")
-	FName WeaponTipSocketName;
-	
-	UPROPERTY(EditAnywhere, Category= "Combat")
-	FName FacingTargetName;
 };

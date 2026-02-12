@@ -4,7 +4,7 @@
 #include "RPGModules/Components/CombatComponent.h"
 
 #include "GameFramework/Character.h"
-#include "RPGModules/Data/CombatConfig.h"
+#include "Aura/Public/RPGModules/Data/CombatConfig.h"
 
 
 UCombatComponent::UCombatComponent()
@@ -54,7 +54,10 @@ FVector UCombatComponent::GetCombatSocketLocation(const FGameplayTag& MontageTag
 	return GetOwner()->GetActorLocation();
 }
 
-
+UNiagaraSystem* UCombatComponent::GetHitReactEffect_Implementation()
+{
+	return HitReactEffect;
+}
 
 
 void UCombatComponent::BeginPlay()

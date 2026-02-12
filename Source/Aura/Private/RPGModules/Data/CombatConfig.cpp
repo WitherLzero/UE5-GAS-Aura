@@ -1,7 +1,7 @@
 ﻿// Copyright rynnli
 
 
-#include "CombatConfig.h"
+#include "RPGModules/Data/CombatConfig.h"
 
 
 FName UCombatConfig::GetSocketNameByTag(const FGameplayTag& Tag) const

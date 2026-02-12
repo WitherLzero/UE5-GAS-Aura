@@ -132,6 +132,15 @@ void AEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
 	}
 }
 
+void AEnemy::OnDeathCallbacks(AActor* DeadActor)
+{
+	Super::OnDeathCallbacks(DeadActor);
+	if (AIController && AIController->GetBlackboardComponent())
+	{
+		AIController->GetBlackboardComponent()->SetValueAsBool(FName("IsDead"), true);
+	}
+}
+
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

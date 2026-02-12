@@ -24,7 +24,7 @@ protected:
 	virtual void InitAbilityActorInfo() override;
 	
 	UFUNCTION()
-	void OnDeathCallbacks(AActor* DeadActor);
+	virtual void OnDeathCallbacks(AActor* DeadActor);
 	
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Combat")

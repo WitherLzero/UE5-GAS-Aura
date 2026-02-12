@@ -50,7 +50,7 @@ protected:
 	/* end Combat Interface */
 	
 	void HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
-	
+	virtual void OnDeathCallbacks(AActor* DeadActor) override;
 	
 	UPROPERTY()
 	TObjectPtr<UVitalAttributeSet> VitalAS;

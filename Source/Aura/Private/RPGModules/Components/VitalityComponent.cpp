@@ -5,6 +5,7 @@
 
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
 #include "RPGFramework/GAS/AttributeSets/VitalAttributeSet.h"
 
 
@@ -51,6 +52,11 @@ void UVitalityComponent::Die()
 
 void UVitalityComponent::MulticastHandleDeath_Implementation()
 {
+	if (DeathSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetOwner()->GetActorLocation(), GetOwner()->GetActorRotation());
+	}
+	
 	PerformRagdoll();
 }
 

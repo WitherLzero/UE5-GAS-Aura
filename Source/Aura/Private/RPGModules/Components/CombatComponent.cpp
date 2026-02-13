@@ -41,7 +41,7 @@ FVector UCombatComponent::GetCombatSocketLocation(const FGameplayTag& MontageTag
 		{
 			if (WeaponMesh && WeaponMesh->DoesSocketExist(SocketName))
 			{
-				return WeaponMesh->GetSocketLocation(WeaponTipSocketName);
+				return WeaponMesh->GetSocketLocation(SocketName);
 			}
 
 			if (ACharacter* Char = Cast<ACharacter>(GetOwner()))

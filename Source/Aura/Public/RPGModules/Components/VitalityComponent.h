@@ -36,4 +36,7 @@ protected:
 	void PerformRagdoll();
 	
 	bool bIsDead = false;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
+	USoundBase* DeathSound;
 };

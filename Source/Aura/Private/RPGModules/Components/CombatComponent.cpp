@@ -32,7 +32,7 @@ UAnimMontage* UCombatComponent::GetHitReactMontage_Implementation()
 }
 
 
-FVector UCombatComponent::GetCombatSocketLocation(const FGameplayTag& MontageTag) const
+FVector UCombatComponent::GetCombatSocketLocation(FGameplayTag MontageTag) const
 {
 	if (CombatConfig)
 	{

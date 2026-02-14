@@ -203,4 +203,8 @@ FString("Effect Tag for HitReact")
 		FString("Right Hand")
 		);		
 	
+	GameplayTags.Montage_Attack_Tail = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Montage.Attack.Tail"),
+		FString("Tail")
+		);			
 }

@@ -36,7 +36,7 @@ public:
 	void RegisterWeaponMesh(USceneComponent* InMesh);
 	
 	UFUNCTION(BlueprintCallable)
-	FVector GetCombatSocketLocation(const FGameplayTag& MontageTag) const;
+	FVector GetCombatSocketLocation(FGameplayTag MontageTag) const;
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	TArray<FTaggedMontage> GetAttackMontages();

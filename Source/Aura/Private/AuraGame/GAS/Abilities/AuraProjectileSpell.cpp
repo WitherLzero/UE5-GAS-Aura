@@ -18,18 +18,17 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	
 }
 
-void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLoc)
+void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLoc, const FVector& SocketLoc)
 {
 	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
 	if (!bIsServer) return;
 
 	if (UCombatComponent* CombatComp = GetAvatarActorFromActorInfo()->FindComponentByClass<UCombatComponent>())
 	{
-		const FVector SocketLocation = CombatComp->GetCombatSocketLocation(FRPGGameplayTags::Get().Montage_Attack_Weapon);
-		const FRotator Rotation = (ProjectileTargetLoc - SocketLocation).Rotation();
+		const FRotator Rotation = (ProjectileTargetLoc - SocketLoc).Rotation();
 		
 		FTransform SpawnTransform;
-		SpawnTransform.SetLocation(SocketLocation);
+		SpawnTransform.SetLocation(SocketLoc);
 		SpawnTransform.SetRotation(Rotation.Quaternion());
 		
 		AAuraProjectile* Projectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(

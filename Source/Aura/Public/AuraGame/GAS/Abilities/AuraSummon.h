@@ -15,8 +15,13 @@ class AURA_API UAuraSummon : public URPGGameplayAbilityBase
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable,Category="Summoning")
 	TArray<FVector> GetSummonLocations();
+	
+	UFUNCTION(BlueprintPure,Category="Summoning")
+	TSubclassOf<APawn> PickRandomMinionClass();
+	
+	
 	
 protected:
 	UPROPERTY(EditDefaultsOnly,Category="Summoning")

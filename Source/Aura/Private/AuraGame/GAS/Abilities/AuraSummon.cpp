@@ -30,3 +30,11 @@ TArray<FVector> UAuraSummon::GetSummonLocations()
 	
 	return SummonLocations;
 }
+
+TSubclassOf<APawn> UAuraSummon::PickRandomMinionClass()
+{
+	if (MinionClasses.IsEmpty()) return nullptr;
+	
+	const int32 Selection = FMath::RandRange(0,MinionClasses.Num()-1);
+	return MinionClasses[Selection];
+}

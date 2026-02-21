@@ -39,20 +39,39 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 			[this](const FOnAttributeChangeData& Data){ OnMaxManaChanged.Broadcast(Data.NewValue);});
 	}
 
-	Cast<URPGAbilitySystemComponent>(AbilitySystemComponent)->OnEffectAssetTagsGet.AddLambda(
-		[this](const FGameplayTagContainer& AssetTags)
+	if (URPGAbilitySystemComponent* ASC = Cast<URPGAbilitySystemComponent>(AbilitySystemComponent))
+	{
+		if (ASC->bStartupAbilitiesGiven)
 		{
-			for(const FGameplayTag& Tag : AssetTags)
+			OnInitializeStartupAbilities(ASC);
+		}
+		else
+		{
+			ASC->OnAbilityGiven.AddUObject(this,&ThisClass::OnInitializeStartupAbilities);
+		}
+		
+		
+		ASC->OnEffectAssetTagsGet.AddLambda(
+			[this](const FGameplayTagContainer& AssetTags)
 			{
-				FGameplayTag Message = FGameplayTag::RequestGameplayTag(FName("Message"));
-				if (Tag.MatchesTag(Message))
+				for(const FGameplayTag& Tag : AssetTags)
 				{
-					const FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable,Tag);
-					OnMessageWidgetRowGet.Broadcast(*Row);
-				}				
-			}
-		}	
-	);
+					FGameplayTag Message = FGameplayTag::RequestGameplayTag(FName("Message"));
+					if (Tag.MatchesTag(Message))
+					{
+						const FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable,Tag);
+						OnMessageWidgetRowGet.Broadcast(*Row);
+					}				
+				}
+			}	
+		);		
+	}
+	
+
+}
+
+void UOverlayWidgetController::OnInitializeStartupAbilities(URPGAbilitySystemComponent* ASC)
+{
 }
 
 

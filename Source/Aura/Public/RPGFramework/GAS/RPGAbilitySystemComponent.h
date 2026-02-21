@@ -7,6 +7,7 @@
 #include "RPGAbilitySystemComponent.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnEffectAssetTagsGet, const FGameplayTagContainer& /*AssetTags*/)
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnAbilityGiven, URPGAbilitySystemComponent*)
 /**
  * 
  */
@@ -24,6 +25,9 @@ public:
 	void AbilityInputTagReleased(const FGameplayTag& InputTag);
 	
 	FOnEffectAssetTagsGet OnEffectAssetTagsGet;
+	FOnAbilityGiven OnAbilityGiven;
+	
+	bool bStartupAbilitiesGiven = false;
 	
 protected:
 	UFUNCTION(Client, Reliable)

@@ -7,6 +7,7 @@
 #include "GameplayTagContainer.h"
 #include "OverlayWidgetController.generated.h"
 
+class URPGAbilitySystemComponent;
 class UAbilityInfo;
 class UUserWidgetBase;
 struct FOnAttributeChangeData;
@@ -66,6 +67,9 @@ public:
 protected:
 	template<typename T>
 	T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
+	
+	void OnInitializeStartupAbilities(URPGAbilitySystemComponent* ASC);
+	
 	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category="Widget Data")
 	TObjectPtr<UDataTable> MessageWidgetDataTable;

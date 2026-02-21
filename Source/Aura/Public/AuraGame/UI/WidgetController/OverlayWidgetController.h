@@ -7,6 +7,7 @@
 #include "GameplayTagContainer.h"
 #include "OverlayWidgetController.generated.h"
 
+struct FRPGAbilityInfo;
 class URPGAbilitySystemComponent;
 class UAbilityInfo;
 class UUserWidgetBase;
@@ -36,6 +37,7 @@ struct FUIWidgetRow : public FTableRowBase
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChanged, float, NewValue);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMessageWidgetRowGet, FUIWidgetRow, Row);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAbilityInfoGet, const FRPGAbilityInfo&, Info);
 
 /**
  * 
@@ -63,6 +65,9 @@ public:
 	
 	UPROPERTY(BlueprintAssignable, Category="GAS | Messages")
 	FOnMessageWidgetRowGet OnMessageWidgetRowGet;
+	
+	UPROPERTY(BlueprintAssignable, Category="GAS | Messages")
+	FOnAbilityInfoGet OnAbilityInfoGet;
 
 protected:
 	template<typename T>

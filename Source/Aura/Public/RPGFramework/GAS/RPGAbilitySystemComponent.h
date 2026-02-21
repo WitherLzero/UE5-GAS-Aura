@@ -6,8 +6,9 @@
 #include "AbilitySystemComponent.h"
 #include "RPGAbilitySystemComponent.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnEffectAssetTagsGet, const FGameplayTagContainer& /*AssetTags*/)
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnAbilityGiven, URPGAbilitySystemComponent*)
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnEffectAssetTagsGet, const FGameplayTagContainer& /*AssetTags*/);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnAbilityGiven, URPGAbilitySystemComponent*);
+DECLARE_DELEGATE_OneParam(FAbilitySpecAction, const FGameplayAbilitySpec&);
 /**
  * 
  */
@@ -20,9 +21,13 @@ public:
 	void OnAbilityActorInfoSet();
 	
 	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities);
+	void ApplyActionToAbilities(const FAbilitySpecAction& Action);
 	
 	void AbilityInputTagHeld(const FGameplayTag& InputTag);
 	void AbilityInputTagReleased(const FGameplayTag& InputTag);
+	
+	static FGameplayTag GetAbilityTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
+	static FGameplayTag GetInputTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
 	
 	FOnEffectAssetTagsGet OnEffectAssetTagsGet;
 	FOnAbilityGiven OnAbilityGiven;

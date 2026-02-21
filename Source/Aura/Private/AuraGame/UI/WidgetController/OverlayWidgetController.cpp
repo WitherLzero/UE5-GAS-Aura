@@ -4,6 +4,7 @@
 #include "AuraGame/UI/WidgetController/OverlayWidgetController.h"
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 #include "RPGFramework/GAS/AttributeSets/VitalAttributeSet.h"
+#include "RPGFramework/GAS/Data/AbilityInfo.h"
 
 void UOverlayWidgetController::BroadcastInitialValues()
 {
@@ -72,6 +73,17 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 
 void UOverlayWidgetController::OnInitializeStartupAbilities(URPGAbilitySystemComponent* ASC)
 {
+	if (!ASC->bStartupAbilitiesGiven) return;
+	
+	FAbilitySpecAction GetAbilityInfo;
+	GetAbilityInfo.BindLambda(
+		[this,ASC](const FGameplayAbilitySpec& Spec)
+		{
+			FRPGAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(ASC->GetAbilityTagFromSpec(Spec));
+			Info.InputTag = ASC->GetInputTagFromSpec(Spec);
+			OnAbilityInfoGet.Broadcast(Info);
+		});
+	ASC->ApplyActionToAbilities(GetAbilityInfo);
 }
 
 

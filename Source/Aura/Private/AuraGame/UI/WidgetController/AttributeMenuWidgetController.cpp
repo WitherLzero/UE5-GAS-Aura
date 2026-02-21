@@ -43,7 +43,7 @@ void UAttributeMenuWidgetController::BroadcastAttributeInfo(const URPGAttributeS
 
 	for (auto& Pair : AS->TagsToAttributes)
 	{
-		FRPGAttributeInfo Info = AttributeInfo->FindAttributeInfoByTag(Pair.Key);
+		FRPGAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(Pair.Key);
 		Info.AttributeValue = Pair.Value().GetNumericValue(AS);
 		OnAttributeInfoChanged.Broadcast(Info);
 	}
@@ -58,7 +58,7 @@ void UAttributeMenuWidgetController::BindAttributeChangeDelegates(const URPGAttr
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value())
 			.AddLambda([this, Pair, AS](const FOnAttributeChangeData& Data)
 			{
-				FRPGAttributeInfo Info = AttributeInfo->FindAttributeInfoByTag(Pair.Key);
+				FRPGAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(Pair.Key);
 				Info.AttributeValue = Pair.Value().GetNumericValue(AS);
 				OnAttributeInfoChanged.Broadcast(Info);
 			}

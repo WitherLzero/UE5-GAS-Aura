@@ -3,7 +3,7 @@
 
 #include "RPGFramework/GAS/Data/AttributeInfo.h"
 
-FRPGAttributeInfo UAttributeInfo::FindAttributeInfoByTag(const FGameplayTag& AttributeTag, bool bLogNotFound) const
+FRPGAttributeInfo UAttributeInfo::FindAttributeInfoForTag(const FGameplayTag& AttributeTag, bool bLogNotFound) const
 {
 	for (const FRPGAttributeInfo& Info : AttributeInfos)
 	{

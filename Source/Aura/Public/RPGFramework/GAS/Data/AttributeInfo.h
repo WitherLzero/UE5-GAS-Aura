@@ -35,7 +35,7 @@ class AURA_API UAttributeInfo : public UDataAsset
 	GENERATED_BODY()
 	
 public:
-	FRPGAttributeInfo FindAttributeInfoByTag(const FGameplayTag& AttributeTag, bool bLogNotFound = false) const;
+	FRPGAttributeInfo FindAttributeInfoForTag(const FGameplayTag& AttributeTag, bool bLogNotFound = false) const;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FRPGAttributeInfo> AttributeInfos;

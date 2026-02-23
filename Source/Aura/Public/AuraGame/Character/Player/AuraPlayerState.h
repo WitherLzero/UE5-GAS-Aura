@@ -6,6 +6,8 @@
 #include "RPGFramework/Player/CorePlayerState.h"
 #include "AuraPlayerState.generated.h"
 
+class UCombatAttributeSet;
+class UPrimaryAttributeSet;
 /**
  * 
  */

@@ -3,7 +3,7 @@
 
 #include "AuraGame/GAS/Data/AuraLevelConfig.h"
 
-int32 UAuraLevelConfig::FindLevelForXP(int32 XP)
+int32 UAuraLevelConfig::FindLevelForXP(int32 XP) const
 {
 	int32 Level = 1;
 	bool bSearching = true;
@@ -23,4 +23,18 @@ int32 UAuraLevelConfig::FindLevelForXP(int32 XP)
 		}
 	}
 	return Level;
+}
+
+int32 UAuraLevelConfig::GetXPRequirement(int32 Level) const
+{
+	if (LevelUpInformation.IsValidIndex(Level))
+	{
+		return LevelUpInformation[Level].LevelUpRequirement;
+	}
+	return 0;
+}
+
+int32 UAuraLevelConfig::GetMaxLevel() const
+{
+	return LevelUpInformation.Num() - 1;
 }

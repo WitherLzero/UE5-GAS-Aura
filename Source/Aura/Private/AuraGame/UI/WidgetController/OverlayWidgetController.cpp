@@ -2,9 +2,12 @@
 
 
 #include "AuraGame/UI/WidgetController/OverlayWidgetController.h"
+
+#include "AuraGame/GAS/Data/AuraLevelConfig.h"
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 #include "RPGFramework/GAS/AttributeSets/VitalAttributeSet.h"
 #include "RPGFramework/GAS/Data/AbilityInfo.h"
+#include "RPGFramework/Player/CorePlayerState.h"
 
 void UOverlayWidgetController::BroadcastInitialValues()
 {
@@ -68,6 +71,10 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 		);		
 	}
 	
+	if (ACorePlayerState* PS = Cast<ACorePlayerState>(PlayerState))
+	{
+		PS->OnXPChangedDelegate.AddUObject(this,&ThisClass::OnXPChanged);
+	} 
 
 }
 
@@ -84,6 +91,28 @@ void UOverlayWidgetController::OnInitializeStartupAbilities(URPGAbilitySystemCom
 			OnAbilityInfoGet.Broadcast(Info);
 		});
 	ASC->ApplyActionToAbilities(GetAbilityInfo);
+}
+
+void UOverlayWidgetController::OnXPChanged(int32 NewXP)
+{
+	const ACorePlayerState* PS = Cast<ACorePlayerState>(PlayerState);
+	const UAuraLevelConfig* LevelUpInfo = PS->LevelConfig;
+	checkf(LevelUpInfo,TEXT("Unable to find LevelConfig. Please fill out in PlayerState: %s"),PS->GetName());
+	
+	const int32 CurrentLevel = LevelUpInfo->FindLevelForXP(NewXP);
+	const int32 MaxLevel = LevelUpInfo->GetMaxLevel();
+	
+	if (CurrentLevel <= MaxLevel && CurrentLevel>0)
+	{
+		const int32 ThisLevelXPRequirement = LevelUpInfo->GetXPRequirement(CurrentLevel);
+		const int32 LastLevelXPRequirement = LevelUpInfo->GetXPRequirement(CurrentLevel-1);
+		
+		const int32 DeltaXPRequirement = ThisLevelXPRequirement - LastLevelXPRequirement;
+		const int32 XPForThisLevel = NewXP - LastLevelXPRequirement;
+		
+		const float XPBarPercent = static_cast<float>(XPForThisLevel) / static_cast<float>(DeltaXPRequirement);
+		OnXPPercentChangedDelegate.Broadcast(XPBarPercent);
+	}
 }
 
 

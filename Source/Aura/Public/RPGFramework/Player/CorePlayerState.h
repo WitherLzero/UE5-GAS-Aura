@@ -8,6 +8,7 @@
 #include "CorePlayerState.generated.h"
 
 
+class UAuraLevelConfig;
 class UVitalAttributeSet;
 class UAbilitySystemComponent;
 
@@ -24,12 +25,14 @@ public:
 	
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 	
-	FOnPlayerStatChanged OnLevelChanged;
-	FOnPlayerStatChanged OnXPChanged;
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UAuraLevelConfig> LevelConfig;
+	
+	FOnPlayerStatChanged OnLevelChangedDelegate;
+	FOnPlayerStatChanged OnXPChangedDelegate;
 protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
-	
 	
 	
 	UPROPERTY()

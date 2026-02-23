@@ -29,34 +29,34 @@ void ACorePlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty
 
 void ACorePlayerState::OnRep_Level(const int32& OldLevel)
 {
-	OnLevelChanged.Broadcast(Level);
+	OnLevelChangedDelegate.Broadcast(Level);
 }
 
 void ACorePlayerState::OnRep_XP(const int32& OldXP)
 {
-	OnXPChanged.Broadcast(XP);
+	OnXPChangedDelegate.Broadcast(XP);
 }
 
 void ACorePlayerState::AddToLevel(int32 InLevel)
 {
 	Level += InLevel;
-	OnLevelChanged.Broadcast(Level);
+	OnLevelChangedDelegate.Broadcast(Level);
 }
 
 void ACorePlayerState::AddToXP(int32 InXP)
 {
 	XP += InXP;
-	OnXPChanged.Broadcast(XP);
+	OnXPChangedDelegate.Broadcast(XP);
 }
 
 void ACorePlayerState::SetLevel(int32 InLevel)
 {
 	Level = InLevel;
-	OnLevelChanged.Broadcast(Level);
+	OnLevelChangedDelegate.Broadcast(Level);
 }
 
 void ACorePlayerState::SetXP(int32 InXP)
 {
 	XP = InXP;
-	OnXPChanged.Broadcast(XP);
+	OnXPChangedDelegate.Broadcast(XP);
 }

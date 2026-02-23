@@ -97,7 +97,7 @@ void UOverlayWidgetController::OnXPChanged(int32 NewXP)
 {
 	const ACorePlayerState* PS = Cast<ACorePlayerState>(PlayerState);
 	const UAuraLevelConfig* LevelUpInfo = PS->LevelConfig;
-	checkf(LevelUpInfo,TEXT("Unable to find LevelConfig. Please fill out in PlayerState: %s"),PS->GetName());
+	checkf(LevelUpInfo,TEXT("Unable to find LevelConfig. Please fill out in PlayerState: %s"),*GetNameSafe(PS));
 	
 	const int32 CurrentLevel = LevelUpInfo->FindLevelForXP(NewXP);
 	const int32 MaxLevel = LevelUpInfo->GetMaxLevel();

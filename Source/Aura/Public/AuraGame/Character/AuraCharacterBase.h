@@ -26,6 +26,7 @@ protected:
 	UFUNCTION()
 	virtual void OnDeathCallbacks(AActor* DeadActor);
 	
+	virtual ECharacterClass GetCharacterClass_Implementation() override;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
@@ -38,6 +39,9 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	TObjectPtr<UActionComponent> ActionComp;	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
+	ECharacterClass CharacterClass = ECharacterClass::Warrior;
 	
 	void Dissolve();
 	

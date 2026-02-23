@@ -46,6 +46,10 @@ void AAuraCharacterBase::OnDeathCallbacks(AActor* DeadActor)
 	SetLifeSpan(LifeSpan);
 }
 
+ECharacterClass AAuraCharacterBase::GetCharacterClass_Implementation()
+{
+	return CharacterClass;
+}
 
 
 void AAuraCharacterBase::Dissolve()

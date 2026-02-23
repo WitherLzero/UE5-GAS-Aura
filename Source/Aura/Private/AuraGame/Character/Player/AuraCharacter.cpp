@@ -21,6 +21,8 @@ AAuraCharacter::AAuraCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	Spline = CreateDefaultSubobject<USplineComponent>("Spline");
+	
+	CharacterClass = ECharacterClass::Elementalist;
 }
 
 void AAuraCharacter::BeginPlay()

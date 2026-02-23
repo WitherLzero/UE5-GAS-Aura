@@ -3,8 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AuraGame/GAS/Data/CharacterClassInfo.h"
 #include "UObject/Interface.h"
 #include "CharacterDataInterface.generated.h"
+
+
 
 // This class does not need to be modified.
 UINTERFACE()
@@ -24,4 +27,7 @@ class AURA_API ICharacterDataInterface
 public:
 	
 	virtual int32 GetCharacterLevel() const;
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	ECharacterClass GetCharacterClass();
 };

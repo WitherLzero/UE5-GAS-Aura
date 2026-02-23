@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "AuraGame/Character/AuraCharacterBase.h"
-#include "AuraGame/GAS/Data/CharacterClassInfo.h"
 #include "RPGFramework/Interaction/EnemyInterface.h"
 #include "AuraGame/UI/WidgetController/OverlayWidgetController.h"
 #include "Enemy.generated.h"
@@ -76,8 +75,7 @@ protected:
 	UPROPERTY(EditAnywhere,Category = "Character Class Defaults")
 	int32 Level = 1;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
-	ECharacterClass CharacterClass = ECharacterClass::Warrior;
+
 	
 private:
 

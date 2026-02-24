@@ -21,11 +21,8 @@ public:
 	FGameplayTag Attributes_Vital_ManaRegeneration;
 	FGameplayTag Attributes_Vital_MaxHealth;
 	FGameplayTag Attributes_Vital_MaxMana;
-
-	FGameplayTag Attributes_Primary_Strength;
-	FGameplayTag Attributes_Primary_Intelligence;
-	FGameplayTag Attributes_Primary_Resilience;
-	FGameplayTag Attributes_Primary_Vigor;
+	
+	FGameplayTag Attributes_Meta_IncomingXP;
 	
 	
 	/*

@@ -29,7 +29,10 @@ void FRPGGameplayTags::InitializeNativeGameplayTags()
 		FString("Maximum amount of Mana obtainable")
 		);
 	
-	
+	GameplayTags.Attributes_Meta_IncomingXP = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Meta.IncomingXP"),
+		FString("Incoming XP Meta Attribute")
+		);	
 
 	
 

@@ -46,10 +46,11 @@ protected:
 	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attributes")
 	TArray<TSubclassOf<UGameplayEffect>> DefaultAttributes;	
 	
-	UPROPERTY(EditAnywhere,Category="Abilities")
+	UPROPERTY(EditAnywhere,Category = "Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> CharacterAbilities;
 	
-	
+	UPROPERTY(EditAnywhere, Category = "Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartupPassiveAbilities;
 
 public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }

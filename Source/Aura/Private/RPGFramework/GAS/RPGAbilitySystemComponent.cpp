@@ -25,6 +25,16 @@ void URPGAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<
 	OnAbilityGiven.Broadcast(this);
 }
 
+void URPGAbilitySystemComponent::AddCharacterPassiveAbilities(
+	const TArray<TSubclassOf<UGameplayAbility>>& StartupPassiveAbilities)
+{
+	for (const TSubclassOf<UGameplayAbility> AbilityClass : StartupPassiveAbilities)
+	{
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass,1);
+		GiveAbilityAndActivateOnce(AbilitySpec);
+	}
+}
+
 void URPGAbilitySystemComponent::ApplyActionToAbilities(const FAbilitySpecAction& Action)
 {
 	FScopedAbilityListLock ActiveScopeLock(*this);

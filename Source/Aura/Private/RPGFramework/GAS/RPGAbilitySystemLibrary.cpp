@@ -6,7 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "RPGFramework/GAS/RPGAbilityTypes.h"
 #include "AuraGame/Game/AuraGameMode.h"
-#include "RPGFramework/Player/CorePlayerState.h"
+#include "RPGFramework/Player/RPGPlayerState.h"
 #include "Kismet/GameplayStatics.h"
 #include "AuraGame/UI/HUD/AuraHUD.h"
 #include "AuraGame/GAS/Data/CharacterClassInfo.h"
@@ -22,7 +22,7 @@ UAttributeMenuWidgetController* URPGAbilitySystemLibrary::GetAttributeMenuWidget
 	{
 		if (AAuraHUD* AuraHUD = Cast<AAuraHUD>(PC->GetHUD()))
 		{
-			ACorePlayerState* PS = PC->GetPlayerState<ACorePlayerState>();
+			ARPGPlayerState* PS = PC->GetPlayerState<ARPGPlayerState>();
 			UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent();
 			
 			const FWidgetControllerParams WidgetControllerParams(ASC,PC,PS);

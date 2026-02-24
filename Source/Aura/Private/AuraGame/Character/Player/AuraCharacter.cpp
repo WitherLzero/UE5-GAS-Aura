@@ -10,7 +10,7 @@
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 #include "Components/SplineComponent.h"
 #include "RPGFramework/Player/CorePlayerController.h"
-#include "RPGFramework/Player/CorePlayerState.h"
+#include "RPGFramework/Player/RPGPlayerState.h"
 #include "RPGFramework/Input/RPGInputConfig.h"
 #include "AuraGame/UI/HUD/AuraHUD.h"
 
@@ -46,6 +46,13 @@ void AAuraCharacter::AddCharacterAbilities()
 	
 	CastChecked<URPGAbilitySystemComponent>(AbilitySystemComponent)->AddCharacterAbilities(CharacterAbilities);
 	CastChecked<URPGAbilitySystemComponent>(AbilitySystemComponent)->AddCharacterPassiveAbilities(StartupPassiveAbilities);
+}
+
+void AAuraCharacter::AddToXP_Implementation(int32 InXP)
+{
+	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState);
+	AuraPlayerState->AddToXP(InXP);
 }
 
 void AAuraCharacter::Tick(float DeltaTime)

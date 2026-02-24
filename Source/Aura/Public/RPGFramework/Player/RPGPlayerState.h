@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameFramework/PlayerState.h"
-#include "CorePlayerState.generated.h"
+#include "RPGPlayerState.generated.h"
 
 
 class UAuraLevelConfig;
@@ -17,11 +17,11 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerStatChanged, int32 /*StatValues*/)
  * 
  */
 UCLASS()
-class AURA_API ACorePlayerState : public APlayerState, public IAbilitySystemInterface
+class AURA_API ARPGPlayerState : public APlayerState, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 public:
-	ACorePlayerState();
+	ARPGPlayerState();
 	
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 	

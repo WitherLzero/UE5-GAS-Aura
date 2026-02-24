@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AuraGame/Character/AuraCharacterBase.h"
+#include "RPGFramework/Interaction/PlayerInterface.h"
 #include "AuraCharacter.generated.h"
 
 
@@ -13,7 +14,7 @@ class ACorePlayerController;
 class USplineComponent;
 
 UCLASS()
-class AURA_API AAuraCharacter : public AAuraCharacterBase
+class AURA_API AAuraCharacter : public AAuraCharacterBase, public IPlayerInterface
 {
 	GENERATED_BODY()
 
@@ -27,6 +28,10 @@ protected:
 	
 	virtual void InitDefaultAttributes() const override;
 	virtual void AddCharacterAbilities() override;
+	
+	/* Player Interface */
+	virtual void AddToXP_Implementation(int32 InXP) override;
+	/* end Player Interface */
 	
 	/* Combat Interface */
 	virtual int32 GetCharacterLevel() const override;

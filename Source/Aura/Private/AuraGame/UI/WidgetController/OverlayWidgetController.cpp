@@ -7,7 +7,7 @@
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 #include "RPGFramework/GAS/AttributeSets/VitalAttributeSet.h"
 #include "RPGFramework/GAS/Data/AbilityInfo.h"
-#include "RPGFramework/Player/CorePlayerState.h"
+#include "RPGFramework/Player/RPGPlayerState.h"
 
 void UOverlayWidgetController::BroadcastInitialValues()
 {
@@ -71,7 +71,7 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 		);		
 	}
 	
-	if (ACorePlayerState* PS = Cast<ACorePlayerState>(PlayerState))
+	if (ARPGPlayerState* PS = Cast<ARPGPlayerState>(PlayerState))
 	{
 		PS->OnXPChangedDelegate.AddUObject(this,&ThisClass::OnXPChanged);
 	} 
@@ -95,7 +95,7 @@ void UOverlayWidgetController::OnInitializeStartupAbilities(URPGAbilitySystemCom
 
 void UOverlayWidgetController::OnXPChanged(int32 NewXP)
 {
-	const ACorePlayerState* PS = Cast<ACorePlayerState>(PlayerState);
+	const ARPGPlayerState* PS = Cast<ARPGPlayerState>(PlayerState);
 	const UAuraLevelConfig* LevelUpInfo = PS->LevelConfig;
 	checkf(LevelUpInfo,TEXT("Unable to find LevelConfig. Please fill out in PlayerState: %s"),*GetNameSafe(PS));
 	

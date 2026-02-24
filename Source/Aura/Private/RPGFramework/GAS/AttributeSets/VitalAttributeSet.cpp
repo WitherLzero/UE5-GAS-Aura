@@ -5,8 +5,7 @@
 #include "RPGFramework/GAS/RPGAbilitySystemLibrary.h"
 #include "RPGFramework/Player/CorePlayerController.h"
 #include "GameFramework/Character.h"
-#include "RPGFramework/Interaction/CharacterDataInterface.h"
-#include "Kismet/GameplayStatics.h"
+#include "RPGFramework/Interaction/PlayerInterface.h"
 
 UVitalAttributeSet::UVitalAttributeSet()
 {
@@ -81,6 +80,12 @@ void UVitalAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 	{
 		const float LocalIncomingXP = GetIncomingXP();
 		SetIncomingXP(0.f);
+
+		if (EffectProps.SourceCharacter->Implements<UPlayerInterface>())
+		{
+			IPlayerInterface::Execute_AddToXP(EffectProps.SourceCharacter,LocalIncomingXP);
+		}
+		
 		UE_LOG(LogTemp,Log,TEXT("Incoming XP: %f"),LocalIncomingXP);
 	}
 }

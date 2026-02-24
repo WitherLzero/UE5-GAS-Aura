@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "RPGFramework/Player/CorePlayerState.h"
+#include "RPGFramework/Player/RPGPlayerState.h"
 #include "AuraPlayerState.generated.h"
 
 class UCombatAttributeSet;
@@ -12,7 +12,7 @@ class UPrimaryAttributeSet;
  * 
  */
 UCLASS()
-class AURA_API AAuraPlayerState : public ACorePlayerState
+class AURA_API AAuraPlayerState : public ARPGPlayerState
 {
 	GENERATED_BODY()
 	

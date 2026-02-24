@@ -1,13 +1,13 @@
 ﻿// Copyright rynnli
 
 
-#include "RPGFramework/Player/CorePlayerState.h"
+#include "RPGFramework/Player/RPGPlayerState.h"
 #include "Net/UnrealNetwork.h"
 
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 #include "RPGFramework/GAS/AttributeSets/VitalAttributeSet.h"
 
-ACorePlayerState::ACorePlayerState()
+ARPGPlayerState::ARPGPlayerState()
 {
 	NetUpdateFrequency = 100.f;
 	
@@ -19,43 +19,43 @@ ACorePlayerState::ACorePlayerState()
 
 }
 
-void ACorePlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+void ARPGPlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	
-	DOREPLIFETIME(ACorePlayerState,Level);
-	DOREPLIFETIME(ACorePlayerState,XP);
+	DOREPLIFETIME(ARPGPlayerState,Level);
+	DOREPLIFETIME(ARPGPlayerState,XP);
 }
 
-void ACorePlayerState::OnRep_Level(const int32& OldLevel)
+void ARPGPlayerState::OnRep_Level(const int32& OldLevel)
 {
 	OnLevelChangedDelegate.Broadcast(Level);
 }
 
-void ACorePlayerState::OnRep_XP(const int32& OldXP)
+void ARPGPlayerState::OnRep_XP(const int32& OldXP)
 {
 	OnXPChangedDelegate.Broadcast(XP);
 }
 
-void ACorePlayerState::AddToLevel(int32 InLevel)
+void ARPGPlayerState::AddToLevel(int32 InLevel)
 {
 	Level += InLevel;
 	OnLevelChangedDelegate.Broadcast(Level);
 }
 
-void ACorePlayerState::AddToXP(int32 InXP)
+void ARPGPlayerState::AddToXP(int32 InXP)
 {
 	XP += InXP;
 	OnXPChangedDelegate.Broadcast(XP);
 }
 
-void ACorePlayerState::SetLevel(int32 InLevel)
+void ARPGPlayerState::SetLevel(int32 InLevel)
 {
 	Level = InLevel;
 	OnLevelChangedDelegate.Broadcast(Level);
 }
 
-void ACorePlayerState::SetXP(int32 InXP)
+void ARPGPlayerState::SetXP(int32 InXP)
 {
 	XP = InXP;
 	OnXPChangedDelegate.Broadcast(XP);

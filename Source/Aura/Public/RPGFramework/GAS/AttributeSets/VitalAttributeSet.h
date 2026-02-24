@@ -73,5 +73,9 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly, Category="Meta Attributes")
 	FGameplayAttributeData IncomingDamage;
-	ATTRIBUTE_ACCESSORS(UVitalAttributeSet, IncomingDamage)
+	ATTRIBUTE_ACCESSORS(UVitalAttributeSet, IncomingDamage)	
+	
+	UPROPERTY(BlueprintReadOnly, Category="Meta Attributes")
+	FGameplayAttributeData IncomingXP;
+	ATTRIBUTE_ACCESSORS(UVitalAttributeSet, IncomingXP)
 };

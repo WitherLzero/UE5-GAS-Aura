@@ -75,8 +75,13 @@ void UVitalAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 				TagContainer.AddTag(FRPGGameplayTags::Get().Effects_HitReact);
 				EffectProps.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 			}
-
 		}
+	}
+	if (Data.EvaluatedData.Attribute == GetIncomingXPAttribute())
+	{
+		const float LocalIncomingXP = GetIncomingXP();
+		SetIncomingXP(0.f);
+		UE_LOG(LogTemp,Log,TEXT("Incoming XP: %f"),LocalIncomingXP);
 	}
 }
 

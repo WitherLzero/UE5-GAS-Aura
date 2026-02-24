@@ -44,9 +44,9 @@ protected:
 	virtual void UnHighlightActor() override;
     /* end Enemy Interface */
 	
-	/* Combat Interface */
+	/* Character Data Interface */
 	virtual int32 GetCharacterLevel() const override;
-	/* end Combat Interface */
+	/* end Character Data Interface */
 	
 	void HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
 	virtual void OnDeathCallbacks(AActor* DeadActor) override;
@@ -76,9 +76,8 @@ protected:
 	int32 Level = 1;
 	
 
-	
 private:
-
+	void SendXPEvent();
 	
 
 };

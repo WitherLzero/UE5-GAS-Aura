@@ -45,6 +45,7 @@ void AAuraCharacter::AddCharacterAbilities()
 	if (!HasAuthority()) return;
 	
 	CastChecked<URPGAbilitySystemComponent>(AbilitySystemComponent)->AddCharacterAbilities(CharacterAbilities);
+	CastChecked<URPGAbilitySystemComponent>(AbilitySystemComponent)->AddCharacterPassiveAbilities(StartupPassiveAbilities);
 }
 
 void AAuraCharacter::Tick(float DeltaTime)

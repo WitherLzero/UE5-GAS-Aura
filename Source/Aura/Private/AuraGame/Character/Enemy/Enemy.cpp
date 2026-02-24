@@ -3,20 +3,20 @@
 
 #include "AuraGame/Character/Enemy/Enemy.h"
 
-#include "AIController.h"
+#include "AbilitySystemBlueprintLibrary.h"
 #include "RPGFramework/Types/RPGGameplayTags.h"
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 #include "RPGFramework/GAS/RPGAbilitySystemLibrary.h"
-#include "Aura/Public/RPGFramework/GAS/AttributeSets/RPGAttributeSetBase.h"
 #include "RPGFramework/GAS/AttributeSets/VitalAttributeSet.h"
+#include "RPGFramework/AI/RPGAIController.h"
+#include "RPGFramework/UI/Widgets/UserWidgetBase.h"
+#include "RPGModules/Components/CombatComponent.h"
 #include "Aura/Aura.h"
 #include "Components/WidgetComponent.h"
 #include "AuraGame/GAS/AttributeSets/CombatAttributeSet.h"
 #include "AuraGame/GAS/AttributeSets/PrimaryAttributeSet.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "RPGFramework/AI/RPGAIController.h"
-#include "RPGFramework/UI/Widgets/UserWidgetBase.h"
 
 
 AEnemy::AEnemy()
@@ -73,6 +73,12 @@ void AEnemy::BeginPlay()
 		}
 	});
 }
+
+void AEnemy::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
 
 void AEnemy::PossessedBy(AController* NewController)
 {
@@ -139,10 +145,20 @@ void AEnemy::OnDeathCallbacks(AActor* DeadActor)
 	{
 		AIController->GetBlackboardComponent()->SetValueAsBool(FName("IsDead"), true);
 	}
+	
+	SendXPEvent();
+	
 }
 
-void AEnemy::Tick(float DeltaTime)
+void AEnemy::SendXPEvent()
 {
-	Super::Tick(DeltaTime);
+	int32 XPReward = URPGAbilitySystemLibrary::GetXPRewardForClassAndLevel(this,CharacterClass,Level);
+	const FRPGGameplayTags& GameplayTags = FRPGGameplayTags::Get();
+	FGameplayEventData Payload;
+	Payload.EventTag = GameplayTags.Attributes_Meta_IncomingXP;
+	Payload.EventMagnitude = XPReward;
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(CombatComp->GetCombatTarget(),GameplayTags.Attributes_Meta_IncomingXP,Payload);
+
 }
+
 

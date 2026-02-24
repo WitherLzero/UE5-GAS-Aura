@@ -3,7 +3,6 @@
 
 #include "AuraGame/Character/AuraCharacterBase.h"
 
-#include "Components/CapsuleComponent.h"
 #include "RPGModules/ARPG/Components/ActionComponent.h"
 #include "RPGModules/Components/CombatComponent.h"
 #include "RPGModules/Components/VitalityComponent.h"
@@ -50,6 +49,7 @@ ECharacterClass AAuraCharacterBase::GetCharacterClass_Implementation()
 {
 	return CharacterClass;
 }
+
 
 
 void AAuraCharacterBase::Dissolve()

@@ -5,13 +5,15 @@
 
 #include "AbilitySystemComponent.h"
 #include "GameplayEffectExecutionCalculation.h"
-#include "RPGFramework/Types/RPGGameplayTags.h"
 #include "RPGFramework/GAS/RPGAbilitySystemLibrary.h"
 
 #include "RPGFramework/GAS/AttributeSets/VitalAttributeSet.h"
 #include "AuraGame/GAS/Data/CharacterClassInfo.h"
 #include "AuraGame/GAS/AttributeSets/CombatAttributeSet.h"
+#include "AuraGame/Types/AuraGameplayTags.h"
 #include "RPGFramework/Interaction/CharacterDataInterface.h"
+
+
 
 struct RPGDamageStatic
 {
@@ -43,7 +45,7 @@ struct RPGDamageStatic
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UCombatAttributeSet, ArcaneResistance, Target, false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UCombatAttributeSet, PhysicalResistance, Target, false);
 		
-		const FRPGGameplayTags& Tags = FRPGGameplayTags::Get();
+		const FAuraGameplayTags& Tags = FAuraGameplayTags::Get();
 		TagsToCaptureDefs.Add(Tags.Attributes_Resistance_Fire, FireResistanceDef);
 		TagsToCaptureDefs.Add(Tags.Attributes_Resistance_Lightning, LightningResistanceDef);
 		TagsToCaptureDefs.Add(Tags.Attributes_Resistance_Arcane, ArcaneResistanceDef);
@@ -97,7 +99,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	
 	// Get damage set by caller Magnitude
 	float Damage = 0.f;
-	for (const auto& Pair : FRPGGameplayTags::Get().DamageTypesToResistances )
+	for (const auto& Pair : FAuraGameplayTags::Get().DamageTypesToResistances )
 	{
 		const FGameplayTag ResistanceTag = Pair.Value;
 		checkf(RPGDamageStatic().TagsToCaptureDefs.Contains(ResistanceTag), TEXT("TagsToCaptureDefs doesn't contain Tag: [%s] in ExecCalc_Damage"), *ResistanceTag.ToString());

@@ -2,11 +2,12 @@
 #include "AuraGame/GAS/AttributeSets/PrimaryAttributeSet.h"
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
-#include "RPGFramework/Types/RPGGameplayTags.h"
+#include "AuraGame/Types/AuraGameplayTags.h"
+
 
 UPrimaryAttributeSet::UPrimaryAttributeSet()
 {
-	const FRPGGameplayTags GameplayTags = FRPGGameplayTags::Get();
+	const FAuraGameplayTags GameplayTags = FAuraGameplayTags::Get();
 	
 	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Strength,GetStrengthAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Intelligence,GetIntelligenceAttribute);

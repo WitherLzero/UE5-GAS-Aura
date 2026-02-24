@@ -27,17 +27,6 @@ public:
 	FGameplayTag Attributes_Primary_Resilience;
 	FGameplayTag Attributes_Primary_Vigor;
 	
-	FGameplayTag Attributes_Combat_Armor;
-	FGameplayTag Attributes_Combat_ArmorPenetration;
-	FGameplayTag Attributes_Combat_BlockChance;
-	FGameplayTag Attributes_Combat_CriticalHitChance;
-	FGameplayTag Attributes_Combat_CriticalHitDamage;
-	FGameplayTag Attributes_Combat_CriticalHitResistance;
-	
-	FGameplayTag Attributes_Resistance_Fire;
-	FGameplayTag Attributes_Resistance_Lightning;
-	FGameplayTag Attributes_Resistance_Arcane;
-	FGameplayTag Attributes_Resistance_Physical;
 	
 	/*
 	 *  Input Tags
@@ -52,20 +41,10 @@ public:
 	
 	
 	/*
-	 *  Damage Tags
-	 */
-	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistances;
-	FGameplayTag Damage;
-	FGameplayTag Damage_Fire;
-	FGameplayTag Damage_Lightning;
-	FGameplayTag Damage_Arcane;
-	FGameplayTag Damage_Physical;
-	
-	
-	/*
 	 *  Effect Tags
 	 */
 	FGameplayTag Effects_HitReact;
+	
 	
 	/*
 	*  Montage

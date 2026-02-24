@@ -3,11 +3,11 @@
 
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
-#include "RPGFramework/Types/RPGGameplayTags.h"
+#include "AuraGame/Types/AuraGameplayTags.h"
 
 UCombatAttributeSet::UCombatAttributeSet()
 {
-	const FRPGGameplayTags GameplayTags = FRPGGameplayTags::Get();
+	const FAuraGameplayTags GameplayTags = FAuraGameplayTags::Get();
 	
 	TagsToAttributes.Add(GameplayTags.Attributes_Combat_Armor,GetArmorAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Combat_ArmorPenetration,GetArmorPenetrationAttribute);

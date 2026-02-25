@@ -64,15 +64,17 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="GAS | Attributes")
 	FOnAttributeChanged OnMaxManaChanged;
 	
-	UPROPERTY(BlueprintAssignable, Category="GAS | XP")
-	FOnPlayerInfoChanged OnXPPercentChangedDelegate;	
-	
 	UPROPERTY(BlueprintAssignable, Category="GAS | Messages")
 	FOnMessageWidgetRowGet OnMessageWidgetRowGet;
-	
+
 	UPROPERTY(BlueprintAssignable, Category="GAS | Messages")
 	FOnAbilityInfoGet OnAbilityInfoGet;
+	
+	UPROPERTY(BlueprintAssignable, Category="GAS | XP")
+	FOnPlayerInfoChanged OnXPPercentChangedDelegate;
 
+	UPROPERTY(BlueprintAssignable, Category="GAS | Level")
+	FOnPlayerInfoChanged OnPlayerLevelChangedDelegate;
 protected:
 	template<typename T>
 	T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);

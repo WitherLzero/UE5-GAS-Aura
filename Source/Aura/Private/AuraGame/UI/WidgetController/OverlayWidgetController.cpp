@@ -74,6 +74,11 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	if (ARPGPlayerState* PS = Cast<ARPGPlayerState>(PlayerState))
 	{
 		PS->OnXPChangedDelegate.AddUObject(this,&ThisClass::OnXPChanged);
+		PS->OnLevelChangedDelegate.AddLambda(
+			[this](int32 NewLevel)
+			{
+				OnPlayerLevelChangedDelegate.Broadcast(static_cast<float>(NewLevel));
+			});
 	} 
 
 }

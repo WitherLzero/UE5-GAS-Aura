@@ -3,9 +3,12 @@
 
 #include "RPGModules/Components/VitalityComponent.h"
 
+
+#include "GameplayEffectExtension.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
+#include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 #include "RPGFramework/GAS/AttributeSets/VitalAttributeSet.h"
 
 
@@ -19,16 +22,14 @@ UVitalityComponent::UVitalityComponent()
 
 void UVitalityComponent::InitVitality(UAbilitySystemComponent* ASC)
 {
+	
 	if (IsValid(ASC))
 	{
-		ASC->GetGameplayAttributeValueChangeDelegate(UVitalAttributeSet::GetHealthAttribute()).AddLambda(
-			[this](const FOnAttributeChangeData& Data)
-			{
-				if (!bIsDead && Data.NewValue <= 0.f)
-				{
-					Die();
-				}
-			});
+		URPGAbilitySystemComponent* RPGASC = Cast<URPGAbilitySystemComponent>(ASC);
+		
+		RPGASC->OnOutOfHealth.AddUObject(this,&ThisClass::HandleOutOfHealth);
+		
+		
 	}
 }
 
@@ -41,10 +42,15 @@ void UVitalityComponent::BeginPlay()
 	
 }
 
+void UVitalityComponent::HandleOutOfHealth(AActor* Instigator)
+{
+	Die();
+	OnDeath.Broadcast(GetOwner(),Instigator);
+}
+
 void UVitalityComponent::Die()
 {
 	bIsDead = true;
-	OnDeath.Broadcast(GetOwner());
 	MulticastHandleDeath();
 }
 

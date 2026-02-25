@@ -52,17 +52,18 @@ void AAuraCharacter::AddToXP_Implementation(int32 InXP)
 {
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
 	check(AuraPlayerState);
-	AuraPlayerState->AddToXP(InXP);
 	
 	const int32 CurrentLevel = AuraPlayerState->GetPlayerLevel();
 	const int32 CurrentXP = AuraPlayerState->GetXP();
-	
 	const int32 NewLevel = AuraPlayerState->LevelConfig->FindLevelForXP(CurrentXP+InXP);
 	const int32 NumLevelUps = NewLevel - CurrentLevel;
+	
 	if (NumLevelUps > 0)
 	{
 		AuraPlayerState->AddToLevel(NumLevelUps);
 	}
+	AuraPlayerState->AddToXP(InXP);
+	
 	
 }
 

@@ -7,7 +7,7 @@
 #include "Components/ActorComponent.h"
 #include "VitalityComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeathSignature, AActor*, DeadActor);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnDeathSignature, AActor*, DeadActor, AActor*, Instigator);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class AURA_API UVitalityComponent : public UActorComponent
@@ -26,6 +26,8 @@ public:
 	FORCEINLINE bool IsDead() const { return bIsDead; }
 protected:
 	virtual void BeginPlay() override;
+	
+	void HandleOutOfHealth(AActor* Instigator);
 	
 	void Die();
 	

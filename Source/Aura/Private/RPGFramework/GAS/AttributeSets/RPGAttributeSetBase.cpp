@@ -2,7 +2,6 @@
 
 
 #include "Aura/Public/RPGFramework/GAS/AttributeSets/RPGAttributeSetBase.h"
-#include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemBlueprintLibrary.h"

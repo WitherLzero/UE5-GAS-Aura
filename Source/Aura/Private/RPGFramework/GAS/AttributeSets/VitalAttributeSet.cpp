@@ -5,6 +5,7 @@
 #include "RPGFramework/GAS/RPGAbilitySystemLibrary.h"
 #include "RPGFramework/Player/CorePlayerController.h"
 #include "GameFramework/Character.h"
+#include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 #include "RPGFramework/Interaction/PlayerInterface.h"
 
 UVitalAttributeSet::UVitalAttributeSet()
@@ -73,6 +74,11 @@ void UVitalAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 				FGameplayTagContainer TagContainer;
 				TagContainer.AddTag(FRPGGameplayTags::Get().Effects_HitReact);
 				EffectProps.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+			}
+			else
+			{
+				URPGAbilitySystemComponent* OwnerASC = Cast<URPGAbilitySystemComponent>(GetOwningAbilitySystemComponent());
+				OwnerASC->OnOutOfHealth.Broadcast(EffectProps.SourceAvatarActor);
 			}
 		}
 	}

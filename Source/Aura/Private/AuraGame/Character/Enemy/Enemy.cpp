@@ -138,26 +138,28 @@ void AEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
 	}
 }
 
-void AEnemy::OnDeathCallbacks(AActor* DeadActor)
+void AEnemy::HandleDeath(AActor* DeadActor, AActor* KillerActor)
 {
-	Super::OnDeathCallbacks(DeadActor);
+	if (HasAuthority())
+	{
+    	SendXPEvent(KillerActor);
+	}
 	if (AIController && AIController->GetBlackboardComponent())
 	{
 		AIController->GetBlackboardComponent()->SetValueAsBool(FName("IsDead"), true);
 	}
-	
-	SendXPEvent();
+	Super::HandleDeath(DeadActor, KillerActor);
 	
 }
 
-void AEnemy::SendXPEvent()
+void AEnemy::SendXPEvent(AActor* KillerActor)
 {
 	int32 XPReward = URPGAbilitySystemLibrary::GetXPRewardForClassAndLevel(this,CharacterClass,Level);
 	const FRPGGameplayTags& GameplayTags = FRPGGameplayTags::Get();
 	FGameplayEventData Payload;
 	Payload.EventTag = GameplayTags.Attributes_Meta_IncomingXP;
 	Payload.EventMagnitude = XPReward;
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(CombatComp->GetCombatTarget(),GameplayTags.Attributes_Meta_IncomingXP,Payload);
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(KillerActor,GameplayTags.Attributes_Meta_IncomingXP,Payload);
 
 }
 

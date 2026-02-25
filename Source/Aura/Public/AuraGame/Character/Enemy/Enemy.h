@@ -49,7 +49,8 @@ protected:
 	/* end Character Data Interface */
 	
 	void HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
-	virtual void OnDeathCallbacks(AActor* DeadActor) override;
+	virtual void HandleDeath(AActor* DeadActor, AActor* KillerActor) override;
+
 	
 	UPROPERTY()
 	TObjectPtr<UVitalAttributeSet> VitalAS;
@@ -77,7 +78,7 @@ protected:
 	
 
 private:
-	void SendXPEvent();
+	void SendXPEvent(AActor* KillerActor);
 	
 
 };

@@ -31,10 +31,10 @@ void AAuraCharacterBase::BeginPlay()
 void AAuraCharacterBase::InitAbilityActorInfo()
 {
 	VitalityComp->InitVitality(AbilitySystemComponent);
-	VitalityComp->OnDeath.AddDynamic(this,&AAuraCharacterBase::OnDeathCallbacks);
+	VitalityComp->OnDeath.AddDynamic(this,&AAuraCharacterBase::HandleDeath);
 }
 
-void AAuraCharacterBase::OnDeathCallbacks(AActor* DeadActor)
+void AAuraCharacterBase::HandleDeath(AActor* DeadActor, AActor* KillerActor)
 {
 	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
 	Weapon->SetSimulatePhysics(true);

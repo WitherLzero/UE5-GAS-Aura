@@ -24,7 +24,7 @@ protected:
 	virtual void InitAbilityActorInfo() override;
 	
 	UFUNCTION()
-	virtual void OnDeathCallbacks(AActor* DeadActor);
+	virtual void HandleDeath(AActor* DeadActor, AActor* KillerActor);
 	
 	virtual ECharacterClass GetCharacterClass_Implementation() override;
 	

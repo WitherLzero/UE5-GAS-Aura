@@ -86,7 +86,7 @@ void UVitalAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 			IPlayerInterface::Execute_AddToXP(EffectProps.SourceCharacter,LocalIncomingXP);
 		}
 		
-		UE_LOG(LogTemp,Log,TEXT("Incoming XP: %f"),LocalIncomingXP);
+		
 	}
 }
 

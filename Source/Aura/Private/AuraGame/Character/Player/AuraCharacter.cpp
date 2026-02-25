@@ -5,15 +5,15 @@
 
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
-#include "AuraGame/Character/Player/AuraPlayerState.h"
 #include "RPGFramework/Types/RPGGameplayTags.h"
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
-#include "Components/SplineComponent.h"
 #include "RPGFramework/Player/CorePlayerController.h"
 #include "RPGFramework/Player/RPGPlayerState.h"
 #include "RPGFramework/Input/RPGInputConfig.h"
+#include "AuraGame/Character/Player/AuraPlayerState.h"
 #include "AuraGame/UI/HUD/AuraHUD.h"
-
+#include "AuraGame/GAS/Data/AuraLevelConfig.h"
+#include "Components/SplineComponent.h"
 
 
 AAuraCharacter::AAuraCharacter()
@@ -53,6 +53,17 @@ void AAuraCharacter::AddToXP_Implementation(int32 InXP)
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
 	check(AuraPlayerState);
 	AuraPlayerState->AddToXP(InXP);
+	
+	const int32 CurrentLevel = AuraPlayerState->GetPlayerLevel();
+	const int32 CurrentXP = AuraPlayerState->GetXP();
+	
+	const int32 NewLevel = AuraPlayerState->LevelConfig->FindLevelForXP(CurrentXP+InXP);
+	const int32 NumLevelUps = NewLevel - CurrentLevel;
+	if (NumLevelUps > 0)
+	{
+		AuraPlayerState->AddToLevel(NumLevelUps);
+	}
+	
 }
 
 void AAuraCharacter::Tick(float DeltaTime)

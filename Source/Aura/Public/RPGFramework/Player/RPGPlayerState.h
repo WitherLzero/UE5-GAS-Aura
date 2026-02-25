@@ -34,7 +34,6 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 	
-	
 	UPROPERTY()
 	TObjectPtr<UVitalAttributeSet> VitalAS;
 	

@@ -3,7 +3,7 @@
 #include "GameplayEffectExtension.h"
 #include "RPGFramework/Types/RPGGameplayTags.h"
 #include "RPGFramework/GAS/RPGAbilitySystemLibrary.h"
-#include "RPGFramework/Player/CorePlayerController.h"
+#include "RPGFramework/Player/RPGPlayerController.h"
 #include "GameFramework/Character.h"
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 #include "RPGFramework/Interaction/PlayerInterface.h"
@@ -100,12 +100,12 @@ void UVitalAttributeSet::ShowFloatingText(const float Damage, bool bBlockedHit, 
 {
 	if (EffectProps.SourceCharacter != EffectProps.TargetCharacter)
 	{
-		if (ACorePlayerController* PC = Cast<ACorePlayerController>(EffectProps.SourceCharacter->Controller))
+		if (ARPGPlayerController* PC = Cast<ARPGPlayerController>(EffectProps.SourceCharacter->Controller))
 		{
 			PC->ShowDamageNumber(EffectProps.TargetCharacter,Damage,bBlockedHit,bCriticalHit);
 			return;
 		}
-		if (ACorePlayerController* PC = Cast<ACorePlayerController>(EffectProps.TargetCharacter->Controller))
+		if (ARPGPlayerController* PC = Cast<ARPGPlayerController>(EffectProps.TargetCharacter->Controller))
 		{
 			PC->ShowDamageNumber(EffectProps.TargetCharacter,Damage,bBlockedHit,bCriticalHit);
 		}

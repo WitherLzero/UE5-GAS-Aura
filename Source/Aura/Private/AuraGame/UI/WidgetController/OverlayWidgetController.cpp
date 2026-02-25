@@ -101,7 +101,7 @@ void UOverlayWidgetController::OnInitializeStartupAbilities(URPGAbilitySystemCom
 void UOverlayWidgetController::OnXPChanged(int32 NewXP)
 {
 	const ARPGPlayerState* PS = Cast<ARPGPlayerState>(PlayerState);
-	const UAuraLevelConfig* LevelUpInfo = PS->LevelConfig;
+	const UAuraLevelConfig* LevelUpInfo = Cast<UAuraLevelConfig>(PS->LevelConfig);
 	checkf(LevelUpInfo,TEXT("Unable to find LevelConfig. Please fill out in PlayerState: %s"),*GetNameSafe(PS));
 	
 	const int32 CurrentLevel = LevelUpInfo->FindLevelForXP(NewXP);

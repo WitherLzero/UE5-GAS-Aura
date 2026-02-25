@@ -8,7 +8,7 @@
 #include "RPGPlayerState.generated.h"
 
 
-class UAuraLevelConfig;
+class ULevelConfig;
 class UVitalAttributeSet;
 class UAbilitySystemComponent;
 
@@ -26,7 +26,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 	
 	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UAuraLevelConfig> LevelConfig;
+	TObjectPtr<ULevelConfig> LevelConfig;
 	
 	FOnPlayerStatChanged OnLevelChangedDelegate;
 	FOnPlayerStatChanged OnXPChangedDelegate;

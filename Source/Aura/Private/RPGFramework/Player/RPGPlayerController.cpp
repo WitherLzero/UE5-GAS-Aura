@@ -1,7 +1,7 @@
 ﻿// Copyright rynnli
 
 
-#include "RPGFramework/Player/CorePlayerController.h"
+#include "RPGFramework/Player/RPGPlayerController.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "RPGFramework/Character/CoreCharacterBase.h"
@@ -12,12 +12,12 @@
 #include "RPGFramework/UI/Widgets/DamageTextComponent.h"
 
 
-ACorePlayerController::ACorePlayerController()
+ARPGPlayerController::ARPGPlayerController()
 {
 	bReplicates = true;
 }
 
-void ACorePlayerController::PlayerTick(float DeltaTime)
+void ARPGPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 	
@@ -25,7 +25,7 @@ void ACorePlayerController::PlayerTick(float DeltaTime)
 }
 
 
-void ACorePlayerController::BeginPlay()
+void ARPGPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	
@@ -40,7 +40,7 @@ void ACorePlayerController::BeginPlay()
 	UpdateMouse();
 }
 
-void ACorePlayerController::SetupInputComponent()
+void ARPGPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 	URPGInputComponent* RPGInputComponent = CastChecked<URPGInputComponent>(InputComponent);
@@ -48,7 +48,7 @@ void ACorePlayerController::SetupInputComponent()
 	RPGInputComponent->BindTaggedAction(InputConfig,this,&ThisClass::OnInputTagPressed,&ThisClass::OnInputTagReleased,&ThisClass::OnInputTagHeld);
 }
 
-void ACorePlayerController::ShowDamageNumber_Implementation(ACharacter* TargetCharacter, float DamageAmount, bool bBlockedHit, bool bCriticalHit)
+void ARPGPlayerController::ShowDamageNumber_Implementation(ACharacter* TargetCharacter, float DamageAmount, bool bBlockedHit, bool bCriticalHit)
 {
 	if (IsValid(TargetCharacter) && DamageTextCompClass)
 	{
@@ -60,7 +60,7 @@ void ACorePlayerController::ShowDamageNumber_Implementation(ACharacter* TargetCh
 	}
 }
 
-void ACorePlayerController::CursorTrace()
+void ARPGPlayerController::CursorTrace()
 {
 	FHitResult CursorHit;
 	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
@@ -77,7 +77,7 @@ void ACorePlayerController::CursorTrace()
 }
 
 
-void ACorePlayerController::UpdateMouse()
+void ARPGPlayerController::UpdateMouse()
 {
 	// TODO: Specific cursor setting for Top-Down? Need to make it changeable 
 	bShowMouseCursor = true;
@@ -89,22 +89,22 @@ void ACorePlayerController::UpdateMouse()
 	SetInputMode(InputModeData);
 }
 
-void ACorePlayerController::OnInputTagPressed(FGameplayTag InputTag)
+void ARPGPlayerController::OnInputTagPressed(FGameplayTag InputTag)
 {
 	ProcessInputTag(InputTag,ERPGInputEvent::IE_Pressed);
 }
 
-void ACorePlayerController::OnInputTagReleased(FGameplayTag InputTag)
+void ARPGPlayerController::OnInputTagReleased(FGameplayTag InputTag)
 {
 	ProcessInputTag(InputTag,ERPGInputEvent::IE_Released);
 }
 
-void ACorePlayerController::OnInputTagHeld(const FInputActionValue& InputActionValue,FGameplayTag InputTag)
+void ARPGPlayerController::OnInputTagHeld(const FInputActionValue& InputActionValue,FGameplayTag InputTag)
 {
 	ProcessInputTag(InputTag,ERPGInputEvent::IE_Held,InputActionValue);
 }
 
-void ACorePlayerController::ProcessInputTag(FGameplayTag InputTag, ERPGInputEvent EventType,
+void ARPGPlayerController::ProcessInputTag(FGameplayTag InputTag, ERPGInputEvent EventType,
                                             const FInputActionValue& InputActionValue)
 {
 	if (IInputInteractable* Interface = Cast<IInputInteractable>(GetPawn()))
@@ -120,7 +120,7 @@ void ACorePlayerController::ProcessInputTag(FGameplayTag InputTag, ERPGInputEven
 
 }
 
-URPGAbilitySystemComponent* ACorePlayerController::GetASC()
+URPGAbilitySystemComponent* ARPGPlayerController::GetASC()
 {
 	if (AbilitySystemComponent == nullptr)
 	{
@@ -129,7 +129,7 @@ URPGAbilitySystemComponent* ACorePlayerController::GetASC()
 	return AbilitySystemComponent;
 }
 
-bool ACorePlayerController::GetCursorHit(FHitResult& HitResult)
+bool ARPGPlayerController::GetCursorHit(FHitResult& HitResult)
 {
 	return GetHitResultUnderCursor(ECC_Visibility, false, HitResult);
 }

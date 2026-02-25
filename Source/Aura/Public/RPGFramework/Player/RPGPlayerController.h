@@ -6,7 +6,7 @@
 #include "GameplayTagContainer.h"
 #include "InputActionValue.h"
 #include "GameFramework/PlayerController.h"
-#include "CorePlayerController.generated.h"
+#include "RPGPlayerController.generated.h"
 
 class UDamageTextComponent;
 class URPGAbilitySystemComponent;
@@ -20,12 +20,12 @@ class UInputMappingContext;
  * 
  */
 UCLASS()
-class AURA_API ACorePlayerController : public APlayerController
+class AURA_API ARPGPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
 public:
-	ACorePlayerController();
+	ARPGPlayerController();
 	virtual void PlayerTick(float DeltaTime) override;
 
 	UFUNCTION(Client,Reliable)

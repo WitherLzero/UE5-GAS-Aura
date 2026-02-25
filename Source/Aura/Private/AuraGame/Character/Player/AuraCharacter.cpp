@@ -7,7 +7,7 @@
 #include "NavigationSystem.h"
 #include "RPGFramework/Types/RPGGameplayTags.h"
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
-#include "RPGFramework/Player/CorePlayerController.h"
+#include "RPGFramework/Player/RPGPlayerController.h"
 #include "RPGFramework/Player/RPGPlayerState.h"
 #include "RPGFramework/Input/RPGInputConfig.h"
 #include "AuraGame/Character/Player/AuraPlayerState.h"
@@ -145,7 +145,7 @@ void AAuraCharacter::InitAbilityActorInfo()
 	Cast<URPGAbilitySystemComponent>(AbilitySystemComponent)->OnAbilityActorInfoSet();
 	
 	InitDefaultAttributes();
-	if (ACorePlayerController* AuraPlayerController = Cast<ACorePlayerController>(GetController()))
+	if (ARPGPlayerController* AuraPlayerController = Cast<ARPGPlayerController>(GetController()))
 	{
 		if (AAuraHUD* AuraHUD = Cast<AAuraHUD>(AuraPlayerController->GetHUD()))
 		{
@@ -154,11 +154,11 @@ void AAuraCharacter::InitAbilityActorInfo()
 	}
 }
 
-ACorePlayerController* AAuraCharacter::GetPC()
+ARPGPlayerController* AAuraCharacter::GetPC()
 {
 	if (PlayerController == nullptr)
 	{
-		PlayerController = Cast<ACorePlayerController>(GetController());
+		PlayerController = Cast<ARPGPlayerController>(GetController());
 	}
 	return PlayerController;
 }

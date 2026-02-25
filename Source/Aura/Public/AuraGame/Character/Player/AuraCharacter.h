@@ -10,7 +10,7 @@
 
 class UActionComponent;
 class UCombatComponent;
-class ACorePlayerController;
+class ARPGPlayerController;
 class USplineComponent;
 
 UCLASS()
@@ -55,13 +55,13 @@ protected:
 	void BP_OnLevelUpVisualsTriggered() const;
 	
 	UPROPERTY()
-	TObjectPtr<ACorePlayerController> PlayerController;
+	TObjectPtr<ARPGPlayerController> PlayerController;
 	
 
 	
 private:
 	virtual void InitAbilityActorInfo() override;
-	ACorePlayerController* GetPC();
+	ARPGPlayerController* GetPC();
 	
 
 	/*

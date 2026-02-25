@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+#include "RPGFramework/GAS/Data/LevelConfig.h"
 #include "AuraLevelConfig.generated.h"
 
 USTRUCT(BlueprintType)
@@ -25,7 +26,7 @@ struct FAuraLevelUpInfo
  * 
  */
 UCLASS()
-class AURA_API UAuraLevelConfig : public UDataAsset
+class AURA_API UAuraLevelConfig : public ULevelConfig
 {
 	GENERATED_BODY()
 	
@@ -34,8 +35,8 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TArray<FAuraLevelUpInfo> LevelUpInformation;
 
-	int32 FindLevelForXP(int32 XP) const;
-	int32 GetXPRequirement(int32 Level) const;
-	
-	int32 GetMaxLevel()const;
+	virtual int32 FindLevelForXP(int32 XP) const override;
+	virtual int32 GetXPRequirement(int32 Level) const override;
+
+	virtual int32 GetMaxLevel()const override;
 };

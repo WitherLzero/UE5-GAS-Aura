@@ -6,7 +6,7 @@
 #include "WidgetController.generated.h"
 
 class UAbilitySystemComponent;
-class ACorePlayerController;
+class ARPGPlayerController;
 /**
  * 
  */

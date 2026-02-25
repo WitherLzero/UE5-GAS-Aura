@@ -61,6 +61,7 @@ void AAuraCharacter::AddToXP_Implementation(int32 InXP)
 	if (NumLevelUps > 0)
 	{
 		AuraPlayerState->AddToLevel(NumLevelUps);
+		MulticastLevelUpEffects();
 	}
 	AuraPlayerState->AddToXP(InXP);
 	
@@ -160,6 +161,11 @@ ACorePlayerController* AAuraCharacter::GetPC()
 		PlayerController = Cast<ACorePlayerController>(GetController());
 	}
 	return PlayerController;
+}
+
+void AAuraCharacter::MulticastLevelUpEffects_Implementation() const
+{
+	BP_OnLevelUpVisualsTriggered();
 }
 
 void AAuraCharacter::Move(const FVector2D& InputAxis)

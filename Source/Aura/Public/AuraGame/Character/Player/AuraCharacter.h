@@ -48,6 +48,11 @@ protected:
 	bool SetupNavPoints();
 	void AutoRun();
 	
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastLevelUpEffects() const;
+	
+	UFUNCTION(BlueprintImplementableEvent, Category=" RPG | Effects")
+	void BP_OnLevelUpVisualsTriggered() const;
 	
 	UPROPERTY()
 	TObjectPtr<ACorePlayerController> PlayerController;
@@ -58,6 +63,7 @@ private:
 	virtual void InitAbilityActorInfo() override;
 	ACorePlayerController* GetPC();
 	
+
 	/*
 	 *  Click-to-Move vars
 	 */

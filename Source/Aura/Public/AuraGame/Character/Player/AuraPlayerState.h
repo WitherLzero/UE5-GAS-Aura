@@ -6,6 +6,7 @@
 #include "RPGFramework/Player/RPGPlayerState.h"
 #include "AuraPlayerState.generated.h"
 
+struct FGameplayTag;
 class UCombatAttributeSet;
 class UPrimaryAttributeSet;
 /**
@@ -20,6 +21,8 @@ public:
 	AAuraPlayerState();
 	
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+	
+	void UpgradeAttribute(const FGameplayTag& AttributeTag);
 	
 	FOnPlayerStatChanged OnAttributePointsChanged;
 	FOnPlayerStatChanged OnSpellPointsChanged;
@@ -43,6 +46,8 @@ private:
 	UFUNCTION()
 	void OnRep_SpellPoints(int32 OldSpellPoints);
 	
+	UFUNCTION(Server, Reliable)
+	void ServerUpgradeAttribute(const FGameplayTag& AttributeTag);
 public:
 	FORCEINLINE int32 GetAttributePoints() const { return AttributePoints; }
 	FORCEINLINE int32 GetSpellPoints() const { return SpellPoints; }

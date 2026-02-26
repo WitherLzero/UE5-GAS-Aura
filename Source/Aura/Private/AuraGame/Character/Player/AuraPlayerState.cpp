@@ -3,6 +3,7 @@
 
 #include "AuraGame/Character/Player/AuraPlayerState.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AuraGame/GAS/AttributeSets/CombatAttributeSet.h"
 #include "AuraGame/GAS/AttributeSets/PrimaryAttributeSet.h"
 
@@ -17,6 +18,14 @@ void AAuraPlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 }
 
+void AAuraPlayerState::UpgradeAttribute(const FGameplayTag& AttributeTag)
+{
+	if (AttributePoints > 0)
+	{
+		ServerUpgradeAttribute(AttributeTag);
+	}
+}
+
 void AAuraPlayerState::OnRep_AttributePoints(int32 OldAttributePoints)
 {
 	OnAttributePointsChanged.Broadcast(AttributePoints);
@@ -25,6 +34,16 @@ void AAuraPlayerState::OnRep_AttributePoints(int32 OldAttributePoints)
 void AAuraPlayerState::OnRep_SpellPoints(int32 OldSpellPoints)
 {
 	OnSpellPointsChanged.Broadcast(SpellPoints);
+}
+
+void AAuraPlayerState::ServerUpgradeAttribute_Implementation(const FGameplayTag& AttributeTag)
+{
+	FGameplayEventData Payload;
+	Payload.EventTag = AttributeTag;
+	Payload.EventMagnitude = 1.f;
+	
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetPawn(), AttributeTag, Payload);
+	AddToAttributePoints(-1);
 }
 
 void AAuraPlayerState::AddToAttributePoints(int32 InPoints)

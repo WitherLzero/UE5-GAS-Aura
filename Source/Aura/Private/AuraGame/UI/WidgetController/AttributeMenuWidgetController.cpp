@@ -46,6 +46,12 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 		});
 }
 
+void UAttributeMenuWidgetController::UpgradeAttribute(const FGameplayTag& AttributeTag)
+{
+	AAuraPlayerState* AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
+	AuraPlayerState->UpgradeAttribute(AttributeTag);
+}
+
 void UAttributeMenuWidgetController::BroadcastAttributeInfo(const URPGAttributeSetBase* AS) const
 {
 	if (!ensure(AS)) return;

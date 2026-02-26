@@ -7,6 +7,7 @@
 #include "AttributeMenuWidgetController.generated.h"
 
 
+struct FGameplayTag;
 class UAttributeInfo;
 struct FRPGAttributeInfo;
 
@@ -22,6 +23,10 @@ class AURA_API UAttributeMenuWidgetController : public UWidgetController
 	
 public:
 	virtual void BindCallbacksToDependencies() override;
+	
+	UFUNCTION(BlueprintCallable)
+	void UpgradeAttribute(const FGameplayTag& AttributeTag);
+
 	
 	UPROPERTY(BlueprintAssignable, Category="GAS | Attributes")
 	FOnAttributeInfoChanged OnAttributeInfoChanged;

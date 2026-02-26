@@ -73,11 +73,11 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	
 	if (ARPGPlayerState* PS = Cast<ARPGPlayerState>(PlayerState))
 	{
-		PS->OnXPChangedDelegate.AddUObject(this,&ThisClass::OnXPChanged);
-		PS->OnLevelChangedDelegate.AddLambda(
+		PS->OnXPChanged.AddUObject(this,&ThisClass::HandleXPChanged);
+		PS->OnLevelChanged.AddLambda(
 			[this](int32 NewLevel)
 			{
-				OnPlayerLevelChangedDelegate.Broadcast(static_cast<float>(NewLevel));
+				OnPlayerLevelChanged.Broadcast(static_cast<float>(NewLevel));
 			});
 	} 
 
@@ -98,7 +98,7 @@ void UOverlayWidgetController::OnInitializeStartupAbilities(URPGAbilitySystemCom
 	ASC->ApplyActionToAbilities(GetAbilityInfo);
 }
 
-void UOverlayWidgetController::OnXPChanged(int32 NewXP)
+void UOverlayWidgetController::HandleXPChanged(int32 NewXP)
 {
 	const ARPGPlayerState* PS = Cast<ARPGPlayerState>(PlayerState);
 	const UAuraLevelConfig* LevelUpInfo = Cast<UAuraLevelConfig>(PS->LevelConfig);
@@ -116,7 +116,7 @@ void UOverlayWidgetController::OnXPChanged(int32 NewXP)
 		const int32 XPForThisLevel = NewXP - LastLevelXPRequirement;
 		
 		const float XPBarPercent = static_cast<float>(XPForThisLevel) / static_cast<float>(DeltaXPRequirement);
-		OnXPPercentChangedDelegate.Broadcast(XPBarPercent);
+		OnXPPercentChanged.Broadcast(XPBarPercent);
 	}
 }
 

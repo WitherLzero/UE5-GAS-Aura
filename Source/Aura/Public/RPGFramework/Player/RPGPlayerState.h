@@ -28,8 +28,8 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<ULevelConfig> LevelConfig;
 	
-	FOnPlayerStatChanged OnLevelChangedDelegate;
-	FOnPlayerStatChanged OnXPChangedDelegate;
+	FOnPlayerStatChanged OnLevelChanged;
+	FOnPlayerStatChanged OnXPChanged;
 protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;

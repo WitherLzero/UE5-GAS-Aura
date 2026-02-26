@@ -29,34 +29,34 @@ void ARPGPlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>
 
 void ARPGPlayerState::OnRep_Level(const int32& OldLevel)
 {
-	OnLevelChangedDelegate.Broadcast(Level);
+	OnLevelChanged.Broadcast(Level);
 }
 
 void ARPGPlayerState::OnRep_XP(const int32& OldXP)
 {
-	OnXPChangedDelegate.Broadcast(XP);
+	OnXPChanged.Broadcast(XP);
 }
 
 void ARPGPlayerState::AddToLevel(int32 InLevel)
 {
 	Level += InLevel;
-	OnLevelChangedDelegate.Broadcast(Level);
+	OnLevelChanged.Broadcast(Level);
 }
 
 void ARPGPlayerState::AddToXP(int32 InXP)
 {
 	XP += InXP;
-	OnXPChangedDelegate.Broadcast(XP);
+	OnXPChanged.Broadcast(XP);
 }
 
 void ARPGPlayerState::SetLevel(int32 InLevel)
 {
 	Level = InLevel;
-	OnLevelChangedDelegate.Broadcast(Level);
+	OnLevelChanged.Broadcast(Level);
 }
 
 void ARPGPlayerState::SetXP(int32 InXP)
 {
 	XP = InXP;
-	OnXPChangedDelegate.Broadcast(XP);
+	OnXPChanged.Broadcast(XP);
 }

@@ -36,7 +36,6 @@ struct FUIWidgetRow : public FTableRowBase
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChanged, float, NewValue);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerInfoChanged, float, NewValue);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMessageWidgetRowGet, FUIWidgetRow, Row);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAbilityInfoGet, const FRPGAbilityInfo&, Info);
 
@@ -71,16 +70,16 @@ public:
 	FOnAbilityInfoGet OnAbilityInfoGet;
 	
 	UPROPERTY(BlueprintAssignable, Category="GAS | XP")
-	FOnPlayerInfoChanged OnXPPercentChangedDelegate;
+	FOnPlayerInfoChangedSignature OnXPPercentChanged;
 
 	UPROPERTY(BlueprintAssignable, Category="GAS | Level")
-	FOnPlayerInfoChanged OnPlayerLevelChangedDelegate;
+	FOnPlayerInfoChangedSignature OnPlayerLevelChanged;
 protected:
 	template<typename T>
 	T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
 	
 	void OnInitializeStartupAbilities(URPGAbilitySystemComponent* ASC);
-	void OnXPChanged(int32 NewXP);
+	void HandleXPChanged(int32 NewXP);
 	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category="Widget Data")
 	TObjectPtr<UDataTable> MessageWidgetDataTable;

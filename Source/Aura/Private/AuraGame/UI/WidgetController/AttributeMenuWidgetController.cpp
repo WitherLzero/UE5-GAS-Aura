@@ -4,6 +4,7 @@
 #include "AuraGame/UI/WidgetController/AttributeMenuWidgetController.h"
 
 #include "Aura/Public/RPGFramework/GAS/AttributeSets/RPGAttributeSetBase.h"
+#include "AuraGame/Character/Player/AuraPlayerState.h"
 #include "AuraGame/GAS/AttributeSets/CombatAttributeSet.h"
 #include "AuraGame/GAS/AttributeSets/PrimaryAttributeSet.h"
 #include "RPGFramework/GAS/AttributeSets/VitalAttributeSet.h"
@@ -35,6 +36,12 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 	BindAttributeChangeDelegates(CombatAS);
 	BindAttributeChangeDelegates(VitalAS);
 
+	AAuraPlayerState* AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
+	AuraPlayerState->OnAttributePointsChanged.AddLambda(
+		[this](int32 NewPoints)
+		{
+			AttributePointsChanged.Broadcast(NewPoints);
+		});
 }
 
 void UAttributeMenuWidgetController::BroadcastAttributeInfo(const URPGAttributeSetBase* AS) const

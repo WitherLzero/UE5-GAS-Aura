@@ -26,6 +26,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="GAS | Attributes")
 	FOnAttributeInfoChanged OnAttributeInfoChanged;
 	
+	UPROPERTY(BlueprintAssignable, Category="GAS|Attributes")
+	FOnPlayerInfoChangedSignature AttributePointsChanged;
+	
 protected:
 	virtual void BroadcastInitialValues() override;
 	

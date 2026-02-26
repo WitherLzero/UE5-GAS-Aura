@@ -36,7 +36,11 @@ public:
 	TArray<FAuraLevelUpInfo> LevelUpInformation;
 
 	virtual int32 FindLevelForXP(int32 XP) const override;
+	
 	virtual int32 GetXPRequirement(int32 Level) const override;
-
+	
 	virtual int32 GetMaxLevel()const override;
+	
+	int32 GetAttributePointsReward(int32 Level) const;
+	int32 GetSpellPointsReward(int32 Level) const;
 };

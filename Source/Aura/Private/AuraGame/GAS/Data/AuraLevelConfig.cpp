@@ -38,3 +38,22 @@ int32 UAuraLevelConfig::GetMaxLevel() const
 {
 	return LevelUpInformation.Num() - 1;
 }
+
+int32 UAuraLevelConfig::GetAttributePointsReward(int32 Level) const
+{
+	if (LevelUpInformation.IsValidIndex(Level))
+	{
+		return LevelUpInformation[Level].AttributePointAward;	
+	}
+	return 0;
+	
+}
+
+int32 UAuraLevelConfig::GetSpellPointsReward(int32 Level) const
+{
+	if (LevelUpInformation.IsValidIndex(Level))
+	{
+		return LevelUpInformation[Level].SpellPointAward;	
+	}
+	return 0;
+}

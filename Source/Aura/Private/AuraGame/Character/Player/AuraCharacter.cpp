@@ -60,6 +60,18 @@ void AAuraCharacter::AddToXP_Implementation(int32 InXP)
 	
 	if (NumLevelUps > 0)
 	{
+		int32 AttributePointsReward = 0;
+		int32 SpellPointsReward = 0;
+		
+		for (int32 i = 0; i < NumLevelUps; ++i)
+		{
+			AttributePointsReward += Cast<UAuraLevelConfig>(AuraPlayerState->LevelConfig)->GetAttributePointsReward(CurrentLevel + i);
+			SpellPointsReward += Cast<UAuraLevelConfig>(AuraPlayerState->LevelConfig)->GetSpellPointsReward(CurrentLevel + i);
+		}
+		
+		AuraPlayerState->AddToAttributePoints(AttributePointsReward);
+		AuraPlayerState->AddToSpellPoints(SpellPointsReward);
+		
 		AuraPlayerState->AddToLevel(NumLevelUps);
 		MulticastLevelUpEffects();
 	}

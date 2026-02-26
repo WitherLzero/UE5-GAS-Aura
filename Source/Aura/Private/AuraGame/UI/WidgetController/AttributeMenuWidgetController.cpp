@@ -22,6 +22,8 @@ void UAttributeMenuWidgetController::BroadcastInitialValues()
 	BroadcastAttributeInfo(CombatAS);
 	BroadcastAttributeInfo(VitalAS);
 	
+	AAuraPlayerState* AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
+	AttributePointsChanged.Broadcast(AuraPlayerState->GetAttributePoints());
 }
 
 void UAttributeMenuWidgetController::BindCallbacksToDependencies()

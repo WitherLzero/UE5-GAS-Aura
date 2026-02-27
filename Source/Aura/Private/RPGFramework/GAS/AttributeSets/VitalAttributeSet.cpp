@@ -100,15 +100,22 @@ void UVitalAttributeSet::PostAttributeChange(const FGameplayAttribute& Attribute
 {
 	Super::PostAttributeChange(Attribute, OldValue, NewValue);
 	
-	if (Attribute == GetMaxHealthAttribute() && bTopOfHealth)
+	if (Attribute == GetMaxHealthAttribute())
 	{
-		SetHealth(GetMaxHealth());
-		bTopOfHealth = false;
+		if (bTopOfHealth)
+		{
+			SetHealth(GetMaxHealth());
+			bTopOfHealth = false;
+		}
+
 	}
-	if (Attribute == GetMaxManaAttribute() && bTopOfMana)
+	if (Attribute == GetMaxManaAttribute())
 	{
-		SetMana(GetMaxMana());
-		bTopOfMana = false;
+		if (bTopOfMana)
+		{
+			SetMana(GetMaxMana());
+			bTopOfMana = false;
+		}
 	}
 }
 

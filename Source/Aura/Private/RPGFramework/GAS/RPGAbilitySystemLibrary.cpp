@@ -15,25 +15,6 @@
 #include "RPGModules/Components/CombatComponent.h"
 #include "RPGModules/Components/VitalityComponent.h"
 
-UAttributeMenuWidgetController* URPGAbilitySystemLibrary::GetAttributeMenuWidgetController(
-	const UObject* WorldContextObject)
-{
-	if (APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject,0))
-	{
-		if (AAuraHUD* AuraHUD = Cast<AAuraHUD>(PC->GetHUD()))
-		{
-			ARPGPlayerState* PS = PC->GetPlayerState<ARPGPlayerState>();
-			UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent();
-			
-			const FWidgetControllerParams WidgetControllerParams(ASC,PC,PS);
-			return AuraHUD->GetAttributeMenuWidgetController(WidgetControllerParams);
-		}
-	}
-	
-	return nullptr;
-}
-
-
 
 void URPGAbilitySystemLibrary::InitDefaultAttributes(const UObject* WorldContextObject, UAbilitySystemComponent* ASC,
                                                      ECharacterClass CharacterClass, float Level)

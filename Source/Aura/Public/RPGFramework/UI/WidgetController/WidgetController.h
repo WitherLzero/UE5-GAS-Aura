@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "WidgetController.generated.h"
 
+class URPGAbilitySystemComponent;
+class UAbilityInfo;
 class UAbilitySystemComponent;
 class ARPGPlayerController;
 /**
@@ -12,6 +14,8 @@ class ARPGPlayerController;
  */
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerInfoChangedSignature, float, NewValue);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAbilityInfoGet, const FRPGAbilityInfo&, Info);
+
 
 
 USTRUCT(BlueprintType)
@@ -43,12 +47,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "WidgetController")
 	void SetWidgetControllerParams(const FWidgetControllerParams& WCParams);
 	
+	UPROPERTY(BlueprintAssignable, Category="GAS | Messages")
+	FOnAbilityInfoGet OnAbilityInfoGet;
 protected:
 	UFUNCTION(BlueprintCallable)
 	virtual void BroadcastInitialValues();
-
 	
 	virtual void BindCallbacksToDependencies();
+	
+	void OnInitializeStartupAbilities(URPGAbilitySystemComponent* ASC);
 	
 	UPROPERTY( BlueprintReadOnly, Category = "WidgetController")
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
@@ -58,4 +65,7 @@ protected:
 	
 	UPROPERTY( BlueprintReadOnly, Category = "WidgetController")
 	TObjectPtr<APlayerState> PlayerState;
+	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category="Widget Data")
+	TObjectPtr<UAbilityInfo> AbilityInfo;
 };

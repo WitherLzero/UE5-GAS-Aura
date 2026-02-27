@@ -83,20 +83,7 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 
 }
 
-void UOverlayWidgetController::OnInitializeStartupAbilities(URPGAbilitySystemComponent* ASC)
-{
-	if (!ASC->bStartupAbilitiesGiven) return;
-	
-	FAbilitySpecAction GetAbilityInfo;
-	GetAbilityInfo.BindLambda(
-		[this,ASC](const FGameplayAbilitySpec& Spec)
-		{
-			FRPGAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(ASC->GetAbilityTagFromSpec(Spec));
-			Info.InputTag = ASC->GetInputTagFromSpec(Spec);
-			OnAbilityInfoGet.Broadcast(Info);
-		});
-	ASC->ApplyActionToAbilities(GetAbilityInfo);
-}
+
 
 void UOverlayWidgetController::HandleXPChanged(int32 NewXP)
 {

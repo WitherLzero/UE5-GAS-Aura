@@ -96,6 +96,22 @@ void UVitalAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 	}
 }
 
+void UVitalAttributeSet::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue)
+{
+	Super::PostAttributeChange(Attribute, OldValue, NewValue);
+	
+	if (Attribute == GetMaxHealthAttribute() && bTopOfHealth)
+	{
+		SetHealth(GetMaxHealth());
+		bTopOfHealth = false;
+	}
+	if (Attribute == GetMaxManaAttribute() && bTopOfMana)
+	{
+		SetMana(GetMaxMana());
+		bTopOfMana = false;
+	}
+}
+
 void UVitalAttributeSet::ShowFloatingText(const float Damage, bool bBlockedHit, bool bCriticalHit) const
 {
 	if (EffectProps.SourceCharacter != EffectProps.TargetCharacter)

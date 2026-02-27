@@ -18,10 +18,13 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+	virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;
 	
 	void ShowFloatingText(const float Damage, bool bBlockedHit, bool bCriticalHit) const;
 	
-
+	
+	bool bTopOfHealth = false;
+	bool bTopOfMana = false;
 	/*
 	 * Vital Attributes
 	 */

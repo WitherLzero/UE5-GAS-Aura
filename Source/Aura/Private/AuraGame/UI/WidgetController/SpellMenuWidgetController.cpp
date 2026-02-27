@@ -3,9 +3,11 @@
 
 #include "AuraGame/UI/WidgetController/SpellMenuWidgetController.h"
 
+#include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
+
 void USpellMenuWidgetController::BroadcastInitialValues()
 {
-	Super::BroadcastInitialValues();
+	OnInitializeStartupAbilities(Cast<URPGAbilitySystemComponent>(AbilitySystemComponent));
 }
 
 void USpellMenuWidgetController::BindCallbacksToDependencies()

@@ -13,6 +13,8 @@ UMMC_MaxMana::UMMC_MaxMana()
 	IntDef.AttributeSource = EGameplayEffectAttributeCaptureSource::Target;
 	IntDef.bSnapshot = false;
 	
+	RelevantAttributesToCapture.Add(IntDef);
+	
 }
 
 float UMMC_MaxMana::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const

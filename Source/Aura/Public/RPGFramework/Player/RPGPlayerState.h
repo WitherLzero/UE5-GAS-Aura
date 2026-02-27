@@ -57,6 +57,8 @@ public:
 	FORCEINLINE int32 GetPlayerLevel()const { return Level; }
 	FORCEINLINE int32 GetXP()const { return XP; }
 	
+	void LevelUp();
+	
 	void AddToLevel(int32 InLevel);
 	void AddToXP(int32 InXP);
 	

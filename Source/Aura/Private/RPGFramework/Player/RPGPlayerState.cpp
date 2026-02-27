@@ -37,6 +37,15 @@ void ARPGPlayerState::OnRep_XP(const int32& OldXP)
 	OnXPChanged.Broadcast(XP);
 }
 
+void ARPGPlayerState::LevelUp()
+{
+	if (VitalAS)
+	{
+		VitalAS->bTopOfHealth = true;
+		VitalAS->bTopOfMana = true;
+	}
+}
+
 void ARPGPlayerState::AddToLevel(int32 InLevel)
 {
 	Level += InLevel;

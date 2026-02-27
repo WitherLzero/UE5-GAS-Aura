@@ -73,6 +73,7 @@ void AAuraCharacter::AddToXP_Implementation(int32 InXP)
 		AuraPlayerState->AddToSpellPoints(SpellPointsReward);
 		
 		AuraPlayerState->AddToLevel(NumLevelUps);
+		AuraPlayerState->LevelUp();
 		MulticastLevelUpEffects();
 	}
 	AuraPlayerState->AddToXP(InXP);

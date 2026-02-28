@@ -50,7 +50,6 @@ public:
 	FGameplayTag Abilities_Summon;
 	FGameplayTag Abilities_Fire_FireBolt;
 	
-	
 	/*
 	 *  Cooldown Tags
 	 */

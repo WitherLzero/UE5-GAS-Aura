@@ -4,6 +4,7 @@
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 
 #include "RPGFramework/GAS/Abilities/RPGGameplayAbilityBase.h"
+#include "RPGFramework/Types/RPGGameplayTags.h"
 
 void URPGAbilitySystemComponent::OnAbilityActorInfoSet()
 {
@@ -18,6 +19,7 @@ void URPGAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<
 		if (const URPGGameplayAbilityBase* Ability = Cast<URPGGameplayAbilityBase>(AbilitySpec.Ability))
 		{
 			AbilitySpec.DynamicAbilityTags.AddTag(Ability->StartupInputTag);
+			AbilitySpec.DynamicAbilityTags.AddTag(FRPGGameplayTags::Get().Abilities_Status_Equipped);
 			GiveAbility(AbilitySpec);
 		}
 	}
@@ -102,6 +104,18 @@ FGameplayTag URPGAbilitySystemComponent::GetInputTagFromSpec(const FGameplayAbil
 		}
 	}
 	return FGameplayTag();
+}
+
+FGameplayTag URPGAbilitySystemComponent::GetStatusFromSpec(const FGameplayAbilitySpec& AbilitySpec)
+{
+	for (FGameplayTag StatusTag : AbilitySpec.DynamicAbilityTags)
+	{
+		if (StatusTag.MatchesTag(FGameplayTag::RequestGameplayTag(FName("Abilities.Status"))))
+		{
+			return StatusTag;
+		}
+	}
+	return FGameplayTag();	
 }
 
 void URPGAbilitySystemComponent::OnRep_ActivateAbilities()

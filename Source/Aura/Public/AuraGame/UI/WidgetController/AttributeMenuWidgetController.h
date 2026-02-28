@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "../../../RPGFramework/UI/WidgetController/WidgetController.h"
+#include "AuraWidgetController.h"
 #include "AttributeMenuWidgetController.generated.h"
 
 
@@ -17,7 +17,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeInfoChanged, const FRPGA
  * 
  */
 UCLASS(BlueprintType, Blueprintable)
-class AURA_API UAttributeMenuWidgetController : public UWidgetController
+class AURA_API UAttributeMenuWidgetController : public UAuraWidgetController
 {
 	GENERATED_BODY()
 	

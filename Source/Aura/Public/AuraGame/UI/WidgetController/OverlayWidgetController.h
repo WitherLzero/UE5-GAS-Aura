@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "../../../RPGFramework/UI/WidgetController/WidgetController.h"
+#include "AuraWidgetController.h"
 #include "GameplayTagContainer.h"
 #include "OverlayWidgetController.generated.h"
 
@@ -41,7 +41,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMessageWidgetRowGet, FUIWidgetRow
  * 
  */
 UCLASS(BlueprintType,Blueprintable)
-class AURA_API UOverlayWidgetController : public UWidgetController
+class AURA_API UOverlayWidgetController : public UAuraWidgetController
 {
 	GENERATED_BODY()
 	

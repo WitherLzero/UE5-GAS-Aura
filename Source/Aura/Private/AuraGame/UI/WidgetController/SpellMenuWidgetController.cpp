@@ -6,16 +6,14 @@
 #include "AuraGame/Character/Player/AuraPlayerState.h"
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 #include "RPGFramework/GAS/Data/AbilityInfo.h"
-
-
+#include "RPGFramework/Types/RPGGameplayTags.h"
 
 
 void USpellMenuWidgetController::BroadcastInitialValues()
 {
 	OnInitializeStartupAbilities(Cast<URPGAbilitySystemComponent>(AbilitySystemComponent));
 	
-	AAuraPlayerState* AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
-	SpellPointsChanged.Broadcast(AuraPlayerState->GetSpellPoints());
+	SpellPointsChanged.Broadcast(GetAuraPS()->GetSpellPoints());
 }
 
 void USpellMenuWidgetController::BindCallbacksToDependencies()
@@ -31,10 +29,65 @@ void USpellMenuWidgetController::BindCallbacksToDependencies()
 			}
 		});
 	
-	AAuraPlayerState* AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
-	AuraPlayerState->OnSpellPointsChanged.AddLambda(
+	GetAuraPS()->OnSpellPointsChanged.AddLambda(
 		[this](int32 NewPoints)
 		{
 			SpellPointsChanged.Broadcast(NewPoints);
 		});
+}
+
+void USpellMenuWidgetController::SpellGlobeSelected(const FGameplayTag& AbilityTag)
+{
+	const int32 SpellPoints = GetAuraPS()->GetSpellPoints();
+	FGameplayTag AbilityStatus;
+	
+	const FRPGGameplayTags GameplayTags = FRPGGameplayTags::Get();
+	const bool bTagValid = AbilityTag.IsValid();
+	const FGameplayAbilitySpec* AbilitySpec = GetASC()->GetSpecFromAbilityTag(AbilityTag);
+	const bool bSpecValid = AbilitySpec != nullptr;
+
+	if (!bTagValid || !bSpecValid)
+	{
+		AbilityStatus = GameplayTags.Abilities_Status_Locked;
+	}else
+	{
+		AbilityStatus = GetASC()->GetStatusFromSpec(*AbilitySpec);
+	}
+	
+	bool bEnableSpendPoints = false;
+	bool bEnableEquip = false;
+	ShouldEnableButtons(SpellPoints, AbilityStatus, bEnableSpendPoints, bEnableEquip);
+	OnSpellGlobeSelected.Broadcast(bEnableSpendPoints,bEnableEquip);
+}
+
+void USpellMenuWidgetController::ShouldEnableButtons(const int32 SpellPoints, const FGameplayTag& AbilityStatus,
+	bool& bShouldEnableSpellPointsButton, bool& bShouldEnableEquipButton)
+{
+	const FRPGGameplayTags GameplayTags = FRPGGameplayTags::Get();
+
+	bShouldEnableSpellPointsButton = false;
+	bShouldEnableEquipButton = false;
+	if (AbilityStatus.MatchesTagExact(GameplayTags.Abilities_Status_Equipped))
+	{
+		bShouldEnableEquipButton = true;
+		if (SpellPoints > 0)
+		{
+			bShouldEnableSpellPointsButton = true;
+		}
+	}
+	else if (AbilityStatus.MatchesTagExact(GameplayTags.Abilities_Status_Eligible))
+	{
+		if (SpellPoints > 0)
+		{
+			bShouldEnableSpellPointsButton = true;
+		}
+	}
+	else if (AbilityStatus.MatchesTagExact(GameplayTags.Abilities_Status_Unlocked))
+	{
+		bShouldEnableEquipButton = true;
+		if (SpellPoints > 0)
+		{
+			bShouldEnableSpellPointsButton = true;
+		}
+	}
 }

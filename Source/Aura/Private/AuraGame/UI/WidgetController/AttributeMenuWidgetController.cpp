@@ -22,8 +22,7 @@ void UAttributeMenuWidgetController::BroadcastInitialValues()
 	BroadcastAttributeInfo(CombatAS);
 	BroadcastAttributeInfo(VitalAS);
 	
-	AAuraPlayerState* AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
-	AttributePointsChanged.Broadcast(AuraPlayerState->GetAttributePoints());
+	AttributePointsChanged.Broadcast(GetAuraPS()->GetAttributePoints());
 }
 
 void UAttributeMenuWidgetController::BindCallbacksToDependencies()
@@ -37,9 +36,8 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 	BindAttributeChangeDelegates(PrimaryAS);
 	BindAttributeChangeDelegates(CombatAS);
 	BindAttributeChangeDelegates(VitalAS);
-
-	AAuraPlayerState* AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
-	AuraPlayerState->OnAttributePointsChanged.AddLambda(
+	
+	GetAuraPS()->OnAttributePointsChanged.AddLambda(
 		[this](int32 NewPoints)
 		{
 			AttributePointsChanged.Broadcast(NewPoints);
@@ -48,8 +46,7 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 
 void UAttributeMenuWidgetController::UpgradeAttribute(const FGameplayTag& AttributeTag)
 {
-	AAuraPlayerState* AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
-	AuraPlayerState->UpgradeAttribute(AttributeTag);
+	GetAuraPS()->UpgradeAttribute(AttributeTag);
 }
 
 void UAttributeMenuWidgetController::BroadcastAttributeInfo(const URPGAttributeSetBase* AS) const

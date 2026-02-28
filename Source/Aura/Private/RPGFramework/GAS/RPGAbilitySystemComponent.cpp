@@ -3,7 +3,9 @@
 
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 
+#include "RPGFramework/GAS/RPGAbilitySystemLibrary.h"
 #include "RPGFramework/GAS/Abilities/RPGGameplayAbilityBase.h"
+#include "RPGFramework/GAS/Data/AbilityInfo.h"
 #include "RPGFramework/Types/RPGGameplayTags.h"
 
 void URPGAbilitySystemComponent::OnAbilityActorInfoSet()
@@ -45,6 +47,29 @@ void URPGAbilitySystemComponent::ApplyActionToAbilities(const FAbilitySpecAction
 		if (!Action.ExecuteIfBound(AbilitySpec))
 		{
 			UE_LOG(LogTemp, Error, TEXT("Failed to execute delegate in %hs"), __FUNCTION__);
+		}
+	}
+}
+
+void URPGAbilitySystemComponent::UpdateAbilityStatuses(int32 Level)
+{
+	UAbilityInfo* AbilityInfo = URPGAbilitySystemLibrary::GetAbilityInfo(GetAvatarActor());
+	if (AbilityInfo)
+	{
+		for (const FRPGAbilityInfo& Info: AbilityInfo->AbilityInfos)
+		{
+			if (!Info.AbilityTag.IsValid()) continue;
+			if (Level < Info.LevelRequirement) continue;
+			if (GetSpecFromAbilityTag(Info.AbilityTag) == nullptr)
+			{
+				FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(Info.Ability,1);
+				AbilitySpec.DynamicAbilityTags.AddTag(FRPGGameplayTags::Get().Abilities_Status_Eligible);
+				GiveAbility(AbilitySpec);
+				
+				MarkAbilitySpecDirty(AbilitySpec);
+				ClientUpdateAbilityStatus(Info.AbilityTag,FRPGGameplayTags::Get().Abilities_Status_Eligible);
+			}
+			
 		}
 	}
 }
@@ -116,6 +141,28 @@ FGameplayTag URPGAbilitySystemComponent::GetStatusFromSpec(const FGameplayAbilit
 		}
 	}
 	return FGameplayTag();	
+}
+
+FGameplayAbilitySpec* URPGAbilitySystemComponent::GetSpecFromAbilityTag(const FGameplayTag& AbilityTag)
+{
+	FScopedAbilityListLock ActiveScopeLock(*this);
+	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		for (FGameplayTag Tag : AbilitySpec.Ability.Get()->AbilityTags)
+		{
+			if (Tag.MatchesTagExact(AbilityTag))
+			{
+				return &AbilitySpec;
+			}
+		}
+	}
+	return nullptr;
+}
+
+void URPGAbilitySystemComponent::ClientUpdateAbilityStatus_Implementation(const FGameplayTag& AbilityTag,
+	const FGameplayTag& StatusTag)
+{
+	OnAbilityStatusChanged.Broadcast(AbilityTag,StatusTag);
 }
 
 void URPGAbilitySystemComponent::OnRep_ActivateAbilities()

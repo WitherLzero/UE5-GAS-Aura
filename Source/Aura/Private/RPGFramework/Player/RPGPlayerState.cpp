@@ -39,6 +39,7 @@ void ARPGPlayerState::OnRep_XP(const int32& OldXP)
 
 void ARPGPlayerState::LevelUp()
 {
+	Cast<URPGAbilitySystemComponent>(AbilitySystemComponent)->UpdateAbilityStatuses(Level);
 	if (VitalAS)
 	{
 		VitalAS->bTopOfHealth = true;

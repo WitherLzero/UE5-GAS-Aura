@@ -3,13 +3,19 @@
 
 #include "AuraGame/UI/WidgetController/SpellMenuWidgetController.h"
 
+#include "AuraGame/Character/Player/AuraPlayerState.h"
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 #include "RPGFramework/GAS/Data/AbilityInfo.h"
+
+
 
 
 void USpellMenuWidgetController::BroadcastInitialValues()
 {
 	OnInitializeStartupAbilities(Cast<URPGAbilitySystemComponent>(AbilitySystemComponent));
+	
+	AAuraPlayerState* AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
+	SpellPointsChanged.Broadcast(AuraPlayerState->GetSpellPoints());
 }
 
 void USpellMenuWidgetController::BindCallbacksToDependencies()
@@ -23,5 +29,12 @@ void USpellMenuWidgetController::BindCallbacksToDependencies()
 				Info.StatusTag = StatusTag;
 				OnAbilityInfoGet.Broadcast(Info);
 			}
+		});
+	
+	AAuraPlayerState* AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
+	AuraPlayerState->OnSpellPointsChanged.AddLambda(
+		[this](int32 NewPoints)
+		{
+			SpellPointsChanged.Broadcast(NewPoints);
 		});
 }

@@ -31,6 +31,7 @@ void UWidgetController::OnInitializeStartupAbilities(URPGAbilitySystemComponent*
 		{
 			FRPGAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(ASC->GetAbilityTagFromSpec(Spec));
 			Info.InputTag = ASC->GetInputTagFromSpec(Spec);
+			Info.StatusTag = ASC->GetStatusFromSpec(Spec);
 			OnAbilityInfoGet.Broadcast(Info);
 		});
 	ASC->ApplyActionToAbilities(GetAbilityInfo);

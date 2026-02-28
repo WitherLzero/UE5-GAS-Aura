@@ -6,7 +6,7 @@
 #include "AuraGame/Character/Player/AuraPlayerState.h"
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 #include "RPGFramework/GAS/Data/AbilityInfo.h"
-#include "RPGFramework/Types/RPGGameplayTags.h"
+
 
 
 void USpellMenuWidgetController::BroadcastInitialValues()
@@ -21,6 +21,15 @@ void USpellMenuWidgetController::BindCallbacksToDependencies()
 	Cast<URPGAbilitySystemComponent>(AbilitySystemComponent)->OnAbilityStatusChanged.AddLambda(
 		[this](const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag)
 		{
+			if (SelectedAbility.Ability.MatchesTagExact(AbilityTag))
+			{
+				SelectedAbility.Status = StatusTag;
+				bool bEnableSpendPoints = false;
+				bool bEnableEquip = false;
+				ShouldEnableButtons(CurrentSpellPoints, StatusTag, bEnableSpendPoints, bEnableEquip);
+				OnSpellGlobeSelected.Broadcast(bEnableSpendPoints, bEnableEquip);
+			}
+			
 			if (AbilityInfo)
 			{
 				FRPGAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AbilityTag);
@@ -33,6 +42,12 @@ void USpellMenuWidgetController::BindCallbacksToDependencies()
 		[this](int32 NewPoints)
 		{
 			SpellPointsChanged.Broadcast(NewPoints);
+			CurrentSpellPoints = NewPoints;
+			
+			bool bEnableSpendPoints = false;
+			bool bEnableEquip = false;
+			ShouldEnableButtons(CurrentSpellPoints, SelectedAbility.Status, bEnableSpendPoints, bEnableEquip);
+			OnSpellGlobeSelected.Broadcast(bEnableSpendPoints, bEnableEquip);
 		});
 }
 

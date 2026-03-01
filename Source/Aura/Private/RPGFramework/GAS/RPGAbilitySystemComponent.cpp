@@ -51,6 +51,7 @@ void URPGAbilitySystemComponent::ApplyActionToAbilities(const FAbilitySpecAction
 	}
 }
 
+// TODO: 考虑如何把业务逻辑下放 
 void URPGAbilitySystemComponent::UpdateAbilityStatuses(int32 Level)
 {
 	UAbilityInfo* AbilityInfo = URPGAbilitySystemLibrary::GetAbilityInfo(GetAvatarActor());
@@ -67,10 +68,33 @@ void URPGAbilitySystemComponent::UpdateAbilityStatuses(int32 Level)
 				GiveAbility(AbilitySpec);
 				
 				MarkAbilitySpecDirty(AbilitySpec);
-				ClientUpdateAbilityStatus(Info.AbilityTag,FRPGGameplayTags::Get().Abilities_Status_Eligible);
+				ClientUpdateAbilityStatus(Info.AbilityTag,FRPGGameplayTags::Get().Abilities_Status_Eligible,AbilitySpec.Level);
 			}
 			
 		}
+	}
+}
+
+void URPGAbilitySystemComponent::UnlockOrUpgradeAbility(const FGameplayTag& AbilityTag)
+{
+	if (!GetOwner()->HasAuthority()) return; 
+	
+	if (FGameplayAbilitySpec* AbilitySpec = GetSpecFromAbilityTag(AbilityTag))
+	{
+		const FRPGGameplayTags GameplayTags = FRPGGameplayTags::Get();
+		FGameplayTag Status = GetStatusFromSpec(*AbilitySpec);
+		if (Status.MatchesTagExact(GameplayTags.Abilities_Status_Eligible))
+		{
+			AbilitySpec->DynamicAbilityTags.RemoveTag(GameplayTags.Abilities_Status_Eligible);
+			AbilitySpec->DynamicAbilityTags.AddTag(GameplayTags.Abilities_Status_Unlocked);
+			Status = GameplayTags.Abilities_Status_Unlocked;
+		}
+		else if (Status.MatchesTagExact(GameplayTags.Abilities_Status_Equipped) || Status.MatchesTagExact(GameplayTags.Abilities_Status_Unlocked))
+		{
+			AbilitySpec->Level += 1;
+		}
+		ClientUpdateAbilityStatus(AbilityTag,Status,AbilitySpec->Level);
+		MarkAbilitySpecDirty(*AbilitySpec);
 	}
 }
 
@@ -160,9 +184,9 @@ FGameplayAbilitySpec* URPGAbilitySystemComponent::GetSpecFromAbilityTag(const FG
 }
 
 void URPGAbilitySystemComponent::ClientUpdateAbilityStatus_Implementation(const FGameplayTag& AbilityTag,
-	const FGameplayTag& StatusTag)
+	const FGameplayTag& StatusTag, int32 AbilityLevel)
 {
-	OnAbilityStatusChanged.Broadcast(AbilityTag,StatusTag);
+	OnAbilityStatusChanged.Broadcast(AbilityTag,StatusTag,AbilityLevel);
 }
 
 void URPGAbilitySystemComponent::OnRep_ActivateAbilities()

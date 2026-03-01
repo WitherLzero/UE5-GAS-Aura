@@ -23,6 +23,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 	
 	void UpgradeAttribute(const FGameplayTag& AttributeTag);
+	void SpendSpellPoint(const FGameplayTag& AbilityTag);
 	
 	FOnPlayerStatChanged OnAttributePointsChanged;
 	FOnPlayerStatChanged OnSpellPointsChanged;
@@ -48,6 +49,9 @@ private:
 	
 	UFUNCTION(Server, Reliable)
 	void ServerUpgradeAttribute(const FGameplayTag& AttributeTag);
+	
+	UFUNCTION(Server, Reliable)
+	void ServerSpendSpellPoint(const FGameplayTag& AbilityTag);	
 public:
 	FORCEINLINE int32 GetAttributePoints() const { return AttributePoints; }
 	FORCEINLINE int32 GetSpellPoints() const { return SpellPoints; }

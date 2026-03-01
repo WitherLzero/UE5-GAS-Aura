@@ -4,12 +4,10 @@
 #include "RPGModules/Components/VitalityComponent.h"
 
 
-#include "GameplayEffectExtension.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
-#include "RPGFramework/GAS/AttributeSets/VitalAttributeSet.h"
 
 
 // Sets default values for this component's properties

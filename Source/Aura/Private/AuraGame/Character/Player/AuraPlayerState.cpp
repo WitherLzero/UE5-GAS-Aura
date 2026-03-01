@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AuraGame/GAS/AttributeSets/CombatAttributeSet.h"
 #include "AuraGame/GAS/AttributeSets/PrimaryAttributeSet.h"
+#include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 
 AAuraPlayerState::AAuraPlayerState()
 {
@@ -26,6 +27,14 @@ void AAuraPlayerState::UpgradeAttribute(const FGameplayTag& AttributeTag)
 	}
 }
 
+void AAuraPlayerState::SpendSpellPoint(const FGameplayTag& AbilityTag)
+{
+	if (SpellPoints > 0)
+	{
+		ServerSpendSpellPoint(AbilityTag);		
+	}
+}
+
 void AAuraPlayerState::OnRep_AttributePoints(int32 OldAttributePoints)
 {
 	OnAttributePointsChanged.Broadcast(AttributePoints);
@@ -34,6 +43,15 @@ void AAuraPlayerState::OnRep_AttributePoints(int32 OldAttributePoints)
 void AAuraPlayerState::OnRep_SpellPoints(int32 OldSpellPoints)
 {
 	OnSpellPointsChanged.Broadcast(SpellPoints);
+}
+
+void AAuraPlayerState::ServerSpendSpellPoint_Implementation(const FGameplayTag& AbilityTag)
+{
+	if (URPGAbilitySystemComponent* ASC = Cast<URPGAbilitySystemComponent>(AbilitySystemComponent))
+	{
+		ASC->UnlockOrUpgradeAbility(AbilityTag);
+		AddToSpellPoints(-1);
+	}
 }
 
 void AAuraPlayerState::ServerUpgradeAttribute_Implementation(const FGameplayTag& AttributeTag)

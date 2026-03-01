@@ -19,7 +19,7 @@ void USpellMenuWidgetController::BroadcastInitialValues()
 void USpellMenuWidgetController::BindCallbacksToDependencies()
 {
 	Cast<URPGAbilitySystemComponent>(AbilitySystemComponent)->OnAbilityStatusChanged.AddLambda(
-		[this](const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag)
+		[this](const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag, const int32 NewLevel)
 		{
 			if (SelectedAbility.Ability.MatchesTagExact(AbilityTag))
 			{
@@ -69,14 +69,24 @@ void USpellMenuWidgetController::SpellGlobeSelected(const FGameplayTag& AbilityT
 		AbilityStatus = GetASC()->GetStatusFromSpec(*AbilitySpec);
 	}
 	
+	SelectedAbility.Ability = AbilityTag;
+	SelectedAbility.Status = AbilityStatus;
 	bool bEnableSpendPoints = false;
 	bool bEnableEquip = false;
 	ShouldEnableButtons(SpellPoints, AbilityStatus, bEnableSpendPoints, bEnableEquip);
 	OnSpellGlobeSelected.Broadcast(bEnableSpendPoints,bEnableEquip);
 }
 
+void USpellMenuWidgetController::SpendSpellPoints()
+{
+	if (GetAuraPS())
+	{
+		GetAuraPS()->SpendSpellPoint(SelectedAbility.Ability);
+	}
+}
+
 void USpellMenuWidgetController::ShouldEnableButtons(const int32 SpellPoints, const FGameplayTag& AbilityStatus,
-	bool& bShouldEnableSpellPointsButton, bool& bShouldEnableEquipButton)
+                                                     bool& bShouldEnableSpellPointsButton, bool& bShouldEnableEquipButton)
 {
 	const FRPGGameplayTags GameplayTags = FRPGGameplayTags::Get();
 

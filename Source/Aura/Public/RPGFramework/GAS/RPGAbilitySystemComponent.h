@@ -26,12 +26,6 @@ public:
 	void AddCharacterPassiveAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupPassiveAbilities);
 	void ApplyActionToAbilities(const FAbilitySpecAction& Action);
 	
-	
-	void UpdateAbilityStatuses(int32 Level);
-	void UnlockOrUpgradeAbility(const FGameplayTag& AbilityTag);
-	
-	
-	
 	void AbilityInputTagHeld(const FGameplayTag& InputTag);
 	void AbilityInputTagReleased(const FGameplayTag& InputTag);
 	
@@ -40,6 +34,12 @@ public:
 	static FGameplayTag GetStatusFromSpec(const FGameplayAbilitySpec& AbilitySpec);
 	
 	FGameplayAbilitySpec* GetSpecFromAbilityTag(const FGameplayTag& AbilityTag);
+	
+	
+	void UpdateAbilityStatuses(int32 Level);
+	void UnlockOrUpgradeAbility(const FGameplayTag& AbilityTag);
+	bool GetDescriptionsByAbilityTag(const FGameplayTag& AbilityTag, FString& OutDescription, FString& OutNextLevelDescription);
+	
 	
 	FOnEffectAssetTagsGet OnEffectAssetTagsGet;
 	FOnAbilityGiven OnAbilityGiven;

@@ -28,6 +28,7 @@ public:
 	/*
 	 *  Abilities
 	 */
+	FGameplayTag Abilities_None;
 	FGameplayTag Abilities_HitReact;
 	
 	FGameplayTag Abilities_Status_Locked;

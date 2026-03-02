@@ -5,11 +5,10 @@
 #include "CoreMinimal.h"
 #include "AuraWidgetController.h"
 #include "GameplayTagContainer.h"
-#include "AuraGame/Types/AuraGameplayTags.h"
 #include "RPGFramework/Types/RPGGameplayTags.h"
 #include "SpellMenuWidgetController.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSpellGlobeSelectedSignature, bool, bSpendPointsButtonEnabled, bool, bEquipButtonEnabled);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnSpellGlobeSelectedSignature, bool, bSpendPointsButtonEnabled, bool, bEquipButtonEnabled, FString, DescriptionString, FString, NextLevelDescriptionString);
 /**
  * 
  */
@@ -44,6 +43,6 @@ public:
 private:
 	void ShouldEnableButtons(const int32 SpellPoints,const FGameplayTag& AbilityStatus, bool& bShouldEnableSpellPointsButton, bool& bShouldEnableEquipButton);
 	
-	FSelectedAbility SelectedAbility = { FAuraGameplayTags::Get().Abilities_None, FRPGGameplayTags::Get().Abilities_Status_Locked};
+	FSelectedAbility SelectedAbility = { FRPGGameplayTags::Get().Abilities_None, FRPGGameplayTags::Get().Abilities_Status_Locked};
 	int32 CurrentSpellPoints = 0;
 };

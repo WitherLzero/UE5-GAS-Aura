@@ -35,11 +35,15 @@ void FRPGGameplayTags::InitializeNativeGameplayTags()
 		);	
 
 	
+	GameplayTags.Abilities_None = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Abilities.None"),
+	FString("Ability Tag None ( nullptr )")
+	);	
+	
 	GameplayTags.Abilities_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Abilities.HitReact"),
 		FString("Hit React Ability")
 		);
-
 	
 	GameplayTags.Abilities_Status_Eligible = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Abilities.Status.Eligible"),

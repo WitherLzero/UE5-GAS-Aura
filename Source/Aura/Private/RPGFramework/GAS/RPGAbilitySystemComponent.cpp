@@ -98,6 +98,23 @@ void URPGAbilitySystemComponent::UnlockOrUpgradeAbility(const FGameplayTag& Abil
 	}
 }
 
+bool URPGAbilitySystemComponent::GetDescriptionsByAbilityTag(const FGameplayTag& AbilityTag, FString& OutDescription, FString& OutNextLevelDescription)
+{
+	if (const FGameplayAbilitySpec* AbilitySpec = GetSpecFromAbilityTag(AbilityTag))
+	{
+		if (URPGGameplayAbilityBase* Ability = Cast<URPGGameplayAbilityBase>(AbilitySpec->Ability))
+		{
+			OutDescription = Ability->GetDescription(AbilitySpec->Level);
+			OutNextLevelDescription = Ability->GetNextLevelDescription(AbilitySpec->Level + 1);
+			return true;
+		}
+	}
+	const UAbilityInfo* AbilityInfo = URPGAbilitySystemLibrary::GetAbilityInfo(GetAvatarActor());
+	OutDescription = URPGGameplayAbilityBase::GetLockedDescription(AbilityInfo->FindAbilityInfoForTag(AbilityTag).LevelRequirement);
+	OutNextLevelDescription = FString();
+	return false;
+}
+
 void URPGAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)
 {
 	if (!InputTag.IsValid()) return;

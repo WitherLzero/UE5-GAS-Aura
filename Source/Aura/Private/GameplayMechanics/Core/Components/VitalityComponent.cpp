@@ -1,7 +1,7 @@
 ﻿// Copyright rynnli
 
 
-#include "RPGModules/Components/VitalityComponent.h"
+#include "GameplayMechanics/Core/Components/VitalityComponent.h"
 
 
 #include "Components/CapsuleComponent.h"

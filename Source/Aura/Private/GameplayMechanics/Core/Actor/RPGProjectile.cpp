@@ -1,7 +1,7 @@
 ﻿// Copyright rynnli
 
 
-#include "AuraGame/Actor/AuraProjectile.h"
+#include "GameplayMechanics/Core/Actor/RPGProjectile.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
@@ -13,7 +13,7 @@
 #include "Kismet/GameplayStatics.h"
 
 
-AAuraProjectile::AAuraProjectile()
+ARPGProjectile::ARPGProjectile()
 {
 	PrimaryActorTick.bCanEverTick = false;
 	bReplicates = true;
@@ -36,7 +36,7 @@ AAuraProjectile::AAuraProjectile()
 }
 
 
-void AAuraProjectile::BeginPlay()
+void ARPGProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 	SetLifeSpan(LifeTime);
@@ -45,7 +45,7 @@ void AAuraProjectile::BeginPlay()
 	LoopingAudioComponent = UGameplayStatics::SpawnSoundAttached(LoopingSound,GetRootComponent());
 }
 
-void AAuraProjectile::Destroyed()
+void ARPGProjectile::Destroyed()
 {
 	if (!bHit && !HasAuthority())
 	{
@@ -57,7 +57,7 @@ void AAuraProjectile::Destroyed()
 	Super::Destroyed();
 }
 
-void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+void ARPGProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
                                       UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (DamageEffectSpecHandle.Data.IsValid() && DamageEffectSpecHandle.Data.Get()->GetContext().GetEffectCauser() != OtherActor)

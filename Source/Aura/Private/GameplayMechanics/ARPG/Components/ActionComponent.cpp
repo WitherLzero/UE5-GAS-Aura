@@ -1,7 +1,7 @@
 ﻿// Copyright rynnli
 
 
-#include "RPGModules/ARPG/Components/ActionComponent.h"
+#include "GameplayMechanics/ARPG/Components/ActionComponent.h"
 
 #include "MotionWarpingComponent.h"
 

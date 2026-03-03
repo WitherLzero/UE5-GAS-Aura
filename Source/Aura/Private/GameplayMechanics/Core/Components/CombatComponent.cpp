@@ -1,10 +1,10 @@
 ﻿// Copyright rynnli
 
 
-#include "RPGModules/Components/CombatComponent.h"
+#include "GameplayMechanics/Core/Components/CombatComponent.h"
 
 #include "GameFramework/Character.h"
-#include "Aura/Public/RPGModules/Data/CombatConfig.h"
+#include "Aura/Public/GameplayMechanics/Core/Data/CombatConfig.h"
 
 
 UCombatComponent::UCombatComponent()

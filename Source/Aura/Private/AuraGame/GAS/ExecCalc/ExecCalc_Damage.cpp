@@ -5,7 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "GameplayEffectExecutionCalculation.h"
-#include "RPGFramework/GAS/RPGAbilitySystemLibrary.h"
+#include "GameplayMechanics/Core/RPGAbilitySystemLibrary.h"
 
 #include "RPGFramework/GAS/AttributeSets/VitalAttributeSet.h"
 #include "AuraGame/GAS/Data/CharacterClassInfo.h"

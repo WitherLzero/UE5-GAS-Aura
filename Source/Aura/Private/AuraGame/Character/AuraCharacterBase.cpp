@@ -3,9 +3,9 @@
 
 #include "AuraGame/Character/AuraCharacterBase.h"
 
-#include "RPGModules/ARPG/Components/ActionComponent.h"
-#include "RPGModules/Components/CombatComponent.h"
-#include "RPGModules/Components/VitalityComponent.h"
+#include "GameplayMechanics/ARPG/Components/ActionComponent.h"
+#include "GameplayMechanics/Core/Components/CombatComponent.h"
+#include "GameplayMechanics/Core/Components/VitalityComponent.h"
 
 
 AAuraCharacterBase::AAuraCharacterBase()

@@ -3,7 +3,7 @@
 
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 
-#include "RPGFramework/GAS/RPGAbilitySystemLibrary.h"
+#include "GameplayMechanics/Core/RPGAbilitySystemLibrary.h"
 #include "RPGFramework/GAS/Abilities/RPGGameplayAbilityBase.h"
 #include "RPGFramework/GAS/Data/AbilityInfo.h"
 #include "RPGFramework/Types/RPGGameplayTags.h"

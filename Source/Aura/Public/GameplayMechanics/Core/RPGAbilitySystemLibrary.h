@@ -6,6 +6,8 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "RPGAbilitySystemLibrary.generated.h"
 
+struct FGameplayEffectSpecHandle;
+class ARPGProjectile;
 class UAbilityInfo;
 struct FTaggedMontage;
 class UCharacterClassInfo;
@@ -36,11 +38,17 @@ public:
 	UFUNCTION(BlueprintCallable, Category="RPGAbilitySystemLibrary|CharacterClassDefaults")
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);
 	
-	UFUNCTION(BlueprintCallable, Category="AuraAbilitySystemLibrary|AbilityInfo")
+	UFUNCTION(BlueprintCallable, Category="RPGAbilitySystemLibrary|AbilityInfo")
 	static UAbilityInfo* GetAbilityInfo(const UObject* WorldContextObject);
+	
 	
 	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayMechanics")
 	static void GetLivePlayersWithinRadius(const UObject* WorldContextObject, TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, float Radius, const FVector& SphereOrigin);
+	
+	UFUNCTION(BlueprintCallable,Category = "RPGAbilitySystemLibrary|GameplayMechanics|Projectile", meta = (DefaultToSelf = "WorldContextObject"))
+	static ARPGProjectile* SpawnProjectileWithDamage(const UObject* WorldContextObject,TSubclassOf<ARPGProjectile> ProjectileClass,
+													const FVector& SpawnLocation, const FVector& TargetLocation, 
+													AActor* Instigator, const FGameplayEffectSpecHandle& DamageSpecHandle);
 	
 	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|GameplayEffects")
 	static bool IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle);

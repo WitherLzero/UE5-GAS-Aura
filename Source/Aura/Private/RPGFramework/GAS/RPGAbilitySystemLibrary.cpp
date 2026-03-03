@@ -1,9 +1,10 @@
 ﻿// Copyright rynnli
 
 
-#include "RPGFramework/GAS/RPGAbilitySystemLibrary.h"
+#include "GameplayMechanics/Core/RPGAbilitySystemLibrary.h"
 
 #include "AbilitySystemComponent.h"
+#include "GameplayMechanics/Core/Actor/RPGProjectile.h"
 #include "RPGFramework/GAS/RPGAbilityTypes.h"
 #include "AuraGame/Game/AuraGameMode.h"
 #include "RPGFramework/Player/RPGPlayerState.h"
@@ -12,8 +13,8 @@
 #include "AuraGame/GAS/Data/CharacterClassInfo.h"
 #include "RPGFramework/Interaction/CharacterDataInterface.h"
 #include "RPGFramework/UI/WidgetController/WidgetController.h"
-#include "RPGModules/Components/CombatComponent.h"
-#include "RPGModules/Components/VitalityComponent.h"
+#include "GameplayMechanics/Core/Components/CombatComponent.h"
+#include "GameplayMechanics/Core/Components/VitalityComponent.h"
 
 
 void URPGAbilitySystemLibrary::InitDefaultAttributes(const UObject* WorldContextObject, UAbilitySystemComponent* ASC,
@@ -103,6 +104,35 @@ void URPGAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldCo
 		}
 	}
 }
+
+ARPGProjectile* URPGAbilitySystemLibrary::SpawnProjectileWithDamage(const UObject* WorldContextObject,
+	TSubclassOf<ARPGProjectile> ProjectileClass, const FVector& SpawnLocation, const FVector& TargetLocation,
+	AActor* Instigator, const FGameplayEffectSpecHandle& DamageSpecHandle)
+{
+	if (!WorldContextObject || !ProjectileClass) return nullptr;
+	UWorld* World = WorldContextObject->GetWorld();
+	if (!World) return nullptr;
+	
+	if (!Instigator->HasAuthority()) return nullptr;
+	
+	const FRotator Rotation = (TargetLocation - SpawnLocation).Rotation();
+	FTransform SpawnTransform;
+	SpawnTransform.SetLocation(SpawnLocation);
+	SpawnTransform.SetRotation(Rotation.Quaternion());
+	
+	ARPGProjectile* Projectile = World->SpawnActorDeferred<ARPGProjectile>(
+	ProjectileClass,
+	SpawnTransform,
+	Instigator,Cast<APawn>(Instigator),
+	ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+	
+	Projectile->DamageEffectSpecHandle = DamageSpecHandle;
+	
+	Projectile->FinishSpawning(SpawnTransform);
+	
+	return Projectile;
+}
+
 
 bool URPGAbilitySystemLibrary::IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle)
 {

@@ -2,7 +2,7 @@
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
 #include "RPGFramework/Types/RPGGameplayTags.h"
-#include "RPGFramework/GAS/RPGAbilitySystemLibrary.h"
+#include "GameplayMechanics/Core/RPGAbilitySystemLibrary.h"
 #include "RPGFramework/Player/RPGPlayerController.h"
 #include "GameFramework/Character.h"
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"

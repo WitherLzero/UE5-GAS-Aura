@@ -1,10 +1,10 @@
 ﻿// Copyright rynnli
 
 
-#include "RPGModules/ARPG/Abilities/ActionGameplayAbility.h"
+#include "GameplayMechanics/ARPG/Abilities/ActionGameplayAbility.h"
 
-#include "RPGModules/ARPG/Components/ActionComponent.h"
-#include "RPGModules/Components/CombatComponent.h"
+#include "GameplayMechanics/ARPG/Components/ActionComponent.h"
+#include "GameplayMechanics/Core/Components/CombatComponent.h"
 
 void UActionGameplayAbility::OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {

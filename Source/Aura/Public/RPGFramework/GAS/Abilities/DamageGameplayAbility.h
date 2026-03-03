@@ -15,15 +15,16 @@ class AURA_API UDamageGameplayAbility : public URPGGameplayAbilityBase
 	GENERATED_BODY()
 	
 protected:
-	UFUNCTION(BlueprintCallable, Category = "Damage")
-	void CauseDamage(AActor* TargetActor);
 	
 	UFUNCTION(BlueprintCallable, Category = "Damage")
 	FGameplayEffectSpecHandle MakeDamageEffectSpecHandle(AActor* SourceActor, UObject* SourceObject) const;
 	
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	float GetDamageByDamageType(float InLevel, const FGameplayTag& DamageType);
+	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category= "Damage")
 	TSubclassOf<UGameplayEffect> DamageEffectClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "Damage")
-	TMap<FGameplayTag,FScalableFloat> DamageType;
+	TMap<FGameplayTag,FScalableFloat> DamageTypes;
+	
 };

@@ -75,6 +75,9 @@ protected:
 	
 	void HandleXPChanged(int32 NewXP);
 	
+	void HandleAbilityEquipped(const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag, const FGameplayTag& NewSlot, const FGameplayTag& PreviousSlot);
+	
+	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category="Widget Data")
 	TObjectPtr<UDataTable> MessageWidgetDataTable;
 	

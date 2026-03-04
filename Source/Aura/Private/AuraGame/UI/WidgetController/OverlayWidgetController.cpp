@@ -3,11 +3,13 @@
 
 #include "AuraGame/UI/WidgetController/OverlayWidgetController.h"
 
+#include "AuraGame/Character/Player/AuraPlayerState.h"
 #include "AuraGame/GAS/Data/AuraLevelConfig.h"
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 #include "RPGFramework/GAS/AttributeSets/VitalAttributeSet.h"
 #include "RPGFramework/GAS/Data/AbilityInfo.h"
-#include "RPGFramework/Player/RPGPlayerState.h"
+#include "RPGFramework/Types/RPGGameplayTags.h"
+
 
 void UOverlayWidgetController::BroadcastInitialValues()
 {
@@ -43,19 +45,20 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 			[this](const FOnAttributeChangeData& Data){ OnMaxManaChanged.Broadcast(Data.NewValue);});
 	}
 
-	if (URPGAbilitySystemComponent* ASC = Cast<URPGAbilitySystemComponent>(AbilitySystemComponent))
+	if (GetASC())
 	{
-		if (ASC->bStartupAbilitiesGiven)
+		if (GetASC()->bStartupAbilitiesGiven)
 		{
-			OnInitializeStartupAbilities(ASC);
+			OnInitializeStartupAbilities(GetASC());
 		}
 		else
 		{
-			ASC->OnAbilityGiven.AddUObject(this,&ThisClass::OnInitializeStartupAbilities);
+			GetASC()->OnAbilityGiven.AddUObject(this,&ThisClass::OnInitializeStartupAbilities);
 		}
 		
+		GetASC()->OnAbilityEquipped.AddUObject(this,&ThisClass::HandleAbilityEquipped);
 		
-		ASC->OnEffectAssetTagsGet.AddLambda(
+		GetASC()->OnEffectAssetTagsGet.AddLambda(
 			[this](const FGameplayTagContainer& AssetTags)
 			{
 				for(const FGameplayTag& Tag : AssetTags)
@@ -71,10 +74,10 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 		);		
 	}
 	
-	if (ARPGPlayerState* PS = Cast<ARPGPlayerState>(PlayerState))
+	if (GetAuraPS())
 	{
-		PS->OnXPChanged.AddUObject(this,&ThisClass::HandleXPChanged);
-		PS->OnLevelChanged.AddLambda(
+		GetAuraPS()->OnXPChanged.AddUObject(this,&ThisClass::HandleXPChanged);
+		GetAuraPS()->OnLevelChanged.AddLambda(
 			[this](int32 NewLevel)
 			{
 				OnPlayerLevelChanged.Broadcast(static_cast<float>(NewLevel));
@@ -105,6 +108,23 @@ void UOverlayWidgetController::HandleXPChanged(int32 NewXP)
 		const float XPBarPercent = static_cast<float>(XPForThisLevel) / static_cast<float>(DeltaXPRequirement);
 		OnXPPercentChanged.Broadcast(XPBarPercent);
 	}
+}
+
+void UOverlayWidgetController::HandleAbilityEquipped(const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag,
+	const FGameplayTag& NewSlot, const FGameplayTag& PreviousSlot)
+{
+	const FRPGGameplayTags GameplayTags = FRPGGameplayTags::Get();
+	
+	FRPGAbilityInfo LastSlotInfo;
+	LastSlotInfo.AbilityTag = GameplayTags.Abilities_None;
+	LastSlotInfo.StatusTag = GameplayTags.Abilities_Status_Unlocked;
+	LastSlotInfo.InputTag = PreviousSlot;
+	OnAbilityInfoGet.Broadcast(LastSlotInfo);
+	
+	FRPGAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AbilityTag);
+	Info.StatusTag = StatusTag;
+	Info.InputTag = NewSlot;
+	OnAbilityInfoGet.Broadcast(Info);
 }
 
 

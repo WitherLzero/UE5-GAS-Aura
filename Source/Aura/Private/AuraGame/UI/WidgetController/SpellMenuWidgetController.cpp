@@ -133,7 +133,6 @@ void USpellMenuWidgetController::SpellRowGlobePressed(const FGameplayTag& SlotTa
 	const FGameplayTag& SelectedAbilityType = AbilityInfo->FindAbilityInfoForTag(SelectedAbility.Ability).AbilityType;
 	if (!SelectedAbilityType.MatchesTagExact(AbilityType)) return;
 	
-	// TODO: Call server to equip ability 
 	GetASC()->ServerEquipAbility(SelectedAbility.Ability,SlotTag);
 }
 

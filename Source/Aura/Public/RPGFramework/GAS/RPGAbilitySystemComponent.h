@@ -7,9 +7,12 @@
 #include "RPGAbilitySystemComponent.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnEffectAssetTagsGet, const FGameplayTagContainer& /*AssetTags*/);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnOutOfHealthSignature, AActor* /*Instigator*/);
+
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnAbilityGiven, URPGAbilitySystemComponent*);
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnOutOfHealthSignature,AActor* /*Instigator*/)
-DECLARE_MULTICAST_DELEGATE_ThreeParams(FOnAbilityStatusChangedSignature, const FGameplayTag& /*AbilityTag*/, const FGameplayTag& /*StatusTag*/, int32 /*AbilityLevel*/)
+DECLARE_MULTICAST_DELEGATE_ThreeParams(FOnAbilityStatusChangedSignature, const FGameplayTag& /*AbilityTag*/, const FGameplayTag& /*StatusTag*/, int32 /*AbilityLevel*/);
+DECLARE_MULTICAST_DELEGATE_FourParams(FOnAbilityEquipped, const FGameplayTag& /*AbilityTag*/, const FGameplayTag& /*Status*/, const FGameplayTag& /*Slot*/, const FGameplayTag& /*PrevSlot*/);
+
 DECLARE_DELEGATE_OneParam(FAbilitySpecAction, const FGameplayAbilitySpec&);
 /**
  * 
@@ -32,6 +35,8 @@ public:
 	static FGameplayTag GetAbilityTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
 	static FGameplayTag GetInputTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
 	static FGameplayTag GetStatusFromSpec(const FGameplayAbilitySpec& AbilitySpec);
+	static bool AbilityHasInputTag(FGameplayAbilitySpec* Spec, const FGameplayTag& InputTag);
+	
 	
 	FGameplayAbilitySpec* GetSpecFromAbilityTag(const FGameplayTag& AbilityTag);
 	
@@ -40,11 +45,14 @@ public:
 	void UnlockOrUpgradeAbility(const FGameplayTag& AbilityTag);
 	bool GetDescriptionsByAbilityTag(const FGameplayTag& AbilityTag, FString& OutDescription, FString& OutNextLevelDescription);
 	
+	UFUNCTION(Server, Reliable)
+	void ServerEquipAbility(const FGameplayTag& AbilityTag, const FGameplayTag& InputTag);
 	
 	FOnEffectAssetTagsGet OnEffectAssetTagsGet;
-	FOnAbilityGiven OnAbilityGiven;
 	FOnOutOfHealthSignature OnOutOfHealth;
+	FOnAbilityGiven OnAbilityGiven;
 	FOnAbilityStatusChangedSignature OnAbilityStatusChanged;
+	FOnAbilityEquipped OnAbilityEquipped;
 	
 	bool bStartupAbilitiesGiven = false;
 	
@@ -55,5 +63,12 @@ protected:
 	UFUNCTION(Client, Reliable)
 	void ClientUpdateAbilityStatus(const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag, int32 AbilityLevel);
 	
+	UFUNCTION(Client, Reliable)
+	void ClientEquipAbility(const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag, const FGameplayTag& NewInputTag, const FGameplayTag& PreviousInputTag);	
+	
 	virtual void OnRep_ActivateAbilities() override;
+	
+private:
+	void ClearAbilityInput(FGameplayAbilitySpec* Spec);
+	void UnbindAbilitiesFromInput(const FGameplayTag& InputTag);
 };

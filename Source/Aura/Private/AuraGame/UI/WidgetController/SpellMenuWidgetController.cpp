@@ -18,7 +18,7 @@ void USpellMenuWidgetController::BroadcastInitialValues()
 
 void USpellMenuWidgetController::BindCallbacksToDependencies()
 {
-	Cast<URPGAbilitySystemComponent>(AbilitySystemComponent)->OnAbilityStatusChanged.AddLambda(
+	GetASC()->OnAbilityStatusChanged.AddLambda(
 		[this](const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag, const int32 NewLevel)
 		{
 			if (SelectedAbility.Ability.MatchesTagExact(AbilityTag))
@@ -40,6 +40,8 @@ void USpellMenuWidgetController::BindCallbacksToDependencies()
 				OnAbilityInfoGet.Broadcast(Info);
 			}
 		});
+	
+	GetASC()->OnAbilityEquipped.AddUObject(this,&ThisClass::HandleAbilityEquipped);
 	
 	GetAuraPS()->OnSpellPointsChanged.AddLambda(
 		[this](int32 NewPoints)
@@ -125,6 +127,16 @@ void USpellMenuWidgetController::EquipButtonPressed()
 	bWaitingForEquipSelection = true;
 }
 
+void USpellMenuWidgetController::SpellRowGlobePressed(const FGameplayTag& SlotTag, const FGameplayTag& AbilityType)
+{
+	// Make sure selected ability won't be equipped on the slot with different AbilityType
+	const FGameplayTag& SelectedAbilityType = AbilityInfo->FindAbilityInfoForTag(SelectedAbility.Ability).AbilityType;
+	if (!SelectedAbilityType.MatchesTagExact(AbilityType)) return;
+	
+	// TODO: Call server to equip ability 
+	GetASC()->ServerEquipAbility(SelectedAbility.Ability,SlotTag);
+}
+
 void USpellMenuWidgetController::ShouldEnableButtons(const int32 SpellPoints, const FGameplayTag& AbilityStatus,
                                                      bool& bShouldEnableSpellPointsButton, bool& bShouldEnableEquipButton)
 {
@@ -155,4 +167,24 @@ void USpellMenuWidgetController::ShouldEnableButtons(const int32 SpellPoints, co
 			bShouldEnableSpellPointsButton = true;
 		}
 	}
+}
+
+void USpellMenuWidgetController::HandleAbilityEquipped(const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag,
+	const FGameplayTag& NewSlot, const FGameplayTag& PreviousSlot)
+{
+	const FRPGGameplayTags GameplayTags = FRPGGameplayTags::Get();
+	
+	FRPGAbilityInfo LastSlotInfo;
+	LastSlotInfo.AbilityTag = GameplayTags.Abilities_None;
+	LastSlotInfo.StatusTag = GameplayTags.Abilities_Status_Unlocked;
+	LastSlotInfo.InputTag = PreviousSlot;
+	OnAbilityInfoGet.Broadcast(LastSlotInfo);
+	
+	FRPGAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AbilityTag);
+	Info.StatusTag = StatusTag;
+	Info.InputTag = NewSlot;
+	OnAbilityInfoGet.Broadcast(Info);
+	
+	OnWaitingForEquip.Broadcast(Info.AbilityType);
+	bWaitingForEquipSelection = false;
 }

@@ -41,6 +41,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void EquipButtonPressed();	
 	
+	UFUNCTION(BlueprintCallable)
+	void SpellRowGlobePressed(const FGameplayTag& SlotTag, const FGameplayTag& AbilityType);	
+	
 	UPROPERTY(BlueprintAssignable, Category="GAS|Spells")
 	FOnPlayerInfoChangedSignature SpellPointsChanged;
 	
@@ -54,6 +57,8 @@ public:
 	bool bWaitingForEquipSelection = false;
 private:
 	void ShouldEnableButtons(const int32 SpellPoints,const FGameplayTag& AbilityStatus, bool& bShouldEnableSpellPointsButton, bool& bShouldEnableEquipButton);
+	void HandleAbilityEquipped(const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag, const FGameplayTag& NewSlot, const FGameplayTag& PreviousSlot);
+	
 	
 	FSelectedAbility SelectedAbility = { FRPGGameplayTags::Get().Abilities_None, FRPGGameplayTags::Get().Abilities_Status_Locked};
 	int32 CurrentSpellPoints = 0;

@@ -123,6 +123,34 @@ bool URPGAbilitySystemComponent::GetDescriptionsByAbilityTag(const FGameplayTag&
 	return false;
 }
 
+void URPGAbilitySystemComponent::ServerEquipAbility_Implementation(const FGameplayTag& AbilityTag, const FGameplayTag& InputTag)
+{
+	if (FGameplayAbilitySpec* AbilitySpec = GetSpecFromAbilityTag(AbilityTag))
+	{
+		const FGameplayTag& PrevInput = GetInputTagFromSpec(*AbilitySpec);
+		const FGameplayTag& Status = GetStatusFromSpec(*AbilitySpec);
+		
+		const FRPGGameplayTags GameplayTags	= FRPGGameplayTags::Get();
+		const bool bCanEquip = (Status == GameplayTags.Abilities_Status_Equipped || Status == GameplayTags.Abilities_Status_Unlocked);
+		if (bCanEquip)
+		{
+			// Remove this InputTag from any ability that has it
+			// Clear and unbind current ability's input
+			UnbindAbilitiesFromInput(InputTag);
+			ClearAbilityInput(AbilitySpec);
+			
+			AbilitySpec->DynamicAbilityTags.AddTag(InputTag);
+			if (Status.MatchesTagExact(GameplayTags.Abilities_Status_Unlocked))
+			{
+				AbilitySpec->DynamicAbilityTags.RemoveTag(GameplayTags.Abilities_Status_Unlocked);
+				AbilitySpec->DynamicAbilityTags.AddTag(GameplayTags.Abilities_Status_Equipped);
+			}
+			MarkAbilitySpecDirty(*AbilitySpec);
+			ClientEquipAbility(AbilityTag,Status,InputTag,PrevInput);
+		}
+	}
+}
+
 void URPGAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)
 {
 	if (!InputTag.IsValid()) return;
@@ -208,10 +236,25 @@ FGameplayAbilitySpec* URPGAbilitySystemComponent::GetSpecFromAbilityTag(const FG
 	return nullptr;
 }
 
+void URPGAbilitySystemComponent::ClientEffectApplied_Implementation(UAbilitySystemComponent* AbilitySystemComponent,
+																	const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)
+{
+	FGameplayTagContainer TagContainer;
+	EffectSpec.GetAllAssetTags(TagContainer);
+	OnEffectAssetTagsGet.Broadcast(TagContainer);
+	
+}
+
 void URPGAbilitySystemComponent::ClientUpdateAbilityStatus_Implementation(const FGameplayTag& AbilityTag,
 	const FGameplayTag& StatusTag, int32 AbilityLevel)
 {
 	OnAbilityStatusChanged.Broadcast(AbilityTag,StatusTag,AbilityLevel);
+}
+
+void URPGAbilitySystemComponent::ClientEquipAbility_Implementation(const FGameplayTag& AbilityTag,
+	const FGameplayTag& StatusTag, const FGameplayTag& NewInputTag, const FGameplayTag& PreviousInputTag)
+{
+	OnAbilityEquipped.Broadcast(AbilityTag,StatusTag,NewInputTag,PreviousInputTag);
 }
 
 void URPGAbilitySystemComponent::OnRep_ActivateAbilities()
@@ -225,12 +268,35 @@ void URPGAbilitySystemComponent::OnRep_ActivateAbilities()
 	}
 }
 
-
-void URPGAbilitySystemComponent::ClientEffectApplied_Implementation(UAbilitySystemComponent* AbilitySystemComponent,
-                                                                    const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)
+void URPGAbilitySystemComponent::ClearAbilityInput(FGameplayAbilitySpec* Spec)
 {
-	FGameplayTagContainer TagContainer;
-	EffectSpec.GetAllAssetTags(TagContainer);
-	OnEffectAssetTagsGet.Broadcast(TagContainer);
-	
+	const FGameplayTag& InputTag = GetInputTagFromSpec(*Spec);
+	Spec->DynamicAbilityTags.RemoveTag(InputTag);
+	MarkAbilitySpecDirty(*Spec);
 }
+
+void URPGAbilitySystemComponent::UnbindAbilitiesFromInput(const FGameplayTag& InputTag)
+{
+	FScopedAbilityListLock ActiveScopedLock(*this);
+	for (FGameplayAbilitySpec& Spec: GetActivatableAbilities())
+	{
+		if (AbilityHasInputTag(&Spec,InputTag))
+		{
+			ClearAbilityInput(&Spec);
+		}
+	}
+}
+
+bool URPGAbilitySystemComponent::AbilityHasInputTag(FGameplayAbilitySpec* Spec, const FGameplayTag& InputTag)
+{
+	for (FGameplayTag Tag : Spec->DynamicAbilityTags)
+	{
+		if (Tag.MatchesTagExact(InputTag))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+

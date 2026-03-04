@@ -187,4 +187,6 @@ void USpellMenuWidgetController::HandleAbilityEquipped(const FGameplayTag& Abili
 	
 	OnWaitingForEquip.Broadcast(Info.AbilityType);
 	bWaitingForEquipSelection = false;
+	
+	OnSpellGlobeReassigned.Broadcast(AbilityTag);
 }

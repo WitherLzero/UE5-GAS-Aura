@@ -3,6 +3,7 @@
 
 #include "GameplayMechanics/Core/RPGAbilitySystemLibrary.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "GameplayMechanics/Core/Actor/RPGProjectile.h"
 #include "RPGFramework/GAS/RPGAbilityTypes.h"
@@ -11,6 +12,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "AuraGame/UI/HUD/AuraHUD.h"
 #include "AuraGame/GAS/Data/CharacterClassInfo.h"
+#include "AuraGame/Types/AuraGameplayTags.h"
 #include "RPGFramework/Interaction/CharacterDataInterface.h"
 #include "RPGFramework/UI/WidgetController/WidgetController.h"
 #include "GameplayMechanics/Core/Components/CombatComponent.h"
@@ -107,7 +109,7 @@ void URPGAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldCo
 
 ARPGProjectile* URPGAbilitySystemLibrary::SpawnProjectileWithDamage(const UObject* WorldContextObject,
 	TSubclassOf<ARPGProjectile> ProjectileClass, const FVector& SpawnLocation, const FVector& TargetLocation,
-	AActor* Instigator, const FGameplayEffectSpecHandle& DamageSpecHandle)
+	AActor* Instigator, const FDamageEffectParams& DamageEffectParams)
 {
 	if (!WorldContextObject || !ProjectileClass) return nullptr;
 	UWorld* World = WorldContextObject->GetWorld();
@@ -125,12 +127,33 @@ ARPGProjectile* URPGAbilitySystemLibrary::SpawnProjectileWithDamage(const UObjec
 	SpawnTransform,
 	Instigator,Cast<APawn>(Instigator),
 	ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
-	
-	Projectile->DamageEffectSpecHandle = DamageSpecHandle;
+
+	Projectile->DamageEffectParams = DamageEffectParams;
 	
 	Projectile->FinishSpawning(SpawnTransform);
 	
 	return Projectile;
+}
+
+FGameplayEffectSpecHandle URPGAbilitySystemLibrary::MakeDamageEffectSpec(const FDamageEffectParams& DamageEffectParams)
+{
+	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
+	const AActor* SourceAvatarActor = DamageEffectParams.SourceAbilitySystemComponent->GetAvatarActor();
+	FGameplayEffectContextHandle EffectContexthandle = DamageEffectParams.SourceAbilitySystemComponent->MakeEffectContext();
+	EffectContexthandle.AddSourceObject(SourceAvatarActor);
+	const FGameplayEffectSpecHandle SpecHandle = DamageEffectParams.SourceAbilitySystemComponent->MakeOutgoingSpec(DamageEffectParams.DamageGameplayEffectClass, DamageEffectParams.AbilityLevel, EffectContexthandle);
+
+	for (auto& Pair : DamageEffectParams.DamageTypes)
+	{
+		const float ScaledDamage = Pair.Value.GetValueAtLevel(DamageEffectParams.AbilityLevel);
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle,Pair.Key,ScaledDamage);
+	}
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Debuff_Chance, DamageEffectParams.DebuffChance);
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Debuff_Damage, DamageEffectParams.DebuffDamage);
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Debuff_Duration, DamageEffectParams.DebuffDuration);
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Debuff_Frequency, DamageEffectParams.DebuffFrequency);
+	
+	return SpecHandle;
 }
 
 

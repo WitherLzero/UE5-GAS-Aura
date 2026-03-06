@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "RPGAbilitySystemLibrary.generated.h"
 
+struct FDamageEffectParams;
 struct FGameplayEffectSpecHandle;
 class ARPGProjectile;
 class UAbilityInfo;
@@ -48,7 +49,10 @@ public:
 	UFUNCTION(BlueprintCallable,Category = "RPGAbilitySystemLibrary|GameplayMechanics|Projectile", meta = (DefaultToSelf = "WorldContextObject"))
 	static ARPGProjectile* SpawnProjectileWithDamage(const UObject* WorldContextObject,TSubclassOf<ARPGProjectile> ProjectileClass,
 													const FVector& SpawnLocation, const FVector& TargetLocation, 
-													AActor* Instigator, const FGameplayEffectSpecHandle& DamageSpecHandle);
+													AActor* Instigator, const FDamageEffectParams& DamageEffectParams);
+	
+	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|DamageEffect")
+	static FGameplayEffectSpecHandle MakeDamageEffectSpec(const FDamageEffectParams& DamageEffectParams);
 	
 	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|GameplayEffects")
 	static bool IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle);

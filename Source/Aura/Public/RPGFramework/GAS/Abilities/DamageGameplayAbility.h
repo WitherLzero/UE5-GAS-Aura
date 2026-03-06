@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "RPGGameplayAbilityBase.h"
+#include "RPGFramework/GAS/RPGAbilityTypes.h"
 #include "DamageGameplayAbility.generated.h"
 
 /**
@@ -16,8 +17,8 @@ class AURA_API UDamageGameplayAbility : public URPGGameplayAbilityBase
 	
 protected:
 	
-	UFUNCTION(BlueprintCallable, Category = "Damage")
-	FGameplayEffectSpecHandle MakeDamageEffectSpecHandle(AActor* SourceActor, UObject* SourceObject) const;
+	UFUNCTION(BlueprintPure, Category = "Damage")
+	FDamageEffectParams MakeDamageEffectParamsFromClassDefaults(AActor* TargetActor = nullptr) const;
 	
 	float GetDamageByDamageType(float InLevel, const FGameplayTag& DamageType);
 	

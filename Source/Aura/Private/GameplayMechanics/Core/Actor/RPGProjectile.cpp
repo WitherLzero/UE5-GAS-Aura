@@ -10,6 +10,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "Aura/Aura.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "GameplayMechanics/Core/RPGAbilitySystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -47,47 +48,40 @@ void ARPGProjectile::BeginPlay()
 
 void ARPGProjectile::Destroyed()
 {
-	if (!bHit && !HasAuthority())
-	{
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this,ImpactEffect,GetActorLocation());
-		UGameplayStatics::PlaySoundAtLocation(this,ImpactSound,GetActorLocation(),FRotator::ZeroRotator);
-		if (LoopingAudioComponent) LoopingAudioComponent->Stop();
-		bHit = true;
-	}
+	if (!bHit && !HasAuthority()) HandleOnHit();
+
 	Super::Destroyed();
 }
 
+
 void ARPGProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-                                      UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                     UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (DamageEffectSpecHandle.Data.IsValid() && DamageEffectSpecHandle.Data.Get()->GetContext().GetEffectCauser() != OtherActor)
+	AActor* SourceAvatarActor = DamageEffectParams.SourceAbilitySystemComponent->GetAvatarActor();
+	if (SourceAvatarActor == OtherActor) return;
+	if (!bHit) HandleOnHit();
+
+	if (HasAuthority())
 	{
-		if (!bHit)
+		if (UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor))
 		{
-			UNiagaraFunctionLibrary::SpawnSystemAtLocation(this,ImpactEffect,GetActorLocation());
-			UGameplayStatics::PlaySoundAtLocation(this,ImpactSound,GetActorLocation(),FRotator::ZeroRotator);
-			if (LoopingAudioComponent) LoopingAudioComponent->Stop();
-			bHit = true;
+			DamageEffectParams.TargetAbilitySystemComponent = TargetASC;
+			FGameplayEffectSpecHandle DamageEffectSpecHandle = URPGAbilitySystemLibrary::MakeDamageEffectSpec(DamageEffectParams);
+			TargetASC->ApplyGameplayEffectSpecToSelf(*DamageEffectSpecHandle.Data.Get());
 		}
-
-		if (HasAuthority())
-		{
-			if (UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor))
-			{
-				TargetASC->ApplyGameplayEffectSpecToSelf(*DamageEffectSpecHandle.Data.Get());
-			}
 		
-			Destroy();
-		}
-		else  // Determine whether the clients spawned the FXs before server destroyed
-		{
-			bHit=true;
-		}
+		Destroy();
 	}
-
-
+	else  bHit=true; // Determine whether the clients spawned the FXs before server destroyed
+	
 	
 }
 
-
+void ARPGProjectile::HandleOnHit()
+{
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this,ImpactEffect,GetActorLocation());
+	UGameplayStatics::PlaySoundAtLocation(this,ImpactSound,GetActorLocation(),FRotator::ZeroRotator);
+	if (LoopingAudioComponent) LoopingAudioComponent->Stop();
+	bHit = true;
+}
 

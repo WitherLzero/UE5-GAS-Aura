@@ -42,6 +42,20 @@ public:
 	FGameplayTag Damage_Arcane;
 	FGameplayTag Damage_Physical;
 	
+	/*
+	 *  Debuff Tags
+	 */
+	TMap<FGameplayTag, FGameplayTag> DamageTypesToDebuffs;
+	FGameplayTag Debuff_Burn;
+	FGameplayTag Debuff_Stun;
+	FGameplayTag Debuff_Arcane;
+	FGameplayTag Debuff_Physical;
+	
+	FGameplayTag Debuff_Chance;
+	FGameplayTag Debuff_Damage;
+	FGameplayTag Debuff_Duration;
+	FGameplayTag Debuff_Frequency;
+	
 	
 	/*
 	 *  Ability Tags

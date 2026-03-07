@@ -19,6 +19,7 @@ public:
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	void HandleIncomingDamage();
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+	void HandleDebuff();
 	virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;
 	
 	void ShowFloatingText(const float Damage, bool bBlockedHit, bool bCriticalHit) const;

@@ -57,30 +57,7 @@ void UVitalAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 	}
 	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
 	{
-		const float LocalIncomingDamage = GetIncomingDamage();
-		SetIncomingDamage(0.f);
-		if (LocalIncomingDamage > 0.f)
-		{
-			const float NewHealth = GetHealth() - LocalIncomingDamage;
-			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
-			
-			const bool bBlocked = URPGAbilitySystemLibrary::IsBlockedHit(EffectProps.EffectContextHandle);
-			const bool bCriticalHit = URPGAbilitySystemLibrary::IsCriticalHit(EffectProps.EffectContextHandle);
-			ShowFloatingText(LocalIncomingDamage,bBlocked,bCriticalHit);
-			
-			const bool bFatal = NewHealth <= 0.f;
-			if (!bFatal)
-			{
-				FGameplayTagContainer TagContainer;
-				TagContainer.AddTag(FRPGGameplayTags::Get().Effects_HitReact);
-				EffectProps.TargetASC->TryActivateAbilitiesByTag(TagContainer);
-			}
-			else
-			{
-				URPGAbilitySystemComponent* OwnerASC = Cast<URPGAbilitySystemComponent>(GetOwningAbilitySystemComponent());
-				OwnerASC->OnOutOfHealth.Broadcast(EffectProps.SourceAvatarActor);
-			}
-		}
+		HandleIncomingDamage();
 	}
 	if (Data.EvaluatedData.Attribute == GetIncomingXPAttribute())
 	{
@@ -91,8 +68,39 @@ void UVitalAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 		{
 			IPlayerInterface::Execute_AddToXP(EffectProps.SourceCharacter,LocalIncomingXP);
 		}
+	}
+}
+
+void UVitalAttributeSet::HandleIncomingDamage()
+{
+	const float LocalIncomingDamage = GetIncomingDamage();
+	SetIncomingDamage(0.f);
+	if (LocalIncomingDamage > 0.f)
+	{
+		const float NewHealth = GetHealth() - LocalIncomingDamage;
+		SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
+			
+		const bool bBlocked = URPGAbilitySystemLibrary::IsBlockedHit(EffectProps.EffectContextHandle);
+		const bool bCriticalHit = URPGAbilitySystemLibrary::IsCriticalHit(EffectProps.EffectContextHandle);
+		ShowFloatingText(LocalIncomingDamage,bBlocked,bCriticalHit);
+
+		if (URPGAbilitySystemLibrary::IsSuccessfulDebuff(EffectProps.EffectContextHandle))
+		{
+			
+		}
 		
-		
+		const bool bFatal = NewHealth <= 0.f;
+		if (!bFatal)
+		{
+			FGameplayTagContainer TagContainer;
+			TagContainer.AddTag(FRPGGameplayTags::Get().Effects_HitReact);
+			EffectProps.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+		}
+		else
+		{
+			URPGAbilitySystemComponent* OwnerASC = Cast<URPGAbilitySystemComponent>(GetOwningAbilitySystemComponent());
+			OwnerASC->OnOutOfHealth.Broadcast(EffectProps.SourceAvatarActor);
+		}
 	}
 }
 

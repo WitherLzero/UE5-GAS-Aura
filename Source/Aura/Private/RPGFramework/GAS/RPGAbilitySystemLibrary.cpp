@@ -107,9 +107,9 @@ void URPGAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldCo
 	}
 }
 
-ARPGProjectile* URPGAbilitySystemLibrary::SpawnProjectileWithDamage(const UObject* WorldContextObject,
-	TSubclassOf<ARPGProjectile> ProjectileClass, const FVector& SpawnLocation, const FVector& TargetLocation,
-	AActor* Instigator, const FDamageEffectParams& DamageEffectParams)
+ARPGProjectile* URPGAbilitySystemLibrary::SpawnProjectileTowardsTarget(const UObject* WorldContextObject,
+                                                                       TSubclassOf<ARPGProjectile> ProjectileClass, const FVector& SpawnLocation, const FVector& TargetLocation,
+                                                                       bool bOverridePitch, float PitchOverride, AActor* Instigator, const FDamageEffectParams& DamageEffectParams)
 {
 	if (!WorldContextObject || !ProjectileClass) return nullptr;
 	UWorld* World = WorldContextObject->GetWorld();
@@ -117,7 +117,9 @@ ARPGProjectile* URPGAbilitySystemLibrary::SpawnProjectileWithDamage(const UObjec
 	
 	if (!Instigator->HasAuthority()) return nullptr;
 	
-	const FRotator Rotation = (TargetLocation - SpawnLocation).Rotation();
+	FRotator Rotation = (TargetLocation - SpawnLocation).Rotation();
+	if (bOverridePitch) Rotation.Pitch = PitchOverride;
+	
 	FTransform SpawnTransform;
 	SpawnTransform.SetLocation(SpawnLocation);
 	SpawnTransform.SetRotation(Rotation.Quaternion());
@@ -133,6 +135,78 @@ ARPGProjectile* URPGAbilitySystemLibrary::SpawnProjectileWithDamage(const UObjec
 	Projectile->FinishSpawning(SpawnTransform);
 	
 	return Projectile;
+}
+
+ARPGProjectile* URPGAbilitySystemLibrary::SpawnProjectileInDirection(const UObject* WorldContextObject,
+	TSubclassOf<ARPGProjectile> ProjectileClass, const FVector& SpawnLocation, const FRotator& SpawnRotation,
+	bool bOverridePitch, float PitchOverride, AActor* Instigator, const FDamageEffectParams& DamageEffectParams)
+{
+	if (!WorldContextObject || !ProjectileClass) return nullptr;
+	UWorld* World = WorldContextObject->GetWorld();
+	if (!World) return nullptr;
+	
+	if (!Instigator->HasAuthority()) return nullptr;
+	
+	FRotator NewRotation = SpawnRotation;
+	if (bOverridePitch) NewRotation.Pitch = PitchOverride;
+	
+	FTransform SpawnTransform;
+	SpawnTransform.SetLocation(SpawnLocation);
+	SpawnTransform.SetRotation(NewRotation.Quaternion());
+	
+	ARPGProjectile* Projectile = World->SpawnActorDeferred<ARPGProjectile>(
+	ProjectileClass,
+	SpawnTransform,
+	Instigator,Cast<APawn>(Instigator),
+	ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+	
+	Projectile->DamageEffectParams = DamageEffectParams;
+	
+	Projectile->FinishSpawning(SpawnTransform);
+	
+	return Projectile;
+}
+
+TArray<FRotator> URPGAbilitySystemLibrary::EvenlySpacedRotators(const FVector& Forward, const FVector& Axis, float Spread, int32 NumRotators)
+{
+	TArray<FRotator> Rotators;
+	
+	const FVector LeftOfSpread = Forward.RotateAngleAxis( -Spread/2.f, Axis);
+	if (NumRotators > 1)
+	{
+		const float DeltaSpread = Spread / (NumRotators - 1);
+		for (int32 i = 0; i < NumRotators; ++i)
+		{
+			const FVector Direction = LeftOfSpread.RotateAngleAxis( DeltaSpread*i, Axis);
+			Rotators.Add(Direction.Rotation());
+		}
+	}
+	else
+	{
+		Rotators.Add(Forward.Rotation());
+	}
+	return Rotators;
+}
+
+TArray<FVector> URPGAbilitySystemLibrary::EvenlySpacedVectors(const FVector& Forward, const FVector& Axis, float Spread, int32 NumVectors)
+{
+	TArray<FVector> Vectors;
+	
+	const FVector LeftOfSpread = Forward.RotateAngleAxis( -Spread/2.f, Axis);
+	if (NumVectors > 1)
+	{
+		const float DeltaSpread = Spread / (NumVectors - 1);
+		for (int32 i = 0; i < NumVectors; ++i)
+		{
+			const FVector Direction = LeftOfSpread.RotateAngleAxis( DeltaSpread*i, Axis);
+			Vectors.Add(Direction);
+		}
+	}
+	else
+	{
+		Vectors.Add(Forward);
+	}
+	return Vectors;
 }
 
 FGameplayEffectSpecHandle URPGAbilitySystemLibrary::MakeDamageEffectSpec(const FDamageEffectParams& DamageEffectParams)

@@ -3,19 +3,19 @@
 
 #include "AuraGame/GAS/Abilities/AuraSummon.h"
 
+#include "GameplayMechanics/Core/RPGAbilitySystemLibrary.h"
+
 TArray<FVector> UAuraSummon::GetSummonLocations()
 {
 	TArray<FVector> SummonLocations;
 	
 	const FVector ActorLoc = GetAvatarActorFromActorInfo()->GetActorLocation();
 	const FVector Forward = GetAvatarActorFromActorInfo()->GetActorForwardVector();
-	const float DeltaSpread = SpawnSpread / NumMinions;
+	const TArray<FVector> Directions = URPGAbilitySystemLibrary::EvenlySpacedVectors(Forward,FVector::UpVector,SpawnSpread,NumMinions);
 	
-	const FVector LeftOfSpread = Forward.RotateAngleAxis( -SpawnSpread/2.f, FVector::UpVector);
-	for (int i = 0; i < NumMinions; i++)
+	for (const FVector& Vec : Directions)
 	{
-		const FVector Direction = LeftOfSpread.RotateAngleAxis( DeltaSpread*i, FVector::UpVector);
-		FVector SpawnLocation = ActorLoc + Direction * FMath::FRandRange(MinSpawnDist,MaxSpawnDist);
+		FVector SpawnLocation = ActorLoc + Vec * FMath::FRandRange(MinSpawnDist,MaxSpawnDist);
 		
 		FHitResult HitResult;
 		GetWorld()->LineTraceSingleByChannel(HitResult,

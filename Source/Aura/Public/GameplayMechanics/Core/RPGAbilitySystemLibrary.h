@@ -48,9 +48,20 @@ public:
 	static void GetLivePlayersWithinRadius(const UObject* WorldContextObject, TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, float Radius, const FVector& SphereOrigin);
 	
 	UFUNCTION(BlueprintCallable,Category = "RPGAbilitySystemLibrary|GameplayMechanics|Projectile", meta = (DefaultToSelf = "WorldContextObject"))
-	static ARPGProjectile* SpawnProjectileWithDamage(const UObject* WorldContextObject,TSubclassOf<ARPGProjectile> ProjectileClass,
-													const FVector& SpawnLocation, const FVector& TargetLocation, 
+	static ARPGProjectile* SpawnProjectileTowardsTarget(const UObject* WorldContextObject, TSubclassOf<ARPGProjectile> ProjectileClass,
+	                                                    const FVector& SpawnLocation, const FVector& TargetLocation,bool bOverridePitch, float PitchOverride, 
+	                                                    AActor* Instigator, const FDamageEffectParams& DamageEffectParams);
+	
+	UFUNCTION(BlueprintCallable,Category = "RPGAbilitySystemLibrary|GameplayMechanics|Projectile", meta = (DefaultToSelf = "WorldContextObject"))
+	static ARPGProjectile* SpawnProjectileInDirection(const UObject* WorldContextObject,TSubclassOf<ARPGProjectile> ProjectileClass,
+													const FVector& SpawnLocation, const FRotator& SpawnRotation,bool bOverridePitch, float PitchOverride, 
 													AActor* Instigator, const FDamageEffectParams& DamageEffectParams);
+	
+	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|Math Algorithm")
+	static TArray<FRotator> EvenlySpacedRotators(const FVector& Forward, const FVector& Axis, float Spread, int32 NumRotators);
+	
+	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|Math Algorithm")
+	static TArray<FVector> EvenlySpacedVectors(const FVector& Forward, const FVector& Axis, float Spread, int32 NumVectors);
 	
 	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|DamageEffect")
 	static FGameplayEffectSpecHandle MakeDamageEffectSpec(const FDamageEffectParams& DamageEffectParams);

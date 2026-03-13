@@ -1,4 +1,4 @@
-﻿// Copyright rynnli
+// Copyright rynnli
 
 
 #include "GameplayMechanics/Core/RPGAbilitySystemLibrary.h"
@@ -17,7 +17,7 @@
 #include "RPGFramework/UI/WidgetController/WidgetController.h"
 #include "GameplayMechanics/Core/Components/CombatComponent.h"
 #include "GameplayMechanics/Core/Components/VitalityComponent.h"
-
+#include "GameplayMechanics/Core/Interaction/CombatInterface.h"
 
 void URPGAbilitySystemLibrary::InitDefaultAttributes(const UObject* WorldContextObject, UAbilitySystemComponent* ASC,
                                                      ECharacterClass CharacterClass, float Level)
@@ -374,4 +374,49 @@ void URPGAbilitySystemLibrary::ApplyEffectToSelf(UAbilitySystemComponent* ASC, A
 	ContextHandle.AddSourceObject(Avatar);
 	const FGameplayEffectSpecHandle SpecHandle = ASC->MakeOutgoingSpec(EffectClass,Level,ContextHandle);
 	ASC->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+}
+
+FVector URPGAbilitySystemLibrary::GetCombatSocketLocation(const AActor* CombatActor, const FGameplayTag& MontageTag)
+{
+	if (CombatActor && CombatActor->Implements<UCombatInterface>())
+	{
+		return ICombatInterface::Execute_GetCombatSocketLocation(CombatActor, MontageTag);
+	}
+	return FVector::ZeroVector;
+}
+
+TArray<FTaggedMontage> URPGAbilitySystemLibrary::GetAttackMontages(const AActor* CombatActor)
+{
+	if (CombatActor && CombatActor->Implements<UCombatInterface>())
+	{
+		return ICombatInterface::Execute_GetAttackMontages(CombatActor);
+	}
+	return TArray<FTaggedMontage>();
+}
+
+UAnimMontage* URPGAbilitySystemLibrary::GetHitReactMontage(const AActor* CombatActor)
+{
+	if (CombatActor && CombatActor->Implements<UCombatInterface>())
+	{
+		return ICombatInterface::Execute_GetHitReactMontage(CombatActor);
+	}
+	return nullptr;
+}
+
+UNiagaraSystem* URPGAbilitySystemLibrary::GetHitReactEffect(const AActor* CombatActor)
+{
+	if (CombatActor && CombatActor->Implements<UCombatInterface>())
+	{
+		return ICombatInterface::Execute_GetHitReactEffect(CombatActor);
+	}
+	return nullptr;
+}
+
+AActor* URPGAbilitySystemLibrary::GetCombatTarget(const AActor* CombatActor)
+{
+	if (CombatActor && CombatActor->Implements<UCombatInterface>())
+	{
+		return ICombatInterface::Execute_GetCombatTarget(CombatActor);
+	}
+	return nullptr;
 }

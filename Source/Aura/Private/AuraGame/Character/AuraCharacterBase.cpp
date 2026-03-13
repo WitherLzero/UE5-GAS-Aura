@@ -34,6 +34,59 @@ void AAuraCharacterBase::InitAbilityActorInfo()
 	VitalityComp->OnDeath.AddDynamic(this,&AAuraCharacterBase::HandleDeath);
 }
 
+AActor* AAuraCharacterBase::GetCombatTarget_Implementation() const
+{
+	if (CombatComp)
+	{
+		return CombatComp->GetCombatTarget();
+	}
+	return nullptr;
+}
+
+FVector AAuraCharacterBase::GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag) const
+{
+	if (CombatComp)
+	{
+		return CombatComp->GetCombatSocketLocation(MontageTag);
+	}
+	return FVector::ZeroVector;
+}
+
+TArray<FTaggedMontage> AAuraCharacterBase::GetAttackMontages_Implementation() const
+{
+	if (CombatComp)
+	{
+		return CombatComp->GetAttackMontages();
+	}
+	return TArray<FTaggedMontage>();
+}
+
+UAnimMontage* AAuraCharacterBase::GetHitReactMontage_Implementation() const
+{
+	if (CombatComp)
+	{
+		return CombatComp->GetHitReactMontage();
+	}
+	return nullptr;
+}
+
+UNiagaraSystem* AAuraCharacterBase::GetHitReactEffect_Implementation() const
+{
+	if (CombatComp)
+	{
+		return CombatComp->GetHitReactEffect();
+	}
+	return nullptr;
+}
+
+void AAuraCharacterBase::SetCombatTarget_Implementation(AActor* InTarget)
+{
+	if (CombatComp)
+	{
+		CombatComp->SetCombatTarget(InTarget);
+	}
+}
+
 void AAuraCharacterBase::HandleDeath(AActor* DeadActor, AActor* KillerActor)
 {
 	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));

@@ -1,4 +1,4 @@
-﻿// Copyright rynnli
+// Copyright rynnli
 
 #pragma once
 
@@ -7,6 +7,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "RPGAbilitySystemLibrary.generated.h"
 
+class UNiagaraSystem;
 struct FDamageEffectParams;
 struct FGameplayEffectSpecHandle;
 class ARPGProjectile;
@@ -110,6 +111,22 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLibrary|GameplayHelpers")
 	static FTaggedMontage PickRandomTaggedMontage (const TArray<FTaggedMontage>& Montages);
+
+	
+	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|Combat")
+	static FVector GetCombatSocketLocation(const AActor* CombatActor, const FGameplayTag& MontageTag);
+
+	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|Combat")
+	static TArray<FTaggedMontage> GetAttackMontages(const AActor* CombatActor);
+
+	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|Combat")
+	static UAnimMontage* GetHitReactMontage(const AActor* CombatActor);
+
+	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|Combat")
+	static UNiagaraSystem* GetHitReactEffect(const AActor* CombatActor);
+
+	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|Combat")
+	static AActor* GetCombatTarget(const AActor* CombatActor);
 	
 private:
 	static void ApplyEffectToSelf(UAbilitySystemComponent* ASC, AActor* Avatar,

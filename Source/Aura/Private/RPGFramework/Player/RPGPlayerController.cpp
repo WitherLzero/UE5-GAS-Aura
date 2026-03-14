@@ -9,6 +9,7 @@
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 #include "RPGFramework/Input/RPGInputComponent.h"
 #include "RPGFramework/Interaction/EnemyInterface.h"
+#include "RPGFramework/Types/RPGGameplayTags.h"
 #include "RPGFramework/UI/Widgets/DamageTextComponent.h"
 
 
@@ -62,6 +63,14 @@ void ARPGPlayerController::ShowDamageNumber_Implementation(ACharacter* TargetCha
 
 void ARPGPlayerController::CursorTrace()
 {
+	if (GetASC() && GetASC()->HasMatchingGameplayTag(FRPGGameplayTags::Get().Player_Block_CursorTrace))
+	{
+		if (LastActor) LastActor->UnHighlightActor();
+		if (ThisActor) ThisActor->UnHighlightActor();
+		LastActor = nullptr;
+		ThisActor = nullptr;
+		return;
+	}
 	FHitResult CursorHit;
 	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
 	if (!CursorHit.bBlockingHit) return;
@@ -91,16 +100,28 @@ void ARPGPlayerController::UpdateMouse()
 
 void ARPGPlayerController::OnInputTagPressed(FGameplayTag InputTag)
 {
+	if (GetASC() && GetASC()->HasMatchingGameplayTag(FRPGGameplayTags::Get().Player_Block_InputPressed))
+	{
+		return;
+	}
 	ProcessInputTag(InputTag,ERPGInputEvent::IE_Pressed);
 }
 
 void ARPGPlayerController::OnInputTagReleased(FGameplayTag InputTag)
 {
+	if (GetASC() && GetASC()->HasMatchingGameplayTag(FRPGGameplayTags::Get().Player_Block_InputReleased))
+	{
+		return;
+	}
 	ProcessInputTag(InputTag,ERPGInputEvent::IE_Released);
 }
 
 void ARPGPlayerController::OnInputTagHeld(const FInputActionValue& InputActionValue,FGameplayTag InputTag)
 {
+	if (GetASC() && GetASC()->HasMatchingGameplayTag(FRPGGameplayTags::Get().Player_Block_InputHeld))
+	{
+		return;
+	}
 	ProcessInputTag(InputTag,ERPGInputEvent::IE_Held,InputActionValue);
 }
 

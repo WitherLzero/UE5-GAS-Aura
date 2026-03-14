@@ -105,28 +105,21 @@ bool AAuraCharacter::OnNativeInput_Implementation(FGameplayTag Tag, ERPGInputEve
 {
 	if (Tag == FRPGGameplayTags::Get().Inputs_LMB)
 	{
-		const bool bIsCasting = AbilitySystemComponent && AbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Casting")));
 		if (EventType == ERPGInputEvent::IE_Pressed)
 		{
 			bTargeting = GetPC()->HitEnemyActor();
 			bAutoRunning = false;
 			
-			if (bIsCasting)
-			{
-				return false;
-			}
 			return true;
 		}
 		
 		if (EventType == ERPGInputEvent::IE_Held)
 		{
-			if (bIsCasting) return false;
 			if (HoldToMove()) return true;
 		}
 		
 		if (EventType == ERPGInputEvent::IE_Released)
 		{
-			if (bIsCasting) return false;
 			if (SetupNavPoints()) return true;
 		}
 	}

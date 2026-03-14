@@ -1,4 +1,4 @@
-﻿// Copyright rynnli
+// Copyright rynnli
 
 
 #include "GameplayMechanics/Core/Actor/RPGProjectile.h"
@@ -77,6 +77,8 @@ void ARPGProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, A
 	
 }
 
+
+
 void ARPGProjectile::HandleOnHit()
 {
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this,ImpactEffect,GetActorLocation());
@@ -85,3 +87,75 @@ void ARPGProjectile::HandleOnHit()
 	bHit = true;
 }
 
+void ARPGProjectile::SetHomingTargetActor(AActor* TargetActor)
+{
+	HomingTargetActor = TargetActor;
+	bIsHomingToLocation = false;
+}
+
+void ARPGProjectile::SetHomingTargetLocation(const FVector& TargetLocation)
+{
+	HomingTargetLocation = TargetLocation;
+	bIsHomingToLocation = true;
+}
+
+void ARPGProjectile::EnableHoming(float AccelerationMin, float AccelerationMax)
+{
+	if (!ProjectileMovement) return;
+
+	if (IsValid(HomingTargetActor))
+	{
+		ProjectileMovement->HomingTargetComponent = HomingTargetActor->GetRootComponent();
+		ProjectileMovement->bIsHomingProjectile = true;
+	}
+	else if (bIsHomingToLocation)
+	{
+		if (!HomingTargetSceneComponent)
+		{
+			HomingTargetSceneComponent = NewObject<USceneComponent>(this);
+		}
+		HomingTargetSceneComponent->SetWorldLocation(HomingTargetLocation);
+		ProjectileMovement->HomingTargetComponent = HomingTargetSceneComponent;
+		ProjectileMovement->bIsHomingProjectile = true;
+	}
+	else
+	{
+		ProjectileMovement->bIsHomingProjectile = false;
+		return;
+	}
+
+	ProjectileMovement->HomingAccelerationMagnitude = FMath::RandRange(AccelerationMin, AccelerationMax);
+	
+	GetWorldTimerManager().SetTimer(HomingTrackerTimer, this, &ThisClass::OnHomingTrackerTick, 0.1f, true);
+}
+
+void ARPGProjectile::OnHomingTrackerTick()
+{
+	if (IsValid(HomingTargetActor))
+	{
+		HomingTargetLocation = HomingTargetActor->GetActorLocation();
+	}
+	else if (!bIsHomingToLocation)
+	{
+		if (!HomingTargetSceneComponent)
+		{
+			HomingTargetSceneComponent = NewObject<USceneComponent>(this);
+		}
+		HomingTargetSceneComponent->SetWorldLocation(HomingTargetLocation);
+		ProjectileMovement->HomingTargetComponent = HomingTargetSceneComponent;
+		
+		bIsHomingToLocation = true; 
+	}
+	const float DistanceSquared = FVector::DistSquared(GetActorLocation(), HomingTargetLocation);
+	if (DistanceSquared < 2500.f) 
+	{
+		GetWorldTimerManager().ClearTimer(HomingTrackerTimer);
+		
+		if (!bHit) HandleOnHit();
+		
+		if (HasAuthority())
+		{
+			Destroy(); 
+		}
+	}
+}

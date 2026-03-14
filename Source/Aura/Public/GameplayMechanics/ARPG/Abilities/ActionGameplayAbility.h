@@ -19,8 +19,6 @@ class AURA_API UActionGameplayAbility : public UDamageGameplayAbility
 protected:
 	virtual void OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
 	
-	UPROPERTY(BlueprintReadOnly)
-	TObjectPtr<UCombatComponent> CombatComponent;
 
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<UActionComponent> ActionComponent;

@@ -114,6 +114,7 @@ void ARPGPlayerController::ProcessInputTag(FGameplayTag InputTag, ERPGInputEvent
 
 	if (GetASC())
 	{
+		if (EventType == ERPGInputEvent::IE_Pressed) GetASC()->AbilityInputTagPressed(InputTag);
 		if (EventType == ERPGInputEvent::IE_Released) GetASC()->AbilityInputTagReleased(InputTag);
 		if (EventType == ERPGInputEvent::IE_Held) GetASC()->AbilityInputTagHeld(InputTag);
 	}

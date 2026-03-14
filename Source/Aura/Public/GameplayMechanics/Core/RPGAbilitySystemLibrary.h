@@ -109,7 +109,7 @@ public:
 	static void SetDamageType(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, const FGameplayTag& InDamageType);
 	
 	
-	UFUNCTION(BlueprintCallable, Category = "AuraAbilitySystemLibrary|GameplayHelpers")
+	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayHelpers")
 	static FTaggedMontage PickRandomTaggedMontage (const TArray<FTaggedMontage>& Montages);
 
 	

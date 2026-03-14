@@ -1,4 +1,4 @@
-﻿// Copyright rynnli
+// Copyright rynnli
 
 
 #include "AuraGame/Character/Player/AuraCharacter.h"
@@ -103,29 +103,30 @@ bool AAuraCharacter::HandleNativeInput(FGameplayTag Tag, ERPGInputEvent EventTyp
 
 bool AAuraCharacter::OnNativeInput_Implementation(FGameplayTag Tag, ERPGInputEvent EventType, FInputActionValue Value)
 {
-	if (Tag == FRPGGameplayTags::Get().Inputs_Move)
-	{
-		if (EventType == ERPGInputEvent::IE_Held)
-		{
-			const FVector2D InputAxis = Value.Get<FVector2D>();
-			Move(InputAxis);
-			return true;
-		}
-	}
 	if (Tag == FRPGGameplayTags::Get().Inputs_LMB)
 	{
+		const bool bIsCasting = AbilitySystemComponent && AbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Casting")));
 		if (EventType == ERPGInputEvent::IE_Pressed)
 		{
 			bTargeting = GetPC()->HitEnemyActor();
 			bAutoRunning = false;
+			
+			if (bIsCasting)
+			{
+				return false;
+			}
 			return true;
 		}
+		
 		if (EventType == ERPGInputEvent::IE_Held)
 		{
+			if (bIsCasting) return false;
 			if (HoldToMove()) return true;
 		}
+		
 		if (EventType == ERPGInputEvent::IE_Released)
 		{
+			if (bIsCasting) return false;
 			if (SetupNavPoints()) return true;
 		}
 	}

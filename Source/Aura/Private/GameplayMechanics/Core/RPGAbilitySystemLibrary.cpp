@@ -368,12 +368,22 @@ FTaggedMontage URPGAbilitySystemLibrary::PickRandomTaggedMontage(const TArray<FT
 }
 
 
+
 void URPGAbilitySystemLibrary::ApplyEffectToSelf(UAbilitySystemComponent* ASC, AActor* Avatar, TSubclassOf<UGameplayEffect> EffectClass, float Level)
 {
 	FGameplayEffectContextHandle ContextHandle =ASC->MakeEffectContext();
 	ContextHandle.AddSourceObject(Avatar);
 	const FGameplayEffectSpecHandle SpecHandle = ASC->MakeOutgoingSpec(EffectClass,Level,ContextHandle);
 	ASC->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+}
+
+USkeletalMeshComponent* URPGAbilitySystemLibrary::GetWeapon(const AActor* CombatActor)
+{
+	if (CombatActor && CombatActor->Implements<UCombatInterface>())
+	{
+		return ICombatInterface::Execute_GetWeapon(CombatActor);
+	}
+	return nullptr;
 }
 
 FVector URPGAbilitySystemLibrary::GetCombatSocketLocation(const AActor* CombatActor, const FGameplayTag& MontageTag)

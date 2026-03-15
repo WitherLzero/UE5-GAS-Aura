@@ -112,6 +112,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayHelpers")
 	static FTaggedMontage PickRandomTaggedMontage (const TArray<FTaggedMontage>& Montages);
 
+	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|Combat")
+	static USkeletalMeshComponent* GetWeapon(const AActor* CombatActor);
 	
 	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|Combat")
 	static FVector GetCombatSocketLocation(const AActor* CombatActor, const FGameplayTag& MontageTag);

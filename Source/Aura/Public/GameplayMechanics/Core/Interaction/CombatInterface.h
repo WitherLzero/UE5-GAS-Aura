@@ -29,7 +29,9 @@ class AURA_API ICombatInterface
 	GENERATED_BODY()
 
 public:
-
+	UFUNCTION(BlueprintNativeEvent, Category = "Combat Interface")
+	USkeletalMeshComponent* GetWeapon() const;
+	
 	UFUNCTION(BlueprintNativeEvent, Category = "Combat Interface")
 	FVector GetCombatSocketLocation(const FGameplayTag& MontageTag) const;
 

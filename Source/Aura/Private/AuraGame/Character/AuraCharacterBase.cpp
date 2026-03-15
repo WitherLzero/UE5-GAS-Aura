@@ -34,6 +34,11 @@ void AAuraCharacterBase::InitAbilityActorInfo()
 	VitalityComp->OnDeath.AddDynamic(this,&AAuraCharacterBase::HandleDeath);
 }
 
+USkeletalMeshComponent* AAuraCharacterBase::GetWeapon_Implementation() const
+{
+	return Weapon;
+}
+
 AActor* AAuraCharacterBase::GetCombatTarget_Implementation() const
 {
 	if (CombatComp)

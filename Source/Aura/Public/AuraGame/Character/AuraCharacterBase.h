@@ -25,6 +25,7 @@ protected:
 	virtual void InitAbilityActorInfo() override;
 	
 	/* Combat Interface*/
+	virtual USkeletalMeshComponent* GetWeapon_Implementation() const override;
 	virtual AActor* GetCombatTarget_Implementation() const override;
 	virtual FVector GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag) const override;
 	virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() const override;

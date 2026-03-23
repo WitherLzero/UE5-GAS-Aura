@@ -17,6 +17,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void StoreMouseDataInfo(const FHitResult& HitResult);
 
+	UFUNCTION(BlueprintCallable)
+	void StoreAdditionalTargets(AActor* OriginActor, TArray<AActor*>& OutAdditionalTargets);
 protected:
 	UPROPERTY(BlueprintReadWrite)
 	FVector MouseHitLocation;
@@ -24,5 +26,6 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<AActor> MouseHitActor;
 
-	
+	UPROPERTY(EditDefaultsOnly, Category = "Beam")
+	int32 MaxNumShockTargets = 5;
 };

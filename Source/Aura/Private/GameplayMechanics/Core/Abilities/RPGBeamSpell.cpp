@@ -3,6 +3,8 @@
 
 #include "GameplayMechanics/Core/Abilities/RPGBeamSpell.h"
 
+#include "GameplayMechanics/Core/RPGAbilitySystemLibrary.h"
+
 void URPGBeamSpell::StoreMouseDataInfo(const FHitResult& HitResult)
 {
 	if (HitResult.bBlockingHit)
@@ -14,4 +16,23 @@ void URPGBeamSpell::StoreMouseDataInfo(const FHitResult& HitResult)
 	{
 		CancelAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true);
 	}
+}
+
+void URPGBeamSpell::StoreAdditionalTargets(AActor* OriginActor, TArray<AActor*>& OutAdditionalTargets)
+{
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(GetAvatarActorFromActorInfo());
+	ActorsToIgnore.Add(OriginActor);
+	
+	TArray<AActor*> OverlappingActors;
+	URPGAbilitySystemLibrary::GetLivePlayersWithinRadius(
+		GetAvatarActorFromActorInfo(),
+		OverlappingActors,
+		ActorsToIgnore,
+		850.f,
+		OriginActor->GetActorLocation());
+	
+	int32 NumAdditionTargets = 5;
+	
+	URPGAbilitySystemLibrary::GetClosestTargets(NumAdditionTargets,OriginActor->GetActorLocation(),OverlappingActors, OutAdditionalTargets);
 }

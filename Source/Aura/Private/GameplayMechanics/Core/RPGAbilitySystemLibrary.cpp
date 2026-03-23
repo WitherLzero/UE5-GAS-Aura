@@ -107,6 +107,24 @@ void URPGAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldCo
 	}
 }
 
+void URPGAbilitySystemLibrary::GetClosestTargets(int32 MaxTargets, const FVector& Origin, const TArray<AActor*>& Actors, TArray<AActor*>& OutClosestTargets)
+{
+	OutClosestTargets = Actors;
+	if (OutClosestTargets.Num() <= MaxTargets)
+	{
+		return;
+	}
+	OutClosestTargets.Sort([&Origin](const AActor& A, const AActor& B)
+	{
+		const double DistSqA = (A.GetActorLocation() - Origin).SquaredLength();
+		const double DistSqB = (B.GetActorLocation() - Origin).SquaredLength();
+
+		return DistSqA < DistSqB;
+	});
+
+	OutClosestTargets.SetNum(MaxTargets);
+}
+
 bool URPGAbilitySystemLibrary::TraceAttackTrajectory(AActor* Instigator, const FGameplayTag& StartSocketTag,
 	const FVector& TargetLocation, float TraceRadius, ETraceTypeQuery TraceChannel,FHitResult& OutHitResult)
 {

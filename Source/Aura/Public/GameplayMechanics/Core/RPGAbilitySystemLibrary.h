@@ -48,6 +48,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayMechanics")
 	static void GetLivePlayersWithinRadius(const UObject* WorldContextObject, TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, float Radius, const FVector& SphereOrigin);
 	
+	UFUNCTION(BlueprintCallable, BlueprintPure=false, Category = "RPGAbilitySystemLibrary|GameplayMechanics", meta = (DefaultToSelf = "Instigator"))
+	static bool TraceAttackTrajectory(AActor* Instigator, 
+									  const FGameplayTag& StartSocketTag, const FVector& TargetLocation, 
+									  float TraceRadius , ETraceTypeQuery TraceChannel,FHitResult& OutHitResult);
+	
 	UFUNCTION(BlueprintCallable,Category = "RPGAbilitySystemLibrary|GameplayMechanics|Projectile", meta = (DefaultToSelf = "WorldContextObject"))
 	static ARPGProjectile* SpawnProjectileTowardsTarget(const UObject* WorldContextObject, TSubclassOf<ARPGProjectile> ProjectileClass,
 	                                                    const FVector& SpawnLocation, const FVector& TargetLocation,bool bOverridePitch, float PitchOverride, 

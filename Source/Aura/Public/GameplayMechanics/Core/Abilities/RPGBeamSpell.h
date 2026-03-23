@@ -16,6 +16,7 @@ class AURA_API URPGBeamSpell : public UActionGameplayAbility
 public:
 	UFUNCTION(BlueprintCallable)
 	void StoreMouseDataInfo(const FHitResult& HitResult);
+
 protected:
 	UPROPERTY(BlueprintReadWrite)
 	FVector MouseHitLocation;
@@ -23,4 +24,5 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<AActor> MouseHitActor;
 
+	
 };

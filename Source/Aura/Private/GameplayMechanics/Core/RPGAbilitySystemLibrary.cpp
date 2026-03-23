@@ -107,6 +107,34 @@ void URPGAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldCo
 	}
 }
 
+bool URPGAbilitySystemLibrary::TraceAttackTrajectory(AActor* Instigator, const FGameplayTag& StartSocketTag,
+	const FVector& TargetLocation, float TraceRadius, ETraceTypeQuery TraceChannel,FHitResult& OutHitResult)
+{
+	if (!Instigator || !Instigator->Implements<UCombatInterface>())
+	{
+		return false;
+	}
+	
+	const FVector StartLocation = GetCombatSocketLocation(Instigator, StartSocketTag);
+	
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(Instigator); 
+	
+	return UKismetSystemLibrary::SphereTraceSingle(
+		Instigator,             
+		StartLocation, 
+		TargetLocation, 
+		TraceRadius, 
+		TraceChannel, 
+		false,                  
+		ActorsToIgnore, 
+		EDrawDebugTrace::None,  
+		OutHitResult, 
+		true                   
+	);
+}
+
+
 ARPGProjectile* URPGAbilitySystemLibrary::SpawnProjectileTowardsTarget(const UObject* WorldContextObject,
                                                                        TSubclassOf<ARPGProjectile> ProjectileClass, const FVector& SpawnLocation, const FVector& TargetLocation,
                                                                        bool bOverridePitch, float PitchOverride, AActor* Instigator, const FDamageEffectParams& DamageEffectParams)

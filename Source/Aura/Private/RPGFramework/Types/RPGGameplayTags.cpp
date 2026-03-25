@@ -82,6 +82,13 @@ void FRPGGameplayTags::InitializeNativeGameplayTags()
 		);	
 	
 	
+	GameplayTags.Event_Character_Died = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Character.Died"),
+	FString("Tag for sending Gameplay Event when character died.")
+	);	
+	
+	
+	
 	GameplayTags.Inputs_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Inputs.LMB"),
 		FString("Input Tag for Left Mouse Button")

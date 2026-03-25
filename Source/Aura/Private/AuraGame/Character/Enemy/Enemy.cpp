@@ -142,6 +142,7 @@ void AEnemy::HandleDeath(AActor* DeadActor, AActor* KillerActor)
 {
 	if (HasAuthority())
 	{
+		SendDeathEvent(DeadActor);
     	SendXPEvent(KillerActor);
 	}
 	if (AIController && AIController->GetBlackboardComponent())

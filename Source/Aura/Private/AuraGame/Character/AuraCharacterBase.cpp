@@ -3,9 +3,11 @@
 
 #include "AuraGame/Character/AuraCharacterBase.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayMechanics/ARPG/Components/ActionComponent.h"
 #include "GameplayMechanics/Core/Components/CombatComponent.h"
 #include "GameplayMechanics/Core/Components/VitalityComponent.h"
+#include "RPGFramework/Types/RPGGameplayTags.h"
 
 
 AAuraCharacterBase::AAuraCharacterBase()
@@ -101,6 +103,14 @@ void AAuraCharacterBase::HandleDeath(AActor* DeadActor, AActor* KillerActor)
 	
 	Dissolve();
 	SetLifeSpan(LifeSpan);
+}
+
+void AAuraCharacterBase::SendDeathEvent(AActor* DeadActor)
+{
+	const FRPGGameplayTags& GameplayTags = FRPGGameplayTags::Get();
+	FGameplayEventData Payload;
+	Payload.Target = this;
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(DeadActor,GameplayTags.Event_Character_Died,Payload);
 }
 
 ECharacterClass AAuraCharacterBase::GetCharacterClass_Implementation()

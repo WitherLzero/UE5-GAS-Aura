@@ -38,6 +38,8 @@ protected:
 	UFUNCTION()
 	virtual void HandleDeath(AActor* DeadActor, AActor* KillerActor);
 	
+	void SendDeathEvent(AActor* DeadActor);
+	
 	virtual ECharacterClass GetCharacterClass_Implementation() override;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Combat")

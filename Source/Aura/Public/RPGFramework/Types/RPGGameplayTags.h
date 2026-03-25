@@ -42,6 +42,11 @@ public:
 	
 	
 	/*
+	 *  Event Tags
+	 */
+	FGameplayTag Event_Character_Died;
+	
+	/*
 	 *  Input Tags
 	 */
 	FGameplayTag Inputs_LMB;

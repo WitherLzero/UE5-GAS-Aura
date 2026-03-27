@@ -6,12 +6,11 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "RPGFramework/Types/RPGGameplayTags.h"
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
-#include "GameplayMechanics/Core/RPGAbilitySystemLibrary.h"
 #include "RPGFramework/GAS/AttributeSets/VitalAttributeSet.h"
 #include "RPGFramework/AI/RPGAIController.h"
 #include "RPGFramework/UI/Widgets/UserWidgetBase.h"
-#include "GameplayMechanics/Core/Components/CombatComponent.h"
 #include "Aura/Aura.h"
+#include "AuraGame/GAS/AuraAbilitySystemLibrary.h"
 #include "Components/WidgetComponent.h"
 #include "AuraGame/GAS/AttributeSets/CombatAttributeSet.h"
 #include "AuraGame/GAS/AttributeSets/PrimaryAttributeSet.h"
@@ -99,7 +98,7 @@ void AEnemy::InitAbilityActorInfo()
 	if (HasAuthority())
 	{
 		InitDefaultAttributes();
-		URPGAbilitySystemLibrary::GiveStartupAbilities(this,AbilitySystemComponent, CharacterClass);
+		UAuraAbilitySystemLibrary::GiveStartupAbilities(this,AbilitySystemComponent, CharacterClass);
 	}
 	
 	Super::InitAbilityActorInfo();
@@ -107,7 +106,7 @@ void AEnemy::InitAbilityActorInfo()
 
 void AEnemy::InitDefaultAttributes() const
 {
-	URPGAbilitySystemLibrary::InitDefaultAttributes(this,GetAbilitySystemComponent(),CharacterClass,Level);
+	UAuraAbilitySystemLibrary::InitDefaultAttributes(this,GetAbilitySystemComponent(),CharacterClass,Level);
 }
 
 void AEnemy::HighlightActor()
@@ -146,7 +145,7 @@ void AEnemy::HandleDeath(AActor* DeadActor, AActor* KillerActor)
 
 void AEnemy::SendXPEvent(AActor* KillerActor)
 {
-	int32 XPReward = URPGAbilitySystemLibrary::GetXPRewardForClassAndLevel(this,CharacterClass,Level);
+	int32 XPReward = UAuraAbilitySystemLibrary::GetXPRewardForClassAndLevel(this,CharacterClass,Level);
 	const FRPGGameplayTags& GameplayTags = FRPGGameplayTags::Get();
 	FGameplayEventData Payload;
 	Payload.EventTag = GameplayTags.Attributes_Meta_IncomingXP;

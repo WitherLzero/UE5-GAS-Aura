@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AuraGame/GAS/AttributeSets/CombatAttributeSet.h"
 #include "AuraGame/GAS/AttributeSets/PrimaryAttributeSet.h"
+#include "Net/UnrealNetwork.h"
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 
 AAuraPlayerState::AAuraPlayerState()
@@ -17,6 +18,9 @@ AAuraPlayerState::AAuraPlayerState()
 void AAuraPlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AAuraPlayerState, AttributePoints);
+	DOREPLIFETIME(AAuraPlayerState, SpellPoints);
+	
 }
 
 void AAuraPlayerState::UpgradeAttribute(const FGameplayTag& AttributeTag)

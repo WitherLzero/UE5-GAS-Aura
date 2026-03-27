@@ -28,18 +28,7 @@ class AURA_API URPGAbilitySystemLibrary : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 	
 public:
-
-	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|CharacterClassDefaults")
-	static void InitDefaultAttributes(const UObject* WorldContextObject,UAbilitySystemComponent* ASC, ECharacterClass CharacterClass, float Level);
-
-	UFUNCTION(BlueprintCallable, Category="RPGAbilitySystemLibrary|CharacterClassDefaults")
-	static void GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC, ECharacterClass CharacterClass);
 	
-	UFUNCTION(Category="RPGAbilitySystemLibrary|CharacterClassDefaults")
-	static int32 GetXPRewardForClassAndLevel(const UObject* WorldContextObject, ECharacterClass CharacterClass, int32 CharacterLevel);
-	
-	UFUNCTION(BlueprintCallable, Category="RPGAbilitySystemLibrary|CharacterClassDefaults")
-	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);
 	
 	UFUNCTION(BlueprintCallable, Category="RPGAbilitySystemLibrary|AbilityInfo")
 	static UAbilityInfo* GetAbilityInfo(const UObject* WorldContextObject);
@@ -144,7 +133,6 @@ public:
 	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|Combat")
 	static AActor* GetCombatTarget(const AActor* CombatActor);
 	
-private:
 	static void ApplyEffectToSelf(UAbilitySystemComponent* ASC, AActor* Avatar,
 							  TSubclassOf<UGameplayEffect> EffectClass,
 							  float Level);

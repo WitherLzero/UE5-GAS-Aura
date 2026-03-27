@@ -8,77 +8,28 @@
 #include "GameplayMechanics/Core/Actor/RPGProjectile.h"
 #include "RPGFramework/GAS/RPGAbilityTypes.h"
 #include "AuraGame/Game/AuraGameMode.h"
-#include "RPGFramework/Player/RPGPlayerState.h"
 #include "Kismet/GameplayStatics.h"
-#include "AuraGame/UI/HUD/AuraHUD.h"
 #include "AuraGame/GAS/Data/CharacterClassInfo.h"
+#include "AuraGame/System/AuraGameSetting.h"
 #include "AuraGame/Types/AuraGameplayTags.h"
 #include "RPGFramework/Interaction/CharacterDataInterface.h"
-#include "RPGFramework/UI/WidgetController/WidgetController.h"
 #include "GameplayMechanics/Core/Components/CombatComponent.h"
 #include "GameplayMechanics/Core/Components/VitalityComponent.h"
 #include "GameplayMechanics/Core/Interaction/CombatInterface.h"
-
-void URPGAbilitySystemLibrary::InitDefaultAttributes(const UObject* WorldContextObject, UAbilitySystemComponent* ASC,
-                                                     ECharacterClass CharacterClass, float Level)
-{
-	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
-	
-	AActor* Avatar = ASC->GetAvatarActor();
-	FCharacterClassDefaultInfo ClassDefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
-	
-	ApplyEffectToSelf(ASC, Avatar, ClassDefaultInfo.PrimaryAttributes, Level);
-	ApplyEffectToSelf(ASC, Avatar, CharacterClassInfo->SecondaryAttributes, Level);
-	ApplyEffectToSelf(ASC, Avatar, CharacterClassInfo->VitalAttributes, Level);
-}
+#include "RPGFramework/System/RPGFrameworkSettings.h"
 
 
-void URPGAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC, ECharacterClass CharacterClass)
-{
-	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
-	for (const TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbilities)
-	{
-		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass,1);
-		ASC->GiveAbility(AbilitySpec);
-	}
-	FCharacterClassDefaultInfo ClassDefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
-	for (const TSubclassOf<UGameplayAbility> AbilityClass : ClassDefaultInfo.StartupAbilities)
-	{
-		if (ICharacterDataInterface* CharacterData =  Cast<ICharacterDataInterface>(ASC->GetAvatarActor()))
-		{
-			FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass,CharacterData->GetCharacterLevel());
-			ASC->GiveAbility(AbilitySpec);
-		}
-	}
-	
-	
-}
-
-int32 URPGAbilitySystemLibrary::GetXPRewardForClassAndLevel(const UObject* WorldContextObject,
-	ECharacterClass CharacterClass, int32 CharacterLevel)
-{
-	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
-	
-	const FCharacterClassDefaultInfo Info = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
-	const float XPReward = Info.XPReward.GetValueAtLevel(CharacterLevel);
-	
-	return static_cast<int32>(XPReward);
-}
-
-UCharacterClassInfo* URPGAbilitySystemLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)
-{
-	AAuraGameMode* GameMode = Cast<AAuraGameMode>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (!GameMode) return nullptr;
-	
-	return GameMode->CharacterClassInfo;
-}
 
 UAbilityInfo* URPGAbilitySystemLibrary::GetAbilityInfo(const UObject* WorldContextObject)
 {
-	ARPGGameModeBase* GameMode = Cast<ARPGGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (!GameMode) return nullptr;
+	const URPGFrameworkSettings* Settings = GetDefault<URPGFrameworkSettings>();
+
+	if (Settings && !Settings->GlobalAbilityInfo.IsNull())
+	{
+		return Settings->GlobalAbilityInfo.LoadSynchronous();
+	}
 	
-	return GameMode->AbilityInfo;
+	return nullptr;
 }
 
 void URPGAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldContextObject,

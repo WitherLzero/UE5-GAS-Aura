@@ -48,7 +48,6 @@ protected:
 	virtual int32 GetCharacterLevel() const override;
 	/* end Character Data Interface */
 	
-	void HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
 	virtual void HandleDeath(AActor* DeadActor, AActor* KillerActor) override;
 
 	
@@ -68,9 +67,6 @@ protected:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthBar;
 	
-	
-	UPROPERTY(BlueprintReadOnly, Category = "Combat")
-	bool bHitReacting = false;
 	
 	
 	UPROPERTY(EditAnywhere,Category = "Character Class Defaults")

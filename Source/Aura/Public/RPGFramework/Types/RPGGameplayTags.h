@@ -46,6 +46,12 @@ public:
 	 */
 	FGameplayTag Event_Character_Died;
 	
+	
+	/* 
+	 * State Tags
+	 */
+	FGameplayTag State_Stunned;
+	
 	/*
 	 *  Input Tags
 	 */

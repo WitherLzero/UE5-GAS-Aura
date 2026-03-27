@@ -63,10 +63,9 @@ void AEnemy::BeginPlay()
 			AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
 					VitalAS->GetMaxHealthAttribute()).AddLambda(
 					[this](const FOnAttributeChangeData& Data){ OnMaxHealthChanged.Broadcast(Data.NewValue);});
-			
-			AbilitySystemComponent->RegisterGameplayTagEvent(FRPGGameplayTags::Get().Effects_HitReact,EGameplayTagEventType::NewOrRemoved).AddUObject(
-				this,&ThisClass::HitReactTagChanged);
 
+			AIController->InitAIwithASC(AbilitySystemComponent);
+			
 			// Broadcast initial values AFTER binding, ensuring we catch the latest replicated data
 			OnHealthChanged.Broadcast(VitalAS->GetHealth());
 			OnMaxHealthChanged.Broadcast(VitalAS->GetMaxHealth());
@@ -129,14 +128,6 @@ int32 AEnemy::GetCharacterLevel() const
 }
 
 
-void AEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
-{
-	bHitReacting = NewCount > 0;
-	if (AIController && AIController->GetBlackboardComponent())
-	{
-		AIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), bHitReacting);
-	}
-}
 
 void AEnemy::HandleDeath(AActor* DeadActor, AActor* KillerActor)
 {

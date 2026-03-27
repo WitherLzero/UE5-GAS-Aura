@@ -88,6 +88,10 @@ void FRPGGameplayTags::InitializeNativeGameplayTags()
 	);	
 	
 	
+	GameplayTags.State_Stunned = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("State.Stunned"),
+FString("State Tag for stunned character.")
+);
 	
 	GameplayTags.Inputs_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Inputs.LMB"),

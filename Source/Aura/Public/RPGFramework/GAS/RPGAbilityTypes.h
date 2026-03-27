@@ -20,6 +20,9 @@ struct FDamageEffectParams
 	TSubclassOf<UGameplayEffect> DamageGameplayEffectClass = nullptr;
 
 	UPROPERTY()
+	TSubclassOf<UGameplayEffect> DebuffCarrierClass = nullptr;
+	
+	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> SourceAbilitySystemComponent;
 
 	UPROPERTY()
@@ -82,7 +85,7 @@ protected:
 	
 	UPROPERTY()
 	bool bIsSuccessfulDebuff = false;
-
+	
 	UPROPERTY()
 	float DebuffDamage = 0.f;
 
@@ -91,15 +94,20 @@ protected:
 
 	UPROPERTY()
 	float DebuffFrequency = 0.f;
+	
+	UPROPERTY()
+	TSubclassOf<UGameplayEffect> DebuffCarrierClass = nullptr;
 
 	TSharedPtr<FGameplayTag> DamageType;	
 public:
 	bool IsCriticalHit() const { return bIsCriticalHit; }
 	bool IsBlockedHit () const { return bIsBlockedHit; }
+	
 	bool IsSuccessfulDebuff() const { return bIsSuccessfulDebuff; }
 	float GetDebuffDamage() const { return DebuffDamage; }
 	float GetDebuffDuration() const { return DebuffDuration; }
 	float GetDebuffFrequency() const { return DebuffFrequency; }
+	TSubclassOf<UGameplayEffect> GetDebuffCarrier() const { return DebuffCarrierClass; }
 	TSharedPtr<FGameplayTag> GetDamageType() const { return DamageType; }
 	
 	void SetIsCriticalHit(bool bInIsCriticalHit) { bIsCriticalHit = bInIsCriticalHit; }
@@ -108,6 +116,7 @@ public:
 	void SetDebuffDamage(float InDamage) { DebuffDamage = InDamage; }
 	void SetDebuffDuration(float InDuration) { DebuffDuration = InDuration; }
 	void SetDebuffFrequency(float InFrequency) { DebuffFrequency = InFrequency; }
+	void SetDebuffCarrier(TSubclassOf<UGameplayEffect> InDebuffCarrierClass) { DebuffCarrierClass = InDebuffCarrierClass; }
 	void SetDamageType(TSharedPtr<FGameplayTag> InDamageType) { DamageType = InDamageType; }
 };
 

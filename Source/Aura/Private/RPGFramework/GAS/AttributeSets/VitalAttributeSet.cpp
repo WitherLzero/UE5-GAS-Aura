@@ -115,6 +115,10 @@ void UVitalAttributeSet::HandleIncomingDamage()
 void UVitalAttributeSet::HandleDebuff()
 {
 	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
+	
+	TSubclassOf<UGameplayEffect> DebuffCarrierClass = URPGAbilitySystemLibrary::GetDebuffCarrier(EffectProps.EffectContextHandle);
+	if (DebuffCarrierClass == nullptr) return;
+	
 	FGameplayEffectContextHandle EffectContext = EffectProps.SourceASC->MakeEffectContext();
 	EffectContext.AddSourceObject(EffectProps.SourceAvatarActor);
 			
@@ -123,40 +127,29 @@ void UVitalAttributeSet::HandleDebuff()
 	const float DebuffDuration = URPGAbilitySystemLibrary::GetDebuffDuration(EffectProps.EffectContextHandle);
 	const float DebuffFrequency = URPGAbilitySystemLibrary::GetDebuffFrequency(EffectProps.EffectContextHandle);
 			
-	FString DebuffName = FString::Printf(TEXT("DynamicDebuff_%s"), *DamageType.ToString());
-	UGameplayEffect* Effect = NewObject<UGameplayEffect>(GetTransientPackage(), FName(DebuffName));
-			
-	Effect->DurationPolicy = EGameplayEffectDurationType::HasDuration;
-	Effect->Period = DebuffFrequency;
-	Effect->DurationMagnitude = FScalableFloat(DebuffDuration);
-			
-	// New approach for add tags
-	FInheritedTagContainer TagContainer = FInheritedTagContainer();
-	UTargetTagsGameplayEffectComponent& Component = Effect->FindOrAddComponent<UTargetTagsGameplayEffectComponent>();
-	TagContainer.Added.AddTag(GameplayTags.DamageTypesToDebuffs[DamageType]);
-	TagContainer.CombinedTags.AddTag(GameplayTags.DamageTypesToDebuffs[DamageType]);
-	Component.SetAndApplyTargetTagChanges(TagContainer);
-	
-	
-	Effect->StackingType = EGameplayEffectStackingType::AggregateBySource;
-	Effect->StackLimitCount = 1;
-			
-	const int32 Index = Effect->Modifiers.Num();
-	Effect->Modifiers.Add(FGameplayModifierInfo());
-	FGameplayModifierInfo& ModifierInfo = Effect->Modifiers[Index];
-			
-	ModifierInfo.ModifierMagnitude = FScalableFloat(DebuffDamage);
-	ModifierInfo.ModifierOp = EGameplayModOp::Additive;
-	ModifierInfo.Attribute = UVitalAttributeSet::GetIncomingDamageAttribute();
-			
-	if (FGameplayEffectSpec* MutableSpec = new FGameplayEffectSpec(Effect, EffectContext, 1.f))
+	FGameplayEffectSpecHandle SpecHandle = EffectProps.SourceASC->MakeOutgoingSpec(DebuffCarrierClass, 1.f, EffectContext);
+	if (SpecHandle.IsValid())
 	{
+		FGameplayEffectSpec* MutableSpec = SpecHandle.Data.Get();
 		FRPGGameplayEffectContext* Context = static_cast<FRPGGameplayEffectContext*>(MutableSpec->GetContext().Get());
 		TSharedPtr<FGameplayTag> DebuffDamageType = MakeShareable(new FGameplayTag(DamageType));
 		Context->SetDamageType(DebuffDamageType);
-
+		
+		MutableSpec->SetDuration(DebuffDuration,true);
+		MutableSpec->Period = DebuffFrequency;
+		
+		const FGameplayTag DebuffTag = GameplayTags.DamageTypesToDebuffs[DamageType];
+		MutableSpec->DynamicGrantedTags.AddTag(DebuffTag);
+		
+		if (DebuffDamage > 0.f)
+		{
+			MutableSpec->SetSetByCallerMagnitude(GameplayTags.Debuff_Damage, DebuffDamage);
+		}
+		
 		EffectProps.TargetASC->ApplyGameplayEffectSpecToSelf(*MutableSpec);
 	}
+	
+	
 }
 
 void UVitalAttributeSet::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue)

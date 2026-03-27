@@ -7,7 +7,7 @@
 #include "AbilitySystemComponent.h"
 
 
-FDamageEffectParams UDamageGameplayAbility::MakeDamageEffectParamsFromClassDefaults(AActor* TargetActor) const
+FDamageEffectParams UDamageGameplayAbility::MakeDamageEffectParamsFromClassDefaults(AActor* TargetActor, bool bApplyDebuff ) const
 {
 	FDamageEffectParams Params;
 	Params.WorldContextObject = GetAvatarActorFromActorInfo();
@@ -16,10 +16,14 @@ FDamageEffectParams UDamageGameplayAbility::MakeDamageEffectParamsFromClassDefau
 	Params.TargetAbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 	Params.DamageTypes = DamageTypes;
 	Params.AbilityLevel = GetAbilityLevel();
-	Params.DebuffChance = DebuffChance;
-	Params.DebuffDamage = DebuffDamage;
-	Params.DebuffDuration = DebuffDuration;
-	Params.DebuffFrequency = DebuffFrequency;
+	if (bApplyDebuff)
+	{
+		Params.DebuffCarrierClass = DebuffCarrier;
+		Params.DebuffChance = DebuffChance;
+		Params.DebuffDamage = DebuffDamage;
+		Params.DebuffDuration = DebuffDuration;
+		Params.DebuffFrequency = DebuffFrequency;
+	}
 	return Params;
 }
 

@@ -261,6 +261,7 @@ FGameplayEffectSpecHandle URPGAbilitySystemLibrary::MakeDamageEffectSpec(const F
 	const AActor* SourceAvatarActor = DamageEffectParams.SourceAbilitySystemComponent->GetAvatarActor();
 	FGameplayEffectContextHandle EffectContexthandle = DamageEffectParams.SourceAbilitySystemComponent->MakeEffectContext();
 	EffectContexthandle.AddSourceObject(SourceAvatarActor);
+	SetDebuffCarrier(EffectContexthandle, DamageEffectParams.DebuffCarrierClass);
 	const FGameplayEffectSpecHandle SpecHandle = DamageEffectParams.SourceAbilitySystemComponent->MakeOutgoingSpec(DamageEffectParams.DamageGameplayEffectClass, DamageEffectParams.AbilityLevel, EffectContexthandle);
 
 	for (auto& Pair : DamageEffectParams.DamageTypes)
@@ -272,6 +273,7 @@ FGameplayEffectSpecHandle URPGAbilitySystemLibrary::MakeDamageEffectSpec(const F
 	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Debuff_Damage, DamageEffectParams.DebuffDamage);
 	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Debuff_Duration, DamageEffectParams.DebuffDuration);
 	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Debuff_Frequency, DamageEffectParams.DebuffFrequency);
+	
 	
 	return SpecHandle;
 }
@@ -302,6 +304,16 @@ bool URPGAbilitySystemLibrary::IsSuccessfulDebuff(const FGameplayEffectContextHa
 		return EffectContext->IsSuccessfulDebuff();
 	}
 	return false;
+}
+
+TSubclassOf<UGameplayEffect> URPGAbilitySystemLibrary::GetDebuffCarrier(
+	const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const FRPGGameplayEffectContext* EffectContext = static_cast<const FRPGGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		return EffectContext->GetDebuffCarrier();
+	}
+	return nullptr;
 }
 
 float URPGAbilitySystemLibrary::GetDebuffDamage(const FGameplayEffectContextHandle& EffectContextHandle)
@@ -366,6 +378,15 @@ void URPGAbilitySystemLibrary::SetIsSuccessfulDebuff(FGameplayEffectContextHandl
 	if (FRPGGameplayEffectContext* EffectContext = static_cast<FRPGGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
 		EffectContext->SetIsSuccessfulDebuff(bInSuccessfulDebuff);
+	}
+}
+
+void URPGAbilitySystemLibrary::SetDebuffCarrier(FGameplayEffectContextHandle& EffectContextHandle,
+	TSubclassOf<UGameplayEffect> DebuffCarrierClass)
+{
+	if (FRPGGameplayEffectContext* EffectContext = static_cast<FRPGGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		EffectContext->SetDebuffCarrier(DebuffCarrierClass);
 	}
 }
 

@@ -1,4 +1,6 @@
-﻿#include "RPGFramework/GAS/RPGAbilityTypes.h"
+#include "RPGFramework/GAS/RPGAbilityTypes.h"
+
+#include "GameplayEffect.h"
 
 bool FRPGGameplayEffectContext::NetSerialize(FArchive& Ar, class UPackageMap* Map, bool& bOutSuccess)
 {
@@ -57,13 +59,17 @@ bool FRPGGameplayEffectContext::NetSerialize(FArchive& Ar, class UPackageMap* Ma
 		{
 			RepBits |= 1 << 12;
 		}
-		if (DamageType.IsValid())
+		if (DebuffCarrierClass)
 		{
 			RepBits |= 1 << 13;
+		}
+		if (DamageType.IsValid())
+		{
+			RepBits |= 1 << 14;
 		}		
 	}
 	
-	Ar.SerializeBits(&RepBits, 14);
+	Ar.SerializeBits(&RepBits, 15);
 	
 	if (RepBits & (1 << 0))
 	{
@@ -131,6 +137,10 @@ bool FRPGGameplayEffectContext::NetSerialize(FArchive& Ar, class UPackageMap* Ma
 	}
 	if (RepBits & (1 << 13))
 	{
+		Ar << DebuffCarrierClass;
+	}
+	if (RepBits & (1 << 14))
+	{
 		if (Ar.IsLoading())
 		{
 			if (!DamageType.IsValid())
@@ -141,7 +151,7 @@ bool FRPGGameplayEffectContext::NetSerialize(FArchive& Ar, class UPackageMap* Ma
 		DamageType->NetSerialize(Ar, Map, bOutSuccess);
 	}
 	
-	
+
 	if (Ar.IsLoading())
 	{
 		AddInstigator(Instigator.Get(), EffectCauser.Get()); // Just to initialize InstigatorAbilitySystemComponent

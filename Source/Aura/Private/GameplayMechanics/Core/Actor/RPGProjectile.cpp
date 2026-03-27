@@ -12,6 +12,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "GameplayMechanics/Core/RPGAbilitySystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "Net/UnrealNetwork.h"
 
 
 ARPGProjectile::ARPGProjectile()
@@ -36,6 +37,18 @@ ARPGProjectile::ARPGProjectile()
 	
 }
 
+
+void ARPGProjectile::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ARPGProjectile, HomingTargetActor);
+	DOREPLIFETIME(ARPGProjectile, HomingTargetLocation);
+	DOREPLIFETIME(ARPGProjectile, bIsHomingToLocation);
+	DOREPLIFETIME(ARPGProjectile, bIsHomingEnabled);
+	DOREPLIFETIME(ARPGProjectile, CachedAccelerationMin);
+	DOREPLIFETIME(ARPGProjectile, CachedAccelerationMax);
+}
 
 void ARPGProjectile::BeginPlay()
 {
@@ -97,6 +110,28 @@ void ARPGProjectile::SetHomingTargetLocation(const FVector& TargetLocation)
 {
 	HomingTargetLocation = TargetLocation;
 	bIsHomingToLocation = true;
+}
+
+void ARPGProjectile::SetHomingEnabled(bool bEnabled, float AccelerationMin, float AccelerationMax)
+{
+	if (!HasAuthority()) return;
+
+	CachedAccelerationMin = AccelerationMin;
+	CachedAccelerationMax = AccelerationMax;
+	bIsHomingEnabled = bEnabled;
+	
+	if (bIsHomingEnabled)
+	{
+		EnableHoming(CachedAccelerationMin, CachedAccelerationMax);
+	}
+}
+
+void ARPGProjectile::OnRep_IsHomingEnabled()
+{
+	if (bIsHomingEnabled)
+	{
+		EnableHoming(CachedAccelerationMin, CachedAccelerationMax);
+	}
 }
 
 void ARPGProjectile::EnableHoming(float AccelerationMin, float AccelerationMax)

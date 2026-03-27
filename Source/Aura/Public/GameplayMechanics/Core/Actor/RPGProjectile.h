@@ -37,11 +37,22 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "RPG Projectile|Homing")
 	void SetHomingTargetLocation(const FVector& TargetLocation);
 
-	/** Activates homing behavior and overrides basic projectile movement rules. */
+	/** Safely triggers homing state on Server, which will automatically replicate to Clients. */
+	UFUNCTION(BlueprintCallable, Category = "RPG Projectile|Homing")
+	void SetHomingEnabled(bool bEnabled, float AccelerationMin = 1600.f, float AccelerationMax = 3200.f);
+
+	/** Original exact enabling logic. Now primarily called internally by Server or Client's OnRep. */
 	UFUNCTION(BlueprintCallable, Category = "RPG Projectile|Homing")
 	void EnableHoming(float AccelerationMin = 1600.f, float AccelerationMax = 3200.f);
 
+	UPROPERTY(BlueprintReadOnly, Replicated, Category = "RPG Projectile|Homing")
+	float CachedAccelerationMin = 1600.f;
+
+	UPROPERTY(BlueprintReadOnly, Replicated, Category = "RPG Projectile|Homing")
+	float CachedAccelerationMax = 3200.f;
+
 protected:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
 	
@@ -54,14 +65,20 @@ protected:
 	void HandleOnHit();
 	
 	
-	UPROPERTY(BlueprintReadOnly, Category = "RPG Projectile|Homing")
+	UPROPERTY(BlueprintReadOnly, Replicated, Category = "RPG Projectile|Homing")
 	TObjectPtr<AActor> HomingTargetActor;
 
-	UPROPERTY(BlueprintReadOnly, Category = "RPG Projectile|Homing")
+	UPROPERTY(BlueprintReadOnly, Replicated, Category = "RPG Projectile|Homing")
 	FVector HomingTargetLocation;
 
-	UPROPERTY(BlueprintReadOnly, Category = "RPG Projectile|Homing")
+	UPROPERTY(BlueprintReadOnly, Replicated, Category = "RPG Projectile|Homing")
 	bool bIsHomingToLocation = false;
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_IsHomingEnabled, Category = "RPG Projectile|Homing")
+	bool bIsHomingEnabled = false;
+
+	UFUNCTION()
+	void OnRep_IsHomingEnabled();
 
 	UPROPERTY()
 	TObjectPtr<USceneComponent> HomingTargetSceneComponent;

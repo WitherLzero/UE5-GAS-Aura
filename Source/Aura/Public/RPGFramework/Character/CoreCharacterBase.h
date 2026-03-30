@@ -40,7 +40,7 @@ protected:
 	bool OnNativeInput(FGameplayTag Tag, ERPGInputEvent EventType, FInputActionValue Value);
 	
 	
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 	
 	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attributes")

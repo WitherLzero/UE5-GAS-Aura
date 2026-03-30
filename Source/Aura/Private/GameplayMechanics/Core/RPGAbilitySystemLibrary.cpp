@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "AbilitySystemGlobals.h"
 #include "GameplayMechanics/Core/Actor/RPGProjectile.h"
 #include "RPGFramework/GAS/RPGAbilityTypes.h"
 #include "AuraGame/Game/AuraGameMode.h"
@@ -374,6 +375,22 @@ void URPGAbilitySystemLibrary::SetDamageType(FGameplayEffectContextHandle& Effec
 	{
 		const TSharedPtr<FGameplayTag> DamageType = MakeShared<FGameplayTag>(InDamageType);
 		EffectContext->SetDamageType(DamageType);
+	}
+}
+
+void URPGAbilitySystemLibrary::ApplyLooseTagToActor(AActor* TargetActor, FGameplayTag TagToApply)
+{
+	if (UAbilitySystemComponent* ASC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(TargetActor))
+	{
+		ASC->AddLooseGameplayTag(TagToApply);
+	}
+}
+
+void URPGAbilitySystemLibrary::RemoveLooseTagFromActor(AActor* TargetActor, FGameplayTag TagToRemove)
+{
+	if (UAbilitySystemComponent* ASC = UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(TargetActor))
+	{
+		ASC->RemoveLooseGameplayTag(TagToRemove);
 	}
 }
 

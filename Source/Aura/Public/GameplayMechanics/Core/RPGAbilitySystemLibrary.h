@@ -112,6 +112,13 @@ public:
 	static void SetDamageType(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, const FGameplayTag& InDamageType);
 	
 	
+	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayTags")
+	static void ApplyLooseTagToActor(AActor* TargetActor, FGameplayTag TagToApply);
+	
+	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayTags")
+	static void RemoveLooseTagFromActor(AActor* TargetActor, FGameplayTag TagToRemove);
+	
+	
 	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayHelpers")
 	static FTaggedMontage PickRandomTaggedMontage (const TArray<FTaggedMontage>& Montages);
 

@@ -12,6 +12,7 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FOnOutOfHealthSignature, AActor* /*Instigato
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnAbilityGiven, URPGAbilitySystemComponent*);
 DECLARE_MULTICAST_DELEGATE_ThreeParams(FOnAbilityStatusChangedSignature, const FGameplayTag& /*AbilityTag*/, const FGameplayTag& /*StatusTag*/, int32 /*AbilityLevel*/);
 DECLARE_MULTICAST_DELEGATE_FourParams(FOnAbilityEquipped, const FGameplayTag& /*AbilityTag*/, const FGameplayTag& /*Status*/, const FGameplayTag& /*Slot*/, const FGameplayTag& /*PrevSlot*/);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnPassiveAbilityDeactivated, const FGameplayTag& /*AbilityTag*/);
 
 DECLARE_DELEGATE_OneParam(FAbilitySpecAction, const FGameplayAbilitySpec&);
 /**
@@ -54,6 +55,7 @@ public:
 	FOnAbilityGiven OnAbilityGiven;
 	FOnAbilityStatusChangedSignature OnAbilityStatusChanged;
 	FOnAbilityEquipped OnAbilityEquipped;
+	FOnPassiveAbilityDeactivated OnPassiveAbilityDeactivated;
 	
 	bool bStartupAbilitiesGiven = false;
 	

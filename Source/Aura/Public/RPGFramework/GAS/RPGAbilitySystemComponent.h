@@ -37,11 +37,15 @@ public:
 	static FGameplayTag GetAbilityTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
 	static FGameplayTag GetInputTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
 	static FGameplayTag GetStatusFromSpec(const FGameplayAbilitySpec& AbilitySpec);
-	static bool AbilityHasInputTag(FGameplayAbilitySpec* Spec, const FGameplayTag& InputTag);
+	static bool AbilityHasInputTag(const FGameplayAbilitySpec& Spec, const FGameplayTag& InputTag);
+	static bool AbilityHasAnyInputTag(const FGameplayAbilitySpec& Spec);
+	static void AssignInputToAbility(FGameplayAbilitySpec& Spec, const FGameplayTag& InputTag);
 	
-	
+	bool AbilityInputIsEmpty(const FGameplayTag& InputTag);
 	FGameplayAbilitySpec* GetSpecFromAbilityTag(const FGameplayTag& AbilityTag);
+	FGameplayAbilitySpec* GetSpecWithInputTag(const FGameplayTag& InputTag);
 	
+	bool IsPassiveAbility(const FGameplayAbilitySpec& Spec) const;
 	
 	void UpdateAbilityStatuses(int32 Level);
 	void UnlockOrUpgradeAbility(const FGameplayTag& AbilityTag);
@@ -72,6 +76,5 @@ protected:
 	virtual void OnRep_ActivateAbilities() override;
 	
 private:
-	void ClearAbilityInput(FGameplayAbilitySpec* Spec);
-	void UnbindAbilitiesFromInput(const FGameplayTag& InputTag);
+	static void ClearAbilityInput(FGameplayAbilitySpec* Spec);
 };

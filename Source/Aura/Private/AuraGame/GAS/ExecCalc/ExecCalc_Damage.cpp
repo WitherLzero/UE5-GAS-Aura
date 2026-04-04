@@ -14,6 +14,8 @@
 #include "AuraGame/Types/AuraGameplayTags.h"
 #include "RPGFramework/Interaction/CharacterDataInterface.h"
 #include "AuraGame/System/AuraGameSetting.h"
+#include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
+#include "GameplayMechanics/Core/Abilities/RPGPassiveAbility.h"
 
 
 
@@ -221,8 +223,24 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	// Double damage plus a bonus if critical hit
 	Damage = bCriticalHit ? 2.f * Damage + SourceCriticalHitDamage : Damage;
 	
-	const bool bHasHaloOfProtection = SourceTags->HasTagExact(FAuraGameplayTags::Get().Abilities_Passive_HaloOfProtection);
-	
+	const bool bHasHaloOfProtection = TargetTags->HasTagExact(FAuraGameplayTags::Get().State_Buff_HaloOfProtection);
+	if (bHasHaloOfProtection)
+	{
+		if (URPGAbilitySystemComponent* TargetRPGASC = Cast<URPGAbilitySystemComponent>(TargetASC))
+		{
+			if (FGameplayAbilitySpec* HaloSpec = TargetRPGASC->GetSpecFromAbilityTag(FAuraGameplayTags::Get().Abilities_Passive_HaloOfProtection))
+			{
+				if (URPGPassiveAbility* HaloAbilityCDO = Cast<URPGPassiveAbility>(HaloSpec->Ability))
+				{
+					if (const FScalableFloat* ReductionCurve = HaloAbilityCDO->AbilityDataMap.Find(FAuraGameplayTags::Get().Abilities_Passive_HaloOfProtection))
+					{
+						const float HaloReduction = ReductionCurve->GetValueAtLevel(HaloSpec->Level);
+						Damage = FMath::Max(0.f, Damage * (100 - HaloReduction) / 100.f);
+					}
+				}
+			}
+		}
+	}
 	
 	const FGameplayModifierEvaluatedData EvaluatedData(UVitalAttributeSet::GetIncomingDamageAttribute(), EGameplayModOp::Additive, Damage);
 	OutExecutionOutput.AddOutputModifier(EvaluatedData);

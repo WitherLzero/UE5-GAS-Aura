@@ -1,4 +1,4 @@
-﻿// Copyright rynnli
+// Copyright rynnli
 
 #pragma once
 
@@ -18,4 +18,7 @@ public:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	
 	void ReceiveDeactivate(const FGameplayTag& AbilityTag);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Framework|Data Properties")
+	TMap<FGameplayTag, FScalableFloat> AbilityDataMap;
 };

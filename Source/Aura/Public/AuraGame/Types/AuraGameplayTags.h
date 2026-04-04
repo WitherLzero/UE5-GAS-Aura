@@ -79,5 +79,9 @@ public:
 	FGameplayTag Event_Recovery_Life;
 	FGameplayTag Event_Recovery_Mana;
 	
+	/*
+	 *  State Tags
+	 */
+	FGameplayTag State_Buff_HaloOfProtection;
 	
 };

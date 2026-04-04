@@ -228,4 +228,9 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 		FName("Event.Recovery.Mana"),
 		FString("Mana Recovery Event Tag")
 	);
+
+	GameplayTags.State_Buff_HaloOfProtection = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("State.Buff.HaloOfProtection"),
+		FString("State Tag for Active Halo of Protection Buff")
+	);
 }

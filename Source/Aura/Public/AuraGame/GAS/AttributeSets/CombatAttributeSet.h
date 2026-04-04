@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "CoreMinimal.h"
 #include "Aura/Public/RPGFramework/GAS/AttributeSets/RPGAttributeSetBase.h"
@@ -28,6 +28,14 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_ArmorPenetration, Category = "Combat Attributes")
 	FGameplayAttributeData ArmorPenetration;
 	ATTRIBUTE_ACCESSORS(UCombatAttributeSet, ArmorPenetration)
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_LifeSteal, Category = "Combat Attributes")
+	FGameplayAttributeData LifeSteal;
+	ATTRIBUTE_ACCESSORS(UCombatAttributeSet, LifeSteal)
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_ManaSteal, Category = "Combat Attributes")
+	FGameplayAttributeData ManaSteal;
+	ATTRIBUTE_ACCESSORS(UCombatAttributeSet, ManaSteal)
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing=OnRep_BlockChance, Category = "Combat Attributes")
 	FGameplayAttributeData BlockChance;
@@ -66,6 +74,12 @@ public:
 
 	UFUNCTION()
 	void OnRep_ArmorPenetration(const FGameplayAttributeData& OldArmorPenetration) const;
+
+	UFUNCTION()
+	void OnRep_LifeSteal(const FGameplayAttributeData& OldLifeSteal) const;
+
+	UFUNCTION()
+	void OnRep_ManaSteal(const FGameplayAttributeData& OldManaSteal) const;
 
 	UFUNCTION()
 	void OnRep_BlockChance(const FGameplayAttributeData& OldBlockChance) const;

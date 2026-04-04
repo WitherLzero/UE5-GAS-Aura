@@ -1,4 +1,4 @@
-﻿// Copyright rynnli
+// Copyright rynnli
 
 #pragma once
 
@@ -18,4 +18,10 @@ class AURA_API UAuraGameSetting : public UDeveloperSettings
 public:
 	UPROPERTY(Config, EditAnywhere, Category = "Aura Data Assets")
 	TSoftObjectPtr<UCharacterClassInfo> CharacterClassInfo;
+	
+	UPROPERTY(Config, EditAnywhere, Category = "Aura|GAS|GameplayEffect")
+	TSubclassOf<UGameplayEffect> LifeStealEffectClass;
+
+	UPROPERTY(Config, EditAnywhere, Category = "Aura|GAS|GameplayEffect")
+	TSubclassOf<UGameplayEffect> ManaStealEffectClass;
 };

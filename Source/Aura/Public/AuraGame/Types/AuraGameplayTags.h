@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
@@ -21,6 +21,8 @@ public:
 	
 	FGameplayTag Attributes_Combat_Armor;
 	FGameplayTag Attributes_Combat_ArmorPenetration;
+	FGameplayTag Attributes_Combat_LifeSteal;
+	FGameplayTag Attributes_Combat_ManaSteal;
 	FGameplayTag Attributes_Combat_BlockChance;
 	FGameplayTag Attributes_Combat_CriticalHitChance;
 	FGameplayTag Attributes_Combat_CriticalHitDamage;
@@ -73,6 +75,9 @@ public:
 	 *  Cooldown Tags
 	 */
 	FGameplayTag Cooldown_Fire_FireBolt;
+	
+	FGameplayTag Event_Recovery_Life;
+	FGameplayTag Event_Recovery_Mana;
 	
 	
 };

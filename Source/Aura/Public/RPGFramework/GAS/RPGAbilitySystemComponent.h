@@ -13,6 +13,8 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FOnAbilityGiven, URPGAbilitySystemComponent*
 DECLARE_MULTICAST_DELEGATE_ThreeParams(FOnAbilityStatusChangedSignature, const FGameplayTag& /*AbilityTag*/, const FGameplayTag& /*StatusTag*/, int32 /*AbilityLevel*/);
 DECLARE_MULTICAST_DELEGATE_FourParams(FOnAbilityEquipped, const FGameplayTag& /*AbilityTag*/, const FGameplayTag& /*Status*/, const FGameplayTag& /*Slot*/, const FGameplayTag& /*PrevSlot*/);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnPassiveAbilityDeactivated, const FGameplayTag& /*AbilityTag*/);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAbilityLevelChanged);
+
 
 DECLARE_DELEGATE_OneParam(FAbilitySpecAction, const FGameplayAbilitySpec&);
 /**
@@ -60,6 +62,9 @@ public:
 	FOnAbilityStatusChangedSignature OnAbilityStatusChanged;
 	FOnAbilityEquipped OnAbilityEquipped;
 	FOnPassiveAbilityDeactivated OnPassiveAbilityDeactivated;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnAbilityLevelChanged OnAbilityLevelChanged;
 	
 	bool bStartupAbilitiesGiven = false;
 	

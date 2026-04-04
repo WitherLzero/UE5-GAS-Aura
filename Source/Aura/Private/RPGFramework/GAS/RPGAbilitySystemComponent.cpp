@@ -146,6 +146,7 @@ void URPGAbilitySystemComponent::UnlockOrUpgradeAbility(const FGameplayTag& Abil
 		else if (Status.MatchesTagExact(GameplayTags.Abilities_Status_Equipped) || Status.MatchesTagExact(GameplayTags.Abilities_Status_Unlocked))
 		{
 			AbilitySpec->Level += 1;
+			OnAbilityLevelChanged.Broadcast();
 		}
 		ClientUpdateAbilityStatus(AbilityTag,Status,AbilitySpec->Level);
 		MarkAbilitySpecDirty(*AbilitySpec);

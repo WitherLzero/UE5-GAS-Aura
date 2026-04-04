@@ -13,6 +13,7 @@
 #include "AuraGame/GAS/AttributeSets/CombatAttributeSet.h"
 #include "AuraGame/Types/AuraGameplayTags.h"
 #include "RPGFramework/Interaction/CharacterDataInterface.h"
+#include "AuraGame/System/AuraGameSetting.h"
 
 
 
@@ -26,6 +27,8 @@ struct RPGDamageStatic
 	DECLARE_ATTRIBUTE_CAPTUREDEF(CriticalHitChance);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(CriticalHitResistance);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(CriticalHitDamage);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(LifeSteal);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(ManaSteal);
 	
 	DECLARE_ATTRIBUTE_CAPTUREDEF(FireResistance);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(LightningResistance);
@@ -40,6 +43,8 @@ struct RPGDamageStatic
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UCombatAttributeSet, CriticalHitChance, Source, false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UCombatAttributeSet, CriticalHitResistance, Target, false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UCombatAttributeSet, CriticalHitDamage, Source, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UCombatAttributeSet, LifeSteal, Source, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UCombatAttributeSet, ManaSteal, Source, false);
 		
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UCombatAttributeSet, FireResistance, Target, false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UCombatAttributeSet, LightningResistance, Target, false);
@@ -69,6 +74,8 @@ UExecCalc_Damage::UExecCalc_Damage()
 	RelevantAttributesToCapture.Add(DamageStatics().CriticalHitChanceDef);
 	RelevantAttributesToCapture.Add(DamageStatics().CriticalHitResistanceDef);
 	RelevantAttributesToCapture.Add(DamageStatics().CriticalHitDamageDef);
+	RelevantAttributesToCapture.Add(DamageStatics().LifeStealDef);
+	RelevantAttributesToCapture.Add(DamageStatics().ManaStealDef);
 	
 	RelevantAttributesToCapture.Add(DamageStatics().FireResistanceDef);
 	RelevantAttributesToCapture.Add(DamageStatics().LightningResistanceDef);
@@ -122,8 +129,8 @@ void UExecCalc_Damage::DetermineDebuff(const FGameplayEffectCustomExecutionParam
 void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
                                               FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
 {
-	const UAbilitySystemComponent* SourceASC = ExecutionParams.GetSourceAbilitySystemComponent();
-	const UAbilitySystemComponent* TargetASC = ExecutionParams.GetTargetAbilitySystemComponent();
+	UAbilitySystemComponent* SourceASC = ExecutionParams.GetSourceAbilitySystemComponent();
+	UAbilitySystemComponent* TargetASC = ExecutionParams.GetTargetAbilitySystemComponent();
 	
 	AActor* SourceAvatar = SourceASC? SourceASC->GetAvatarActor(): nullptr;
 	AActor* TargetAvatar = TargetASC? TargetASC->GetAvatarActor(): nullptr;
@@ -214,6 +221,52 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	// Double damage plus a bonus if critical hit
 	Damage = bCriticalHit ? 2.f * Damage + SourceCriticalHitDamage : Damage;
 	
+	const bool bHasHaloOfProtection = SourceTags->HasTagExact(FAuraGameplayTags::Get().Abilities_Passive_HaloOfProtection);
+	
+	
 	const FGameplayModifierEvaluatedData EvaluatedData(UVitalAttributeSet::GetIncomingDamageAttribute(), EGameplayModOp::Additive, Damage);
 	OutExecutionOutput.AddOutputModifier(EvaluatedData);
+
+	// Life Steal and Mana Steal
+	if (Damage > 0.f)
+	{
+		const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
+		const UAuraGameSetting* GameSetting = GetDefault<UAuraGameSetting>();
+
+		// Life Steal
+		float SourceLifeSteal = 0.f;
+		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().LifeStealDef, EvaluationParameters, SourceLifeSteal);
+		SourceLifeSteal = FMath::Max<float>(SourceLifeSteal, 0.f);
+
+		if (SourceLifeSteal > 0.f && GameSetting->LifeStealEffectClass)
+		{
+			const float LifeToSteal = Damage * (SourceLifeSteal / 100.f);
+			FGameplayEffectContextHandle ContextHandle = SourceASC->MakeEffectContext();
+			ContextHandle.AddSourceObject(SourceAvatar);
+			FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(GameSetting->LifeStealEffectClass, 1.f, ContextHandle);
+			if (SpecHandle.IsValid())
+			{
+				SpecHandle.Data.Get()->SetSetByCallerMagnitude(GameplayTags.Event_Recovery_Life, LifeToSteal);
+				SourceASC->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+			}
+		}
+
+		// Mana Steal
+		float SourceManaSteal = 0.f;
+		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ManaStealDef, EvaluationParameters, SourceManaSteal);
+		SourceManaSteal = FMath::Max<float>(SourceManaSteal, 0.f);
+
+		if (SourceManaSteal > 0.f && GameSetting->ManaStealEffectClass)
+		{
+			const float ManaToSteal = Damage * (SourceManaSteal / 100.f);
+			FGameplayEffectContextHandle ContextHandle = SourceASC->MakeEffectContext();
+			ContextHandle.AddSourceObject(SourceAvatar);
+			FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(GameSetting->ManaStealEffectClass, 1.f, ContextHandle);
+			if (SpecHandle.IsValid())
+			{
+				SpecHandle.Data.Get()->SetSetByCallerMagnitude(GameplayTags.Event_Recovery_Mana, ManaToSteal);
+				SourceASC->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+			}
+		}
+	}
 }

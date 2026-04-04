@@ -1,4 +1,4 @@
-﻿
+
 #include "AuraGame/GAS/AttributeSets/CombatAttributeSet.h"
 
 #include "Net/UnrealNetwork.h"
@@ -11,6 +11,8 @@ UCombatAttributeSet::UCombatAttributeSet()
 	
 	TagsToAttributes.Add(GameplayTags.Attributes_Combat_Armor,GetArmorAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Combat_ArmorPenetration,GetArmorPenetrationAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Combat_LifeSteal,GetLifeStealAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Combat_ManaSteal,GetManaStealAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Combat_BlockChance,GetBlockChanceAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Combat_CriticalHitChance,GetCriticalHitChanceAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Combat_CriticalHitDamage,GetCriticalHitDamageAttribute);
@@ -29,6 +31,8 @@ void UCombatAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimePrope
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, Armor, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, ArmorPenetration, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, LifeSteal, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, ManaSteal, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, BlockChance, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, CriticalHitChance, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UCombatAttributeSet, CriticalHitDamage, COND_None, REPNOTIFY_Always);
@@ -47,6 +51,16 @@ void UCombatAttributeSet::OnRep_Armor(const FGameplayAttributeData& OldArmor) co
 void UCombatAttributeSet::OnRep_ArmorPenetration(const FGameplayAttributeData& OldArmorPenetration) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UCombatAttributeSet, ArmorPenetration, OldArmorPenetration);
+}
+
+void UCombatAttributeSet::OnRep_LifeSteal(const FGameplayAttributeData& OldLifeSteal) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCombatAttributeSet, LifeSteal, OldLifeSteal);
+}
+
+void UCombatAttributeSet::OnRep_ManaSteal(const FGameplayAttributeData& OldManaSteal) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UCombatAttributeSet, ManaSteal, OldManaSteal);
 }
 
 void UCombatAttributeSet::OnRep_BlockChance(const FGameplayAttributeData& OldBlockChance) const

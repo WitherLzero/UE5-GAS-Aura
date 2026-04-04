@@ -1,4 +1,4 @@
-﻿
+
 #include "AuraGame/Types/AuraGameplayTags.h"
 #include "GameplayTagsManager.h"
 
@@ -37,6 +37,16 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Attributes_Combat_ArmorPenetration = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Combat.ArmorPenetration"),
 		FString("Ignores Percentage of enemy Armor, increases Critical Hit Chance")
+		);
+
+	GameplayTags.Attributes_Combat_LifeSteal = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Combat.LifeSteal"),
+		FString("Percentage of damage dealt that is recovered as Health")
+		);
+
+	GameplayTags.Attributes_Combat_ManaSteal = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Combat.ManaSteal"),
+		FString("Percentage of damage dealt that is recovered as Mana")
 		);
 
 	GameplayTags.Attributes_Combat_BlockChance = UGameplayTagsManager::Get().AddNativeGameplayTag(
@@ -206,6 +216,16 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	
 	GameplayTags.Cooldown_Fire_FireBolt = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Cooldown.Fire.FireBolt"),
-	FString("FireBolt Cooldown Tag")
-	);	
+		FString("FireBolt Cooldown Tag")
+	);
+
+	GameplayTags.Event_Recovery_Life = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Recovery.Life"),
+		FString("Life Recovery Event Tag")
+	);
+
+	GameplayTags.Event_Recovery_Mana = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Recovery.Mana"),
+		FString("Mana Recovery Event Tag")
+	);
 }

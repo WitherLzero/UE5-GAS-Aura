@@ -61,6 +61,17 @@ public:
 	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|Math Algorithm")
 	static TArray<FVector> EvenlySpacedVectors(const FVector& Forward, const FVector& Axis, float Spread, int32 NumVectors);
 	
+	/**
+	 * 圆形径向地表阵列生成器 (法阵/碎片环形专用分布算法)
+	 * @param CenterLocation  中心原点
+	 * @param NumPoints		  生成的点数
+	 * @param Radius		  外环半径
+	 * @param YawOverride	  可选的整体旋转偏移角度
+	 * @param bIncludeCenter  是否在圆心强制留存一个落点
+	 */
+	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|Math Algorithm", meta = (DefaultToSelf = "WorldContextObject"))
+	static TArray<FVector> GetGroundRadialPoints(const UObject* WorldContextObject, const FVector& CenterLocation, int32 NumPoints, float Radius, float YawOverride = 0.f, bool bIncludeCenter = true);
+	
 	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|DamageEffect")
 	static FGameplayEffectSpecHandle MakeDamageEffectSpec(const FDamageEffectParams& DamageEffectParams);
 	

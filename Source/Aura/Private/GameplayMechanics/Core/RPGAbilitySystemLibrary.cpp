@@ -207,6 +207,59 @@ TArray<FVector> URPGAbilitySystemLibrary::EvenlySpacedVectors(const FVector& For
 	return Vectors;
 }
 
+TArray<FVector> URPGAbilitySystemLibrary::GetGroundRadialPoints(const UObject* WorldContextObject, const FVector& CenterLocation,
+	int32 NumPoints, float Radius, float YawOverride, bool bIncludeCenter)
+{
+	TArray<FVector> TheoreticalPoints;
+	if (NumPoints <= 0) return TheoreticalPoints;
+
+	int32 RemainingPoints = NumPoints;
+
+	if (bIncludeCenter)
+	{
+		TheoreticalPoints.Add(CenterLocation);
+		RemainingPoints--;
+	}
+
+	if (RemainingPoints > 0)
+	{
+		float DeltaAngle = 360.f / RemainingPoints; 
+		
+		for (int32 i = 0; i < RemainingPoints; ++i)
+		{
+			float CurrentAngle = YawOverride + (DeltaAngle * i);
+			FVector Direction = FVector::ForwardVector.RotateAngleAxis(CurrentAngle, FVector::UpVector);
+			TheoreticalPoints.Add(CenterLocation + Direction * Radius);
+		}
+	}
+
+	TArray<FVector> GroundedPoints;
+	UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull);
+	if (!World) return TheoreticalPoints;
+
+	FCollisionQueryParams QueryParams;
+	FCollisionObjectQueryParams ObjectQueryParams;
+	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldStatic); 
+	
+	for (const FVector& Pt : TheoreticalPoints)
+	{
+		FVector RayStart = Pt + FVector(0.f, 0.f, 500.f);
+		FVector RayEnd = Pt - FVector(0.f, 0.f, 500.f);
+
+		FHitResult HitResult;
+		if (World->LineTraceSingleByObjectType(HitResult, RayStart, RayEnd, ObjectQueryParams, QueryParams))
+		{
+			GroundedPoints.Add(HitResult.ImpactPoint);
+		}
+		else
+		{
+			GroundedPoints.Add(Pt);
+		}
+	}
+
+	return GroundedPoints;
+}
+
 FGameplayEffectSpecHandle URPGAbilitySystemLibrary::MakeDamageEffectSpec(const FDamageEffectParams& DamageEffectParams)
 {
 	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();

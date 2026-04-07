@@ -103,6 +103,25 @@ bool AAuraCharacter::HandleNativeInput(FGameplayTag Tag, ERPGInputEvent EventTyp
 
 bool AAuraCharacter::OnNativeInput_Implementation(FGameplayTag Tag, ERPGInputEvent EventType, FInputActionValue Value)
 {
+	// ====== 核心拦截层：检查瞄准微状态 ======
+	if (AbilitySystemComponent && AbilitySystemComponent->HasMatchingGameplayTag(FRPGGameplayTags::Get().State_Action_Targeting))
+	{
+		// 拦截左键作为 Confirm
+		if (Tag == FRPGGameplayTags::Get().Inputs_LMB && EventType == ERPGInputEvent::IE_Pressed)
+		{
+			AbilitySystemComponent->LocalInputConfirm();
+			return true; 
+		}
+		
+		// 拦截右键作为 Cancel
+		if (Tag == FRPGGameplayTags::Get().Inputs_RMB && EventType == ERPGInputEvent::IE_Pressed)
+		{
+			AbilitySystemComponent->LocalInputCancel();
+			return true; 
+		}
+	}
+
+	// ====== 常规按键处理层 ======
 	if (Tag == FRPGGameplayTags::Get().Inputs_LMB)
 	{
 		if (EventType == ERPGInputEvent::IE_Pressed)
@@ -150,7 +169,7 @@ void AAuraCharacter::InitAbilityActorInfo()
 	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState,this);
 	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
 	Cast<URPGAbilitySystemComponent>(AbilitySystemComponent)->OnAbilityActorInfoSet();
-	
+	Cast<URPGAbilitySystemComponent>(AbilitySystemComponent)->UpdateAbilityStatuses(GetCharacterLevel());
 	InitDefaultAttributes();
 	if (ARPGPlayerController* AuraPlayerController = Cast<ARPGPlayerController>(GetController()))
 	{

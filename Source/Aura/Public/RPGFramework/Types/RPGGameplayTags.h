@@ -51,6 +51,7 @@ public:
 	 * State Tags
 	 */
 	FGameplayTag State_Stunned;
+	FGameplayTag State_Action_Targeting;
 	
 	/*
 	 *  Input Tags

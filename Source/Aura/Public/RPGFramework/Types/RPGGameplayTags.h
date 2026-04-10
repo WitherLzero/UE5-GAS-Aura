@@ -45,6 +45,7 @@ public:
 	 *  Event Tags
 	 */
 	FGameplayTag Event_Character_Died;
+	FGameplayTag Event_Action_UpdateWarpingTarget;
 	
 	
 	/* 

@@ -86,6 +86,11 @@ void FRPGGameplayTags::InitializeNativeGameplayTags()
 		FName("Event.Character.Died"),
 	FString("Tag for sending Gameplay Event when character died.")
 	);	
+
+	GameplayTags.Event_Action_UpdateWarpingTarget = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Action.UpdateWarpingTarget"),
+		FString("Event Tag to notify Action Component to update warping target")
+		);
 	
 	
 	GameplayTags.State_Stunned = UGameplayTagsManager::Get().AddNativeGameplayTag(

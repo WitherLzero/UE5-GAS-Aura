@@ -94,14 +94,14 @@ void AEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);
 	Cast<URPGAbilitySystemComponent>(AbilitySystemComponent)->OnAbilityActorInfoSet();
-
+	InitComponentsWithASC(AbilitySystemComponent);
+	
 	if (HasAuthority())
 	{
 		InitDefaultAttributes();
 		UAuraAbilitySystemLibrary::GiveStartupAbilities(this,AbilitySystemComponent, CharacterClass);
 	}
 	
-	Super::InitAbilityActorInfo();
 }
 
 void AEnemy::InitDefaultAttributes() const

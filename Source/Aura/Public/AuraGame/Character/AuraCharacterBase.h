@@ -23,6 +23,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void InitAbilityActorInfo() override;
+	virtual void InitComponentsWithASC(UAbilitySystemComponent* AbilitySystemComponent);
 	
 	/* Combat Interface*/
 	virtual USkeletalMeshComponent* GetWeapon_Implementation() const override;

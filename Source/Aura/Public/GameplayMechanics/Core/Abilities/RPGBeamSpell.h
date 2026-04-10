@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayMechanics/ARPG/Abilities/ActionGameplayAbility.h"
+#include "RPGFramework/GAS/Abilities/DamageGameplayAbility.h"
 #include "RPGBeamSpell.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class AURA_API URPGBeamSpell : public UActionGameplayAbility
+class AURA_API URPGBeamSpell : public UDamageGameplayAbility
 {
 	GENERATED_BODY()
 public:

@@ -32,8 +32,15 @@ void AAuraCharacterBase::BeginPlay()
 
 void AAuraCharacterBase::InitAbilityActorInfo()
 {
-	VitalityComp->InitVitality(AbilitySystemComponent);
+
+}
+
+void AAuraCharacterBase::InitComponentsWithASC(UAbilitySystemComponent* ASC)
+{
+	VitalityComp->InitVitality(ASC);
 	VitalityComp->OnDeath.AddDynamic(this,&AAuraCharacterBase::HandleDeath);
+	
+	ActionComp->InitActionComponent(ASC);
 }
 
 USkeletalMeshComponent* AAuraCharacterBase::GetWeapon_Implementation() const

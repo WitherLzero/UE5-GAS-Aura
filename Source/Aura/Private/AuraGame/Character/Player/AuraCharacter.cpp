@@ -170,6 +170,7 @@ void AAuraCharacter::InitAbilityActorInfo()
 	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
 	Cast<URPGAbilitySystemComponent>(AbilitySystemComponent)->OnAbilityActorInfoSet();
 	Cast<URPGAbilitySystemComponent>(AbilitySystemComponent)->UpdateAbilityStatuses(GetCharacterLevel());
+	InitComponentsWithASC(AbilitySystemComponent);
 	InitDefaultAttributes();
 	if (ARPGPlayerController* AuraPlayerController = Cast<ARPGPlayerController>(GetController()))
 	{

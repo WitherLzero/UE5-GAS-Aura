@@ -46,6 +46,7 @@ void AAuraCharacter::AddCharacterAbilities()
 	
 	CastChecked<URPGAbilitySystemComponent>(AbilitySystemComponent)->AddCharacterAbilities(CharacterAbilities);
 	CastChecked<URPGAbilitySystemComponent>(AbilitySystemComponent)->AddCharacterPassiveAbilities(StartupPassiveAbilities);
+	CastChecked<URPGAbilitySystemComponent>(AbilitySystemComponent)->UpdateAbilityStatuses(GetCharacterLevel());
 }
 
 void AAuraCharacter::AddToXP_Implementation(int32 InXP)
@@ -169,7 +170,6 @@ void AAuraCharacter::InitAbilityActorInfo()
 	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState,this);
 	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
 	Cast<URPGAbilitySystemComponent>(AbilitySystemComponent)->OnAbilityActorInfoSet();
-	Cast<URPGAbilitySystemComponent>(AbilitySystemComponent)->UpdateAbilityStatuses(GetCharacterLevel());
 	InitComponentsWithASC(AbilitySystemComponent);
 	InitDefaultAttributes();
 	if (ARPGPlayerController* AuraPlayerController = Cast<ARPGPlayerController>(GetController()))

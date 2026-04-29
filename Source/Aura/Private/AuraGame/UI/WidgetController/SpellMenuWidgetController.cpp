@@ -11,7 +11,7 @@
 
 void USpellMenuWidgetController::BroadcastInitialValues()
 {
-	OnInitializeStartupAbilities(Cast<URPGAbilitySystemComponent>(AbilitySystemComponent));
+	OnInitializeStartupAbilities(GetASC());
 	
 	SpellPointsChanged.Broadcast(GetAuraPS()->GetSpellPoints());
 }

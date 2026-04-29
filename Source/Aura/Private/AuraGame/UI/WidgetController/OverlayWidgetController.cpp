@@ -13,6 +13,7 @@
 
 void UOverlayWidgetController::BroadcastInitialValues()
 {
+	OnInitializeStartupAbilities(GetASC());
 	const UVitalAttributeSet* VitalSet = Cast<UVitalAttributeSet>(AbilitySystemComponent->GetAttributeSet(UVitalAttributeSet::StaticClass()));
 	if (VitalSet)
 	{
@@ -47,14 +48,8 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 
 	if (GetASC())
 	{
-		if (GetASC()->bStartupAbilitiesGiven)
-		{
-			OnInitializeStartupAbilities(GetASC());
-		}
-		else
-		{
-			GetASC()->OnAbilityGiven.AddUObject(this,&ThisClass::OnInitializeStartupAbilities);
-		}
+		GetASC()->OnAbilityGiven.AddUObject(this,&ThisClass::OnInitializeStartupAbilities);
+
 		
 		GetASC()->OnAbilityEquipped.AddUObject(this,&ThisClass::HandleAbilityEquipped);
 		

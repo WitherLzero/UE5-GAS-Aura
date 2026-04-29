@@ -28,12 +28,18 @@ class AURA_API URPGAbilitySystemLibrary : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 	
 public:
-	
-	
+
+	/*
+	 * Ability Info
+	 */
+
 	UFUNCTION(BlueprintCallable, Category="RPGAbilitySystemLibrary|AbilityInfo")
 	static UAbilityInfo* GetAbilityInfo(const UObject* WorldContextObject);
-	
-	
+
+	/*
+	 * Gameplay Mechanics
+	 */
+
 	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayMechanics")
 	static void GetLivePlayersWithinRadius(const UObject* WorldContextObject, TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, float Radius, const FVector& SphereOrigin);
 	
@@ -54,7 +60,11 @@ public:
 	static ARPGProjectile* SpawnProjectileInDirection(const UObject* WorldContextObject,TSubclassOf<ARPGProjectile> ProjectileClass,
 													const FVector& SpawnLocation, const FRotator& SpawnRotation,bool bOverridePitch, float PitchOverride, 
 													AActor* Instigator, const FDamageEffectParams& DamageEffectParams);
-	
+
+	/*
+	 * Math Algorithm
+	 */
+
 	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|Math Algorithm")
 	static TArray<FRotator> EvenlySpacedRotators(const FVector& Forward, const FVector& Axis, float Spread, int32 NumRotators);
 	
@@ -71,10 +81,18 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|Math Algorithm", meta = (DefaultToSelf = "WorldContextObject"))
 	static TArray<FVector> GetGroundRadialPoints(const UObject* WorldContextObject, const FVector& CenterLocation, int32 NumPoints, float Radius, float YawOverride = 0.f, bool bIncludeCenter = true);
-	
+
+	/*
+	 * Damage Effect
+	 */
+
 	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|DamageEffect")
 	static FGameplayEffectSpecHandle MakeDamageEffectSpec(const FDamageEffectParams& DamageEffectParams);
-	
+
+	/*
+	 * Effect Context Getters
+	 */
+
 	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|GameplayEffects")
 	static bool IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle);
 	
@@ -97,8 +115,24 @@ public:
 	static float GetDebuffFrequency(const FGameplayEffectContextHandle& EffectContextHandle);
 
 	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|GameplayEffects")
+	static bool IsRadialDamage(const FGameplayEffectContextHandle& EffectContextHandle);
+
+	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|GameplayEffects")
+	static float GetRadialDamageInnerRadius(const FGameplayEffectContextHandle& EffectContextHandle);
+
+	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|GameplayEffects")
+	static float GetRadialDamageOuterRadius(const FGameplayEffectContextHandle& EffectContextHandle);
+
+	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|GameplayEffects")
+	static FVector GetRadialDamageOrigin(const FGameplayEffectContextHandle& EffectContextHandle);
+
+	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|GameplayEffects")
 	static FGameplayTag GetDamageType(const FGameplayEffectContextHandle& EffectContextHandle);
-	
+
+	/*
+	 * Effect Context Setters
+	 */
+
 	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayEffects")
 	static void SetIsBlockedHit(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, bool bInIsBlockedHit);
 	
@@ -119,20 +153,42 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayEffects")
 	static void SetDebuffFrequency(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, float InFrequency);
-	
+
+	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayEffects")
+	static void SetIsRadialDamage(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, bool bInIsRadialDamage);
+
+	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayEffects")
+	static void SetRadialDamageInnerRadius(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, float InInnerRadius);
+
+	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayEffects")
+	static void SetRadialDamageOuterRadius(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, float InOuterRadius);
+
+	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayEffects")
+	static void SetRadialDamageOrigin(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, const FVector& InOrigin);
+
 	static void SetDamageType(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, const FGameplayTag& InDamageType);
-	
-	
+
+	/*
+	 * Gameplay Tags
+	 */
+
 	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayTags")
 	static void ApplyLooseTagToActor(AActor* TargetActor, FGameplayTag TagToApply);
 	
 	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayTags")
 	static void RemoveLooseTagFromActor(AActor* TargetActor, FGameplayTag TagToRemove);
-	
-	
+
+	/*
+	 * Gameplay Helpers
+	 */
+
 	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayHelpers")
 	static FTaggedMontage PickRandomTaggedMontage (const TArray<FTaggedMontage>& Montages);
-
+	
+	/*
+	 * Combat
+	 */
+	
 	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|Combat")
 	static USkeletalMeshComponent* GetWeapon(const AActor* CombatActor);
 	
@@ -150,7 +206,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|Combat")
 	static AActor* GetCombatTarget(const AActor* CombatActor);
-	
+
+
+
 	static void ApplyEffectToSelf(UAbilitySystemComponent* ASC, AActor* Avatar,
 							  TSubclassOf<UGameplayEffect> EffectClass,
 							  float Level);

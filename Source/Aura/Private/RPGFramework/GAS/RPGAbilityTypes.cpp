@@ -66,10 +66,27 @@ bool FRPGGameplayEffectContext::NetSerialize(FArchive& Ar, class UPackageMap* Ma
 		if (DamageType.IsValid())
 		{
 			RepBits |= 1 << 14;
-		}		
+		}
+		if (bIsRadialDamage)
+		{
+			RepBits |= 1 << 15;
+
+			if (RadialDamageInnerRadius > 0.f)
+			{
+				RepBits |= 1 << 16;
+			}
+			if (RadialDamageOuterRadius > 0.f)
+			{
+				RepBits |= 1 << 17;
+			}
+			if (!RadialDamageOrigin.IsZero())
+			{
+				RepBits |= 1 << 18;
+			}
+		}
 	}
 	
-	Ar.SerializeBits(&RepBits, 15);
+	Ar.SerializeBits(&RepBits, 19);
 	
 	if (RepBits & (1 << 0))
 	{
@@ -149,6 +166,24 @@ bool FRPGGameplayEffectContext::NetSerialize(FArchive& Ar, class UPackageMap* Ma
 			}
 		}
 		DamageType->NetSerialize(Ar, Map, bOutSuccess);
+	}
+
+	if (RepBits & (1 << 15))
+	{
+		Ar << bIsRadialDamage;
+
+		if (RepBits & (1 << 16))
+		{
+			Ar << RadialDamageInnerRadius;
+		}
+		if (RepBits & (1 << 17))
+		{
+			Ar << RadialDamageOuterRadius;
+		}
+		if (RepBits & (1 << 18))
+		{
+			RadialDamageOrigin.NetSerialize(Ar, Map, bOutSuccess);
+		}
 	}
 	
 

@@ -52,11 +52,13 @@ void UActionComponent::OnUpdateWarpingTargetEvent(const FGameplayEventData* Payl
 	FVector ResolvedTargetLoc = FVector::ZeroVector;
 	bool bFoundValidLocation = false;
 
-	if (const AActor* TargetActor = Cast<AActor>(Payload->Target)) 
+	// 优先级1: Target 是 AActor
+	if (const AActor* TargetActor = Cast<AActor>(Payload->Target))
 	{
 		ResolvedTargetLoc = TargetActor->GetActorLocation();
 		bFoundValidLocation = true;
 	}
+	// 优先级2: TargetData (HitResult 或 EndPoint)
 	else if (Payload->TargetData.Num() > 0)
 	{
 		if (const FGameplayAbilityTargetData* FirstData = Payload->TargetData.Get(0))

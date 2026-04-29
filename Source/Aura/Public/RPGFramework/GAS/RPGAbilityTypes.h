@@ -45,10 +45,13 @@ struct FDamageEffectParams
 
 	UPROPERTY()
 	float DebuffFrequency = 0.f;
-
+	
 	UPROPERTY()
 	bool bIsRadialDamage = false;
 
+	UPROPERTY()
+	float RadialFalloff = 1.f;
+	
 	UPROPERTY()
 	float RadialDamageInnerRadius = 0.f;
 

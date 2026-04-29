@@ -44,7 +44,10 @@ public:
 	static void GetLivePlayersWithinRadius(const UObject* WorldContextObject, TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, float Radius, const FVector& SphereOrigin);
 	
 	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayMechanics")
-	static void GetClosestTargets(int32 MaxTargets, const FVector& Origin, const TArray<AActor*>& Actors, TArray<AActor*>& OutClosestTargets);
+	static void GetClosestTargetsMax(int32 MaxTargets, const FVector& Origin, const TArray<AActor*>& Actors, TArray<AActor*>& OutClosestTargets);
+
+	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|GameplayMechanics")
+	static void GetClosestTargets(const FVector& Origin, const TArray<AActor*>& Actors, TArray<AActor*>& OutSortedTargets);
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure=false, Category = "RPGAbilitySystemLibrary|GameplayMechanics", meta = (DefaultToSelf = "Instigator"))
 	static bool TraceAttackTrajectory(AActor* Instigator, 
@@ -88,6 +91,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|DamageEffect")
 	static FGameplayEffectSpecHandle MakeDamageEffectSpec(const FDamageEffectParams& DamageEffectParams);
+
+	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|DamageEffect")
+	static float GetDamageFalloff(const FVector& Origin, const AActor* TargetActor, float InnerRadius, float OuterRadius);
 
 	/*
 	 * Effect Context Getters

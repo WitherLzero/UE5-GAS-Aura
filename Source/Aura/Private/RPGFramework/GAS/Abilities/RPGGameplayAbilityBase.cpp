@@ -4,6 +4,9 @@
 #include "RPGFramework/GAS/Abilities/RPGGameplayAbilityBase.h"
 
 #include "RPGFramework/GAS/AttributeSets/VitalAttributeSet.h"
+#include "RPGFramework/Types/RPGGameplayTags.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "Abilities/GameplayAbilityTargetTypes.h"
 
 FString URPGGameplayAbilityBase::GetDescription(int32 Level)
 {
@@ -45,4 +48,23 @@ float URPGGameplayAbilityBase::GetCooldown(float InLevel) const
 		CooldownEffect->DurationMagnitude.GetStaticMagnitudeIfPossible(InLevel, Cooldown);
 	}
 	return Cooldown;
+}
+
+void URPGGameplayAbilityBase::SendWarpingTargetEvent(const FVector& TargetLocation)
+{
+	AActor* AvatarActor = GetAvatarActorFromActorInfo();
+	if (!AvatarActor) return;
+
+	FHitResult HitResult;
+	HitResult.Location = TargetLocation;
+	
+	const FGameplayAbilityTargetDataHandle TargetData = UAbilitySystemBlueprintLibrary::AbilityTargetDataFromHitResult(HitResult);
+
+	FGameplayEventData Payload;
+	Payload.TargetData = TargetData;
+
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+		AvatarActor,
+		FRPGGameplayTags::Get().Event_Action_UpdateWarpingTarget,
+		Payload);
 }

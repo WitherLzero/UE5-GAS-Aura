@@ -25,4 +25,7 @@ public:
 protected:
 	float GetManaCost(float InLevel = 1.f) const;
 	float GetCooldown(float InLevel = 1.f) const;
+
+	UFUNCTION(BlueprintCallable, Category = "GameplayAbility")
+	void SendWarpingTargetEvent(const FVector& TargetLocation);
 };

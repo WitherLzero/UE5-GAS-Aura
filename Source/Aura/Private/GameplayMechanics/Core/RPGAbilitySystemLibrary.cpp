@@ -59,7 +59,7 @@ void URPGAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldCo
 	}
 }
 
-void URPGAbilitySystemLibrary::GetClosestTargets(int32 MaxTargets, const FVector& Origin, const TArray<AActor*>& Actors, TArray<AActor*>& OutClosestTargets)
+void URPGAbilitySystemLibrary::GetClosestTargetsMax(int32 MaxTargets, const FVector& Origin, const TArray<AActor*>& Actors, TArray<AActor*>& OutClosestTargets)
 {
 	OutClosestTargets = Actors;
 	if (OutClosestTargets.Num() <= MaxTargets)
@@ -75,6 +75,17 @@ void URPGAbilitySystemLibrary::GetClosestTargets(int32 MaxTargets, const FVector
 	});
 
 	OutClosestTargets.SetNum(MaxTargets);
+}
+
+void URPGAbilitySystemLibrary::GetClosestTargets(const FVector& Origin, const TArray<AActor*>& Actors, TArray<AActor*>& OutSortedTargets)
+{
+	OutSortedTargets = Actors;
+	OutSortedTargets.Sort([&Origin](const AActor& A, const AActor& B)
+	{
+		const double DistSqA = (A.GetActorLocation() - Origin).SquaredLength();
+		const double DistSqB = (B.GetActorLocation() - Origin).SquaredLength();
+		return DistSqA < DistSqB;
+	});
 }
 
 bool URPGAbilitySystemLibrary::TraceAttackTrajectory(AActor* Instigator, const FGameplayTag& StartSocketTag,
@@ -268,16 +279,12 @@ FGameplayEffectSpecHandle URPGAbilitySystemLibrary::MakeDamageEffectSpec(const F
 	EffectContexthandle.AddSourceObject(SourceAvatarActor);
 	SetDebuffCarrier(EffectContexthandle, DamageEffectParams.DebuffCarrierClass);
 
-	SetIsRadialDamage(EffectContexthandle, DamageEffectParams.bIsRadialDamage);
-	SetRadialDamageInnerRadius(EffectContexthandle, DamageEffectParams.RadialDamageInnerRadius);
-	SetRadialDamageOuterRadius(EffectContexthandle, DamageEffectParams.RadialDamageOuterRadius);
-	SetRadialDamageOrigin(EffectContexthandle, DamageEffectParams.RadialDamageOrigin);
-
 	const FGameplayEffectSpecHandle SpecHandle = DamageEffectParams.SourceAbilitySystemComponent->MakeOutgoingSpec(DamageEffectParams.DamageGameplayEffectClass, DamageEffectParams.AbilityLevel, EffectContexthandle);
 
 	for (auto& Pair : DamageEffectParams.DamageTypes)
 	{
-		const float ScaledDamage = Pair.Value.GetValueAtLevel(DamageEffectParams.AbilityLevel);
+		float ScaledDamage = Pair.Value.GetValueAtLevel(DamageEffectParams.AbilityLevel);
+		ScaledDamage *= DamageEffectParams.RadialFalloff;
 		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle,Pair.Key,ScaledDamage);
 	}
 	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Debuff_Chance, DamageEffectParams.DebuffChance);
@@ -289,6 +296,23 @@ FGameplayEffectSpecHandle URPGAbilitySystemLibrary::MakeDamageEffectSpec(const F
 	return SpecHandle;
 }
 
+float URPGAbilitySystemLibrary::GetDamageFalloff(const FVector& Origin, const AActor* TargetActor, float InnerRadius, float OuterRadius)
+{
+	if (!TargetActor) return 0.f;
+
+	const float Distance = FVector::Dist(Origin, TargetActor->GetActorLocation());
+
+	if (Distance <= InnerRadius)
+	{
+		return 1.f;
+	}
+	if (Distance >= OuterRadius)
+	{
+		return 0.f;
+	}
+	const float Range = OuterRadius - InnerRadius;
+	return 1.f - (Distance - InnerRadius) / Range;
+}
 
 bool URPGAbilitySystemLibrary::IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle)
 {

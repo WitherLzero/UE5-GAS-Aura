@@ -18,14 +18,14 @@ class AURA_API UDamageGameplayAbility : public URPGGameplayAbilityBase
 protected:
 	
 	UFUNCTION(BlueprintPure, Category = "Damage")
-	FDamageEffectParams MakeDamageEffectParamsFromClassDefaults(AActor* TargetActor = nullptr, bool bApplyDebuff = true) const;
+	FDamageEffectParams MakeDamageEffectParamsFromClassDefaults(AActor* TargetActor = nullptr, bool bApplyDebuff = true, float RadialFalloff = 1.0f) const;
 	
 	float GetDamageByDamageType(float InLevel, const FGameplayTag& DamageType);
 	
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category= "Ability | Damage")
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category= "Ability |Effect")
 	TSubclassOf<UGameplayEffect> DamageEffectClass;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "Ability |Damage")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category= "Ability|Damage")
 	TMap<FGameplayTag,FScalableFloat> DamageTypes;
 	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category= "Ability |Debuff")
@@ -43,15 +43,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Ability |Debuff")
 	float DebuffDuration = 5.f;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	UPROPERTY(EditDefaultsOnly, Category = "Ability |Radial")
 	bool bIsRadialDamage = false;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ability |Radial")
 	float RadialDamageInnerRadius = 0.f;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly,Category = "Ability |Radial")
 	float RadialDamageOuterRadius = 0.f;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	UPROPERTY(EditDefaultsOnly, Category = "Ability |Radial")
 	FVector RadialDamageOrigin = FVector::ZeroVector;
 };

@@ -34,5 +34,5 @@ void URPGBeamSpell::StoreAdditionalTargets(AActor* OriginActor, TArray<AActor*>&
 	
 	int32 NumAdditionTargets = 3;
 	
-	URPGAbilitySystemLibrary::GetClosestTargets(NumAdditionTargets,OriginActor->GetActorLocation(),OverlappingActors, OutAdditionalTargets);
+	URPGAbilitySystemLibrary::GetClosestTargetsMax(NumAdditionTargets,OriginActor->GetActorLocation(),OverlappingActors, OutAdditionalTargets);
 }

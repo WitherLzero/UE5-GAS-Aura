@@ -1,14 +1,14 @@
 // Copyright rynnli
 
 
-#include "RPGFramework/Character/CoreCharacterBase.h"
+#include "RPGFramework/Character/RPGCharacterBase.h"
 
 #include "AbilitySystemComponent.h"
 #include "InputActionValue.h"
 #include "Aura/Aura.h"
 #include "Components/CapsuleComponent.h"
 
-ACoreCharacterBase::ACoreCharacterBase()
+ARPGCharacterBase::ARPGCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
 	
@@ -21,12 +21,12 @@ ACoreCharacterBase::ACoreCharacterBase()
 	
 }
 
-void ACoreCharacterBase::Move(const FVector2D& InputAxis)
+void ARPGCharacterBase::Move(const FVector2D& InputAxis)
 {
 }
 
 
-void ACoreCharacterBase::BeginPlay()
+void ARPGCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
@@ -35,20 +35,20 @@ void ACoreCharacterBase::BeginPlay()
 
 
 
-void ACoreCharacterBase::InitAbilityActorInfo()
+void ARPGCharacterBase::InitAbilityActorInfo()
 {
 }
 
-void ACoreCharacterBase::InitDefaultAttributes() const
+void ARPGCharacterBase::InitDefaultAttributes() const
 {
 }
 
-void ACoreCharacterBase::AddCharacterAbilities()
+void ARPGCharacterBase::AddCharacterAbilities()
 {
 }
 
 
-void ACoreCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const
+void ARPGCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const
 {
 	if (!GetAbilitySystemComponent()) return;
 	check(GameplayEffectClass);
@@ -60,7 +60,7 @@ void ACoreCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> Gameplay
 }
 
 
-bool ACoreCharacterBase::OnNativeInput_Implementation(FGameplayTag Tag, ERPGInputEvent EventType,
+bool ARPGCharacterBase::OnNativeInput_Implementation(FGameplayTag Tag, ERPGInputEvent EventType,
                                                       FInputActionValue Value)
 {
 	return false;

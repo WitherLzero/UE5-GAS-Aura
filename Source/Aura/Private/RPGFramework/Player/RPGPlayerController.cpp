@@ -4,7 +4,7 @@
 #include "RPGFramework/Player/RPGPlayerController.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
-#include "RPGFramework/Character/CoreCharacterBase.h"
+#include "RPGFramework/Character/RPGCharacterBase.h"
 #include "EnhancedInputSubsystems.h"
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 #include "RPGFramework/Input/RPGInputComponent.h"

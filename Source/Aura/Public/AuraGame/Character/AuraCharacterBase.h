@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayMechanics/Core/Interaction/CombatInterface.h"
-#include "RPGFramework/Character/CoreCharacterBase.h"
+#include "RPGFramework/Character/RPGCharacterBase.h"
 #include "AuraCharacterBase.generated.h"
 
 class UVitalityComponent;
@@ -12,7 +12,7 @@ class UActionComponent;
 class UCombatComponent;
 
 UCLASS()
-class AURA_API AAuraCharacterBase : public ACoreCharacterBase, public  ICombatInterface
+class AURA_API AAuraCharacterBase : public ARPGCharacterBase, public  ICombatInterface
 {
 	GENERATED_BODY()
 

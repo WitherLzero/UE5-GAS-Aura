@@ -7,7 +7,7 @@
 #include "AbilitySystemInterface.h"
 #include "RPGFramework/Interaction/CharacterDataInterface.h"
 #include "RPGFramework/Interaction/InputInteractable.h"
-#include "CoreCharacterBase.generated.h"
+#include "RPGCharacterBase.generated.h"
 
 class UGameplayAbility;
 class UGameplayEffect;
@@ -15,12 +15,12 @@ class UAbilitySystemComponent;
 class UAttributeSet;
 
 UCLASS()
-class AURA_API ACoreCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICharacterDataInterface, public IInputInteractable
+class AURA_API ARPGCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICharacterDataInterface, public IInputInteractable
 {
 	GENERATED_BODY()
 
 public:
-	ACoreCharacterBase();
+	ARPGCharacterBase();
 
 	virtual void Move(const FVector2D& InputAxis);
 

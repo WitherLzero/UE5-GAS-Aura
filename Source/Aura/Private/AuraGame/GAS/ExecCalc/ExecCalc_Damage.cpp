@@ -93,7 +93,6 @@ void UExecCalc_Damage::DetermineDebuff(const FGameplayEffectCustomExecutionParam
 	for (TTuple<FGameplayTag, FGameplayTag> Pair : GameplayTags.DamageTypesToDebuffs)
 	{
 		const FGameplayTag& DamageType = Pair.Key;
-		const FGameplayTag& DebuffType = Pair.Value;
 		const FGameplayTag& ResistanceTag = GameplayTags.DamageTypesToResistances[DamageType];
 		
 		const float TypeDamage = Spec.GetSetByCallerMagnitude(DamageType, false, -1.f);

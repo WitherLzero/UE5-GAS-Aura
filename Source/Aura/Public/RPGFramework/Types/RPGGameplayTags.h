@@ -40,6 +40,14 @@ public:
 	FGameplayTag Abilities_Type_Passive;
 	FGameplayTag Abilities_Type_None;
 	
+	/*
+	 *  Debuff Tags
+	 */
+	FGameplayTag Debuff_Chance;
+	FGameplayTag Debuff_Damage;
+	FGameplayTag Debuff_Duration;
+	FGameplayTag Debuff_Frequency;
+	
 	
 	/*
 	 *  Event Tags

@@ -3,7 +3,7 @@
 
 #include "AuraGame/GAS/Data/CharacterClassInfo.h"
 
-FCharacterClassDefaultInfo UCharacterClassInfo::GetClassDefaultInfo(ECharacterClass CharacterClass)
+FCharacterClassDefaultInfo UCharacterClassInfo::GetClassDefaultInfo(const FGameplayTag& CharacterClassTag)
 {
-	return CharacterClassInfo.FindChecked(CharacterClass);
+	return CharacterClassInfo.FindChecked(CharacterClassTag);
 }

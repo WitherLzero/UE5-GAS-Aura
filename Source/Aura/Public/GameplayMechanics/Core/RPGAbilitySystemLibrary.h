@@ -13,10 +13,8 @@ struct FGameplayEffectSpecHandle;
 class ARPGProjectile;
 class UAbilityInfo;
 struct FTaggedMontage;
-class UCharacterClassInfo;
 class UGameplayEffect;
 struct FGameplayEffectContextHandle;
-enum class ECharacterClass : uint8;
 class UAbilitySystemComponent;
 class UAttributeMenuWidgetController;
 /**
@@ -135,6 +133,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|GameplayEffects")
 	static FGameplayTag GetDamageType(const FGameplayEffectContextHandle& EffectContextHandle);
 
+	UFUNCTION(BlueprintPure, Category = "RPGAbilitySystemLibrary|GameplayEffects")
+	static FGameplayTag GetDebuffType(const FGameplayEffectContextHandle& EffectContextHandle);
+
 	/*
 	 * Effect Context Setters
 	 */
@@ -173,6 +174,8 @@ public:
 	static void SetRadialDamageOrigin(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, const FVector& InOrigin);
 
 	static void SetDamageType(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, const FGameplayTag& InDamageType);
+	
+	static void SetDebuffType(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, const FGameplayTag& InDebuffType);
 
 	/*
 	 * Gameplay Tags

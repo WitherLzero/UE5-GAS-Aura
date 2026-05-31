@@ -35,6 +35,39 @@ FDamageEffectParams UDamageGameplayAbility::MakeDamageEffectParamsFromClassDefau
 	return Params;
 }
 
+FDamageEffectParams UDamageGameplayAbility::MakeDamageEffectParamsFromCustomValues(
+	AActor* TargetActor,
+	const TMap<FGameplayTag, FScalableFloat>& InDamageTypes,
+	bool bApplyDebuff,
+	float RadialFalloff,
+	TSubclassOf<UGameplayEffect> InDebuffCarrier,
+	float InDebuffChance,
+	float InDebuffDamage,
+	float InDebuffDuration,
+	float InDebuffFrequency) const
+{
+	FDamageEffectParams Params;
+	Params.WorldContextObject = GetAvatarActorFromActorInfo();
+	Params.DamageGameplayEffectClass = DamageEffectClass;
+	Params.SourceAbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+	Params.TargetAbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
+	Params.DamageTypes = InDamageTypes;
+	Params.AbilityLevel = GetAbilityLevel();
+	if (bApplyDebuff)
+	{
+		Params.DebuffCarrierClass = InDebuffCarrier;
+		Params.DebuffChance = InDebuffChance;
+		Params.DebuffDamage = InDebuffDamage;
+		Params.DebuffDuration = InDebuffDuration;
+		Params.DebuffFrequency = InDebuffFrequency;
+	}
+	if (bIsRadialDamage)
+	{
+		Params.RadialFalloff = RadialFalloff;
+	}
+	return Params;
+}
+
 float UDamageGameplayAbility::GetDamageByDamageType(float InLevel, const FGameplayTag& DamageType)
 {
 	checkf(DamageTypes.Contains(DamageType), TEXT("GameplayAbilit [%s] does not contain DamageType [%s]"), *GetNameSafe(this), *DamageType.ToString());

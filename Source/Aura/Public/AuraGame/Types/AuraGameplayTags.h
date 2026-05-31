@@ -53,10 +53,7 @@ public:
 	FGameplayTag Debuff_Arcane;
 	FGameplayTag Debuff_Physical;
 	
-	FGameplayTag Debuff_Chance;
-	FGameplayTag Debuff_Damage;
-	FGameplayTag Debuff_Duration;
-	FGameplayTag Debuff_Frequency;
+
 	
 	
 	/*
@@ -84,5 +81,12 @@ public:
 	 *  State Tags
 	 */
 	FGameplayTag State_Buff_HaloOfProtection;
+	
+	/*
+	 *  Character Class Tags
+	 */
+	FGameplayTag Character_Class_Elementalist;
+	FGameplayTag Character_Class_Warrior;
+	FGameplayTag Character_Class_Ranger;
 	
 };

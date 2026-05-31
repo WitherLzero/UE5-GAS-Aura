@@ -19,12 +19,12 @@ class ARPGPlayerState;
 
 
 void UAuraAbilitySystemLibrary::InitDefaultAttributes(const UObject* WorldContextObject, UAbilitySystemComponent* ASC,
-                                                     ECharacterClass CharacterClass, float Level)
+                                                     const FGameplayTag& CharacterClassTag, float Level)
 {
 	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
 	
 	AActor* Avatar = ASC->GetAvatarActor();
-	FCharacterClassDefaultInfo ClassDefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
+	FCharacterClassDefaultInfo ClassDefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClassTag);
 	
 	URPGAbilitySystemLibrary::ApplyEffectToSelf(ASC, Avatar, ClassDefaultInfo.PrimaryAttributes, Level);
 	URPGAbilitySystemLibrary::ApplyEffectToSelf(ASC, Avatar, CharacterClassInfo->SecondaryAttributes, Level);
@@ -32,7 +32,7 @@ void UAuraAbilitySystemLibrary::InitDefaultAttributes(const UObject* WorldContex
 }
 
 
-void UAuraAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC, ECharacterClass CharacterClass)
+void UAuraAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC, const FGameplayTag& CharacterClassTag)
 {
 	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
 	for (const TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbilities)
@@ -40,7 +40,7 @@ void UAuraAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContext
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass,1);
 		ASC->GiveAbility(AbilitySpec);
 	}
-	FCharacterClassDefaultInfo ClassDefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
+	FCharacterClassDefaultInfo ClassDefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClassTag);
 	for (const TSubclassOf<UGameplayAbility> AbilityClass : ClassDefaultInfo.StartupAbilities)
 	{
 		if (ICharacterDataInterface* CharacterData =  Cast<ICharacterDataInterface>(ASC->GetAvatarActor()))
@@ -54,11 +54,11 @@ void UAuraAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContext
 }
 
 int32 UAuraAbilitySystemLibrary::GetXPRewardForClassAndLevel(const UObject* WorldContextObject,
-	ECharacterClass CharacterClass, int32 CharacterLevel)
+	const FGameplayTag& CharacterClassTag, int32 CharacterLevel)
 {
 	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
 	
-	const FCharacterClassDefaultInfo Info = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
+	const FCharacterClassDefaultInfo Info = CharacterClassInfo->GetClassDefaultInfo(CharacterClassTag);
 	const float XPReward = Info.XPReward.GetValueAtLevel(CharacterLevel);
 	
 	return static_cast<int32>(XPReward);

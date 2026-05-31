@@ -1,7 +1,6 @@
 ﻿#include "RPGFramework/GAS/AttributeSets/VitalAttributeSet.h"
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
-#include "AuraGame/Types/AuraGameplayTags.h"
 #include "RPGFramework/Types/RPGGameplayTags.h"
 #include "GameplayMechanics/Core/RPGAbilitySystemLibrary.h"
 #include "RPGFramework/Player/RPGPlayerController.h"
@@ -114,7 +113,7 @@ void UVitalAttributeSet::HandleIncomingDamage()
 
 void UVitalAttributeSet::HandleDebuff()
 {
-	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
+	const FRPGGameplayTags& RPGGameplayTags = FRPGGameplayTags::Get();
 	
 	TSubclassOf<UGameplayEffect> DebuffCarrierClass = URPGAbilitySystemLibrary::GetDebuffCarrier(EffectProps.EffectContextHandle);
 	if (DebuffCarrierClass == nullptr) return;
@@ -123,6 +122,7 @@ void UVitalAttributeSet::HandleDebuff()
 	EffectContext.AddSourceObject(EffectProps.SourceAvatarActor);
 			
 	const FGameplayTag DamageType = URPGAbilitySystemLibrary::GetDamageType(EffectProps.EffectContextHandle);
+	const FGameplayTag DebuffType = URPGAbilitySystemLibrary::GetDebuffType(EffectProps.EffectContextHandle);
 	const float DebuffDamage = URPGAbilitySystemLibrary::GetDebuffDamage(EffectProps.EffectContextHandle);
 	const float DebuffDuration = URPGAbilitySystemLibrary::GetDebuffDuration(EffectProps.EffectContextHandle);
 	const float DebuffFrequency = URPGAbilitySystemLibrary::GetDebuffFrequency(EffectProps.EffectContextHandle);
@@ -138,18 +138,18 @@ void UVitalAttributeSet::HandleDebuff()
 		MutableSpec->SetDuration(DebuffDuration,true);
 		MutableSpec->Period = DebuffFrequency;
 		
-		const FGameplayTag DebuffTag = GameplayTags.DamageTypesToDebuffs[DamageType];
-		MutableSpec->DynamicGrantedTags.AddTag(DebuffTag);
+		if (DebuffType.IsValid())
+		{
+			MutableSpec->DynamicGrantedTags.AddTag(DebuffType);
+		}
 		
 		if (DebuffDamage > 0.f)
 		{
-			MutableSpec->SetSetByCallerMagnitude(GameplayTags.Debuff_Damage, DebuffDamage);
+			MutableSpec->SetSetByCallerMagnitude(RPGGameplayTags.Debuff_Damage, DebuffDamage);
 		}
 		
 		EffectProps.TargetASC->ApplyGameplayEffectSpecToSelf(*MutableSpec);
 	}
-	
-	
 }
 
 void UVitalAttributeSet::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue)

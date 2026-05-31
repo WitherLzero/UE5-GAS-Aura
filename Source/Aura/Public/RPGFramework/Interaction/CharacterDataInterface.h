@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AuraGame/GAS/Data/CharacterClassInfo.h"
+#include "GameplayTagContainer.h"
 #include "UObject/Interface.h"
 #include "CharacterDataInterface.generated.h"
 
@@ -29,5 +29,5 @@ public:
 	virtual int32 GetCharacterLevel() const;
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	ECharacterClass GetCharacterClass();
+	FGameplayTag GetCharacterClassTag();
 };

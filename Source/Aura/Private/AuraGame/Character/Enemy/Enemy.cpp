@@ -11,6 +11,7 @@
 #include "RPGFramework/UI/Widgets/UserWidgetBase.h"
 #include "Aura/Aura.h"
 #include "AuraGame/GAS/AuraAbilitySystemLibrary.h"
+#include "AuraGame/Types/AuraGameplayTags.h"
 #include "Components/WidgetComponent.h"
 #include "AuraGame/GAS/AttributeSets/CombatAttributeSet.h"
 #include "AuraGame/GAS/AttributeSets/PrimaryAttributeSet.h"
@@ -87,7 +88,7 @@ void AEnemy::PossessedBy(AController* NewController)
 	AIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
 	AIController->RunBehaviorTree(BehaviorTree);
 	AIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), false);
-	AIController->GetBlackboardComponent()->SetValueAsBool(FName("RangedAttacker"), CharacterClass != ECharacterClass::Warrior);
+	AIController->GetBlackboardComponent()->SetValueAsBool(FName("RangedAttacker"), CharacterClassTag != FAuraGameplayTags::Get().Character_Class_Warrior);
 }
 
 void AEnemy::InitAbilityActorInfo()
@@ -99,14 +100,14 @@ void AEnemy::InitAbilityActorInfo()
 	if (HasAuthority())
 	{
 		InitDefaultAttributes();
-		UAuraAbilitySystemLibrary::GiveStartupAbilities(this,AbilitySystemComponent, CharacterClass);
+		UAuraAbilitySystemLibrary::GiveStartupAbilities(this,AbilitySystemComponent, CharacterClassTag);
 	}
 	
 }
 
 void AEnemy::InitDefaultAttributes() const
 {
-	UAuraAbilitySystemLibrary::InitDefaultAttributes(this,GetAbilitySystemComponent(),CharacterClass,Level);
+	UAuraAbilitySystemLibrary::InitDefaultAttributes(this,GetAbilitySystemComponent(),CharacterClassTag,Level);
 }
 
 void AEnemy::HighlightActor()
@@ -145,7 +146,7 @@ void AEnemy::HandleDeath(AActor* DeadActor, AActor* KillerActor)
 
 void AEnemy::SendXPEvent(AActor* KillerActor)
 {
-	int32 XPReward = UAuraAbilitySystemLibrary::GetXPRewardForClassAndLevel(this,CharacterClass,Level);
+	int32 XPReward = UAuraAbilitySystemLibrary::GetXPRewardForClassAndLevel(this,CharacterClassTag,Level);
 	const FRPGGameplayTags& GameplayTags = FRPGGameplayTags::Get();
 	FGameplayEventData Payload;
 	Payload.EventTag = GameplayTags.Attributes_Meta_IncomingXP;

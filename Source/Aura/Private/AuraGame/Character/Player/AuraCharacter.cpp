@@ -5,6 +5,7 @@
 
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
+#include "AuraGame/Types/AuraGameplayTags.h"
 #include "RPGFramework/Types/RPGGameplayTags.h"
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 #include "RPGFramework/Player/RPGPlayerController.h"
@@ -22,7 +23,7 @@ AAuraCharacter::AAuraCharacter()
 	
 	Spline = CreateDefaultSubobject<USplineComponent>("Spline");
 	
-	CharacterClass = ECharacterClass::Elementalist;
+	CharacterClassTag = FAuraGameplayTags::Get().Character_Class_Elementalist;
 }
 
 void AAuraCharacter::BeginPlay()

@@ -147,22 +147,7 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 		FName("Debuff.Stun"),
 		FString("Debuff for Lightning damage")
 		);	
-	GameplayTags.Debuff_Chance = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("Debuff.Chance"),
-		FString("Debuff Chance")
-		);
-	GameplayTags.Debuff_Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("Debuff.Damage"),
-		FString("Debuff Damage")
-		);
-	GameplayTags.Debuff_Duration = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("Debuff.Duration"),
-		FString("Debuff Duration")
-		);
-	GameplayTags.Debuff_Frequency = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("Debuff.Frequency"),
-		FString("Debuff Frequency")
-		);	
+
 	/*
 	 * Map of Damage Types to Debuffs
 	 */
@@ -237,5 +222,23 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.State_Buff_HaloOfProtection = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("State.Buff.HaloOfProtection"),
 		FString("State Tag for Active Halo of Protection Buff")
+	);
+	
+	/*
+	 *  Character Class Tags
+	 */
+	GameplayTags.Character_Class_Elementalist = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Character.Class.Elementalist"),
+		FString("Elementalist Character Class")
+	);
+	
+	GameplayTags.Character_Class_Warrior = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Character.Class.Warrior"),
+		FString("Warrior Character Class")
+	);
+	
+	GameplayTags.Character_Class_Ranger = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Character.Class.Ranger"),
+		FString("Ranger Character Class")
 	);
 }

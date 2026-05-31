@@ -8,17 +8,13 @@
 #include "AbilitySystemGlobals.h"
 #include "GameplayMechanics/Core/Actor/RPGProjectile.h"
 #include "RPGFramework/GAS/RPGAbilityTypes.h"
-#include "AuraGame/Game/AuraGameMode.h"
 #include "Kismet/GameplayStatics.h"
-#include "AuraGame/GAS/Data/CharacterClassInfo.h"
-#include "AuraGame/System/AuraGameSetting.h"
-#include "AuraGame/Types/AuraGameplayTags.h"
-#include "RPGFramework/Interaction/CharacterDataInterface.h"
+
 #include "GameplayMechanics/Core/Components/CombatComponent.h"
 #include "GameplayMechanics/Core/Components/VitalityComponent.h"
 #include "GameplayMechanics/Core/Interaction/CombatInterface.h"
 #include "RPGFramework/System/RPGFrameworkSettings.h"
-
+#include "RPGFramework/Types/RPGGameplayTags.h"
 
 
 UAbilityInfo* URPGAbilitySystemLibrary::GetAbilityInfo(const UObject* WorldContextObject)
@@ -273,7 +269,8 @@ TArray<FVector> URPGAbilitySystemLibrary::GetGroundRadialPoints(const UObject* W
 
 FGameplayEffectSpecHandle URPGAbilitySystemLibrary::MakeDamageEffectSpec(const FDamageEffectParams& DamageEffectParams)
 {
-	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
+	
+	const FRPGGameplayTags& GameplayTags = FRPGGameplayTags::Get();
 	const AActor* SourceAvatarActor = DamageEffectParams.SourceAbilitySystemComponent->GetAvatarActor();
 	FGameplayEffectContextHandle EffectContexthandle = DamageEffectParams.SourceAbilitySystemComponent->MakeEffectContext();
 	EffectContexthandle.AddSourceObject(SourceAvatarActor);
@@ -426,6 +423,18 @@ FGameplayTag URPGAbilitySystemLibrary::GetDamageType(const FGameplayEffectContex
 	return FGameplayTag();
 }
 
+FGameplayTag URPGAbilitySystemLibrary::GetDebuffType(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const FRPGGameplayEffectContext* EffectContext = static_cast<const FRPGGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		if (EffectContext->GetDebuffType().IsValid())
+		{
+			return *EffectContext->GetDebuffType();
+		}
+	}
+	return FGameplayTag();
+}
+
 void URPGAbilitySystemLibrary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle, bool bInIsBlockedHit)
 {
 	if (FRPGGameplayEffectContext* EffectContext = static_cast<FRPGGameplayEffectContext*>(EffectContextHandle.Get()))
@@ -526,6 +535,16 @@ void URPGAbilitySystemLibrary::SetDamageType(FGameplayEffectContextHandle& Effec
 	{
 		const TSharedPtr<FGameplayTag> DamageType = MakeShared<FGameplayTag>(InDamageType);
 		EffectContext->SetDamageType(DamageType);
+	}
+}
+
+void URPGAbilitySystemLibrary::SetDebuffType(FGameplayEffectContextHandle& EffectContextHandle,
+	const FGameplayTag& InDebuffType)
+{
+	if (FRPGGameplayEffectContext* EffectContext = static_cast<FRPGGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		const TSharedPtr<FGameplayTag> DebuffType = MakeShared<FGameplayTag>(InDebuffType);
+		EffectContext->SetDebuffType(DebuffType);
 	}
 }
 

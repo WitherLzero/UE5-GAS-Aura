@@ -6,7 +6,6 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "AuraAbilitySystemLibrary.generated.h"
 
-enum class ECharacterClass : uint8;
 class UCharacterClassInfo;
 class USpellMenuWidgetController;
 class UAttributeMenuWidgetController;
@@ -22,13 +21,13 @@ class AURA_API UAuraAbilitySystemLibrary : public UBlueprintFunctionLibrary
 	
 public:
 	UFUNCTION(BlueprintCallable, Category = "RPGAbilitySystemLibrary|CharacterClassDefaults")
-	static void InitDefaultAttributes(const UObject* WorldContextObject,UAbilitySystemComponent* ASC, ECharacterClass CharacterClass, float Level);
+	static void InitDefaultAttributes(const UObject* WorldContextObject,UAbilitySystemComponent* ASC, const FGameplayTag& CharacterClassTag, float Level);
 
 	UFUNCTION(BlueprintCallable, Category="RPGAbilitySystemLibrary|CharacterClassDefaults")
-	static void GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC, ECharacterClass CharacterClass);
+	static void GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC, const FGameplayTag& CharacterClassTag);
 	
 	UFUNCTION(Category="RPGAbilitySystemLibrary|CharacterClassDefaults")
-	static int32 GetXPRewardForClassAndLevel(const UObject* WorldContextObject, ECharacterClass CharacterClass, int32 CharacterLevel);
+	static int32 GetXPRewardForClassAndLevel(const UObject* WorldContextObject, const FGameplayTag& CharacterClassTag, int32 CharacterLevel);
 	
 	UFUNCTION(BlueprintCallable, Category="RPGAbilitySystemLibrary|CharacterClassDefaults")
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);

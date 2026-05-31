@@ -120,9 +120,9 @@ void AAuraCharacterBase::SendDeathEvent(AActor* DeadActor)
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(DeadActor,GameplayTags.Event_Character_Died,Payload);
 }
 
-ECharacterClass AAuraCharacterBase::GetCharacterClass_Implementation()
+FGameplayTag AAuraCharacterBase::GetCharacterClassTag_Implementation()
 {
-	return CharacterClass;
+	return CharacterClassTag;
 }
 
 

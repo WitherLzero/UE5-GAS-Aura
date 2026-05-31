@@ -82,6 +82,24 @@ void FRPGGameplayTags::InitializeNativeGameplayTags()
 		);	
 	
 	
+	GameplayTags.Debuff_Chance = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Debuff.Chance"),
+		FString("Debuff Chance")
+		);
+	GameplayTags.Debuff_Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Debuff.Damage"),
+		FString("Debuff Damage")
+		);
+	GameplayTags.Debuff_Duration = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Debuff.Duration"),
+		FString("Debuff Duration")
+		);
+	GameplayTags.Debuff_Frequency = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Debuff.Frequency"),
+		FString("Debuff Frequency")
+		);		
+	
+	
 	GameplayTags.Event_Character_Died = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Event.Character.Died"),
 	FString("Tag for sending Gameplay Event when character died.")

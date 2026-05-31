@@ -16,7 +16,7 @@
 #include "AuraGame/System/AuraGameSetting.h"
 #include "RPGFramework/GAS/RPGAbilitySystemComponent.h"
 #include "GameplayMechanics/Core/Abilities/RPGPassiveAbility.h"
-
+#include "RPGFramework/Types/RPGGameplayTags.h"
 
 
 struct RPGDamageStatic
@@ -88,18 +88,20 @@ UExecCalc_Damage::UExecCalc_Damage()
 
 void UExecCalc_Damage::DetermineDebuff(const FGameplayEffectCustomExecutionParameters& ExecutionParams, const FGameplayEffectSpec& Spec, FAggregatorEvaluateParameters EvaluationParameters) const
 {
-	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
+	const FRPGGameplayTags& RPGGameplayTags = FRPGGameplayTags::Get();
+	const FAuraGameplayTags& AuraGameplayTags = FAuraGameplayTags::Get();
 	
-	for (TTuple<FGameplayTag, FGameplayTag> Pair : GameplayTags.DamageTypesToDebuffs)
+	for (TTuple<FGameplayTag, FGameplayTag> Pair : AuraGameplayTags.DamageTypesToDebuffs)
 	{
 		const FGameplayTag& DamageType = Pair.Key;
-		const FGameplayTag& ResistanceTag = GameplayTags.DamageTypesToResistances[DamageType];
+		const FGameplayTag& DebuffType = Pair.Value;
+		const FGameplayTag& ResistanceTag = AuraGameplayTags.DamageTypesToResistances[DamageType];
 		
 		const float TypeDamage = Spec.GetSetByCallerMagnitude(DamageType, false, -1.f);
 		if (TypeDamage > -.5f) // .5 padding for floating point [im]precision
 		{
 			// Determine if there was a successful debuff
-			const float SourceDebuffChance = Spec.GetSetByCallerMagnitude(GameplayTags.Debuff_Chance, false, -1.f);
+			const float SourceDebuffChance = Spec.GetSetByCallerMagnitude(RPGGameplayTags.Debuff_Chance, false, -1.f);
 
 			float TargetDebuffResistance = 0.f;
 			ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(RPGDamageStatic().TagsToCaptureDefs[ResistanceTag], EvaluationParameters, TargetDebuffResistance);
@@ -114,10 +116,11 @@ void UExecCalc_Damage::DetermineDebuff(const FGameplayEffectCustomExecutionParam
 
 				URPGAbilitySystemLibrary::SetIsSuccessfulDebuff(ContextHandle, true);
 				URPGAbilitySystemLibrary::SetDamageType(ContextHandle, DamageType);
+				URPGAbilitySystemLibrary::SetDebuffType(ContextHandle, DebuffType);
 
-				const float DebuffDamage = Spec.GetSetByCallerMagnitude(GameplayTags.Debuff_Damage, false, -1.f);
-				const float DebuffDuration = Spec.GetSetByCallerMagnitude(GameplayTags.Debuff_Duration, false, -1.f);
-				const float DebuffFrequency = Spec.GetSetByCallerMagnitude(GameplayTags.Debuff_Frequency, false, -1.f);
+				const float DebuffDamage = Spec.GetSetByCallerMagnitude(RPGGameplayTags.Debuff_Damage, false, -1.f);
+				const float DebuffDuration = Spec.GetSetByCallerMagnitude(RPGGameplayTags.Debuff_Duration, false, -1.f);
+				const float DebuffFrequency = Spec.GetSetByCallerMagnitude(RPGGameplayTags.Debuff_Frequency, false, -1.f);
 				
 				URPGAbilitySystemLibrary::SetDebuffDamage(ContextHandle, DebuffDamage);
 				URPGAbilitySystemLibrary::SetDebuffDuration(ContextHandle, DebuffDuration);
@@ -135,7 +138,6 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	
 	AActor* SourceAvatar = SourceASC? SourceASC->GetAvatarActor(): nullptr;
 	AActor* TargetAvatar = TargetASC? TargetASC->GetAvatarActor(): nullptr;
-	ICharacterDataInterface* SourceCombatInterface = Cast<ICharacterDataInterface>(SourceAvatar);
 	ICharacterDataInterface* TargetInterface = Cast<ICharacterDataInterface>(TargetAvatar);
 	
 	const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();

@@ -41,7 +41,7 @@ protected:
 	
 	void SendDeathEvent(AActor* DeadActor);
 	
-	virtual ECharacterClass GetCharacterClass_Implementation() override;
+	virtual FGameplayTag GetCharacterClassTag_Implementation() override;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
@@ -56,7 +56,7 @@ protected:
 	TObjectPtr<UActionComponent> ActionComp;	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
-	ECharacterClass CharacterClass = ECharacterClass::Warrior;
+	FGameplayTag CharacterClassTag;
 	
 	void Dissolve();
 	

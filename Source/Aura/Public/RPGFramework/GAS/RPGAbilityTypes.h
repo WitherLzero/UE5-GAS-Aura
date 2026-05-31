@@ -114,6 +114,7 @@ protected:
 	TSubclassOf<UGameplayEffect> DebuffCarrierClass = nullptr;
 
 	TSharedPtr<FGameplayTag> DamageType;
+	TSharedPtr<FGameplayTag> DebuffType;
 
 	UPROPERTY()
 	bool bIsRadialDamage = false;
@@ -137,6 +138,7 @@ public:
 	float GetDebuffFrequency() const { return DebuffFrequency; }
 	TSubclassOf<UGameplayEffect> GetDebuffCarrier() const { return DebuffCarrierClass; }
 	TSharedPtr<FGameplayTag> GetDamageType() const { return DamageType; }
+	TSharedPtr<FGameplayTag> GetDebuffType() const { return DebuffType; }
 
 	bool IsRadialDamage() const { return bIsRadialDamage; }
 	float GetRadialDamageInnerRadius() const { return RadialDamageInnerRadius; }
@@ -151,6 +153,7 @@ public:
 	void SetDebuffFrequency(float InFrequency) { DebuffFrequency = InFrequency; }
 	void SetDebuffCarrier(TSubclassOf<UGameplayEffect> InDebuffCarrierClass) { DebuffCarrierClass = InDebuffCarrierClass; }
 	void SetDamageType(TSharedPtr<FGameplayTag> InDamageType) { DamageType = InDamageType; }
+	void SetDebuffType(TSharedPtr<FGameplayTag> InDebuffType) { DebuffType = InDebuffType; }
 	void SetIsRadialDamage(bool bInIsRadialDamage) { bIsRadialDamage = bInIsRadialDamage; }
 	void SetRadialDamageInnerRadius(float InRadialDamageInnerRadius) { RadialDamageInnerRadius = InRadialDamageInnerRadius; }
 	void SetRadialDamageOuterRadius(float InRadialDamageOuterRadius) { RadialDamageOuterRadius = InRadialDamageOuterRadius; }

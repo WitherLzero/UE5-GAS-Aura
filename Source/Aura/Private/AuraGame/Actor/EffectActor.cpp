@@ -1,11 +1,11 @@
-﻿// Copyright rynnli
+// Copyright rynnli
 
 
 #include "AuraGame/Actor/EffectActor.h"
 
 #include "AbilitySystemInterface.h"
 #include "AbilitySystemBlueprintLibrary.h"
-#include "Aura/Public/RPGFramework/GAS/AttributeSets/RPGAttributeSetBase.h"
+#include "RPGFramework/GAS/AttributeSets/RPGAttributeSetBase.h"
 
 #include "GameplayEffect.h"
 

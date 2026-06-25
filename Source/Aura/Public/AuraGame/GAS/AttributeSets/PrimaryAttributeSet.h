@@ -1,7 +1,7 @@
-﻿#pragma once
+#pragma once
 
 #include "CoreMinimal.h"
-#include "Aura/Public/RPGFramework/GAS/AttributeSets/RPGAttributeSetBase.h"
+#include "RPGFramework/GAS/AttributeSets/RPGAttributeSetBase.h"
 #include "AbilitySystemComponent.h"
 #include "PrimaryAttributeSet.generated.h"
 

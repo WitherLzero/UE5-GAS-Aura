@@ -1,9 +1,9 @@
-﻿// Copyright rynnli
+// Copyright rynnli
 
 
 #include "AuraGame/UI/WidgetController/AttributeMenuWidgetController.h"
 
-#include "Aura/Public/RPGFramework/GAS/AttributeSets/RPGAttributeSetBase.h"
+#include "RPGFramework/GAS/AttributeSets/RPGAttributeSetBase.h"
 #include "AuraGame/Character/Player/AuraPlayerState.h"
 #include "AuraGame/GAS/AttributeSets/CombatAttributeSet.h"
 #include "AuraGame/GAS/AttributeSets/PrimaryAttributeSet.h"

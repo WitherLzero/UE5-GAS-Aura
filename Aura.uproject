@@ -13,6 +13,11 @@
 				"GameplayAbilities",
 				"UMG"
 			]
+		},
+		{
+			"Name": "RPGCore",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [

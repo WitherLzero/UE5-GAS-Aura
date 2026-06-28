@@ -27,11 +27,13 @@ Build/
 Releases/
 Collections/
 Developers/
+Plugins/
 __ExternalActors__/
 __ExternalObjects__/
 
 # AI
 .agent/
+docs/
 
 # Local builds
 Builds/
@@ -57,3 +59,6 @@ __pycache__/
 *.lib
 *.dll
 *.exe
+AGENTS.md
+CONTEXT-MAP.md
+CONTEXT.md

@@ -8,8 +8,9 @@ public class AuraEditorTarget : TargetRules
 	public AuraEditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V5;
+		DefaultBuildSettings = BuildSettingsVersion.Latest;
+		CppCompileWarningSettings.UndefinedIdentifierWarningLevel = WarningLevel.Error;
 
-		ExtraModuleNames.AddRange( new string[] { "Aura", "RPGCore" } );
+		ExtraModuleNames.AddRange( new string[] { "Aura" } );
 	}
 }
